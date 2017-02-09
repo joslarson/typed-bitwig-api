@@ -3641,13 +3641,6 @@ declare namespace API {
 
     }
 
-    /**
-     * An interface representing the host application to the script.
-     * @global
-     * @type {Host}
-     */
-    var host: Host;
-
     interface IndexedBooleanValueChangedCallback extends IndexedValueChangedCallback {
         /**
          * Registers an observer that reports the names of the scenes and slots. The slot names reflect the names
@@ -6265,3 +6258,9 @@ declare namespace API {
     }
 
 }
+
+declare const host: API.Host;
+declare const loadAPI: typeof host.loadAPI;
+declare const load: typeof host.load;
+declare const println: typeof host.println;
+declare function dump(obj: any);

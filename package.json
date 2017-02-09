@@ -1,8 +1,8 @@
 {
-  "name": "bitwig-api-typescript-definitions",
-  "version": "2.0.0-beta1",
+  "name": "bitwig-api-ts-stubs",
+  "version": "2.0.0-beta.1",
   "description": "TypeScript definition file for the Bitwig Control Surface API.",
-  "main": "index.js",
+  "types": "bitwig-api.d.ts",
   "scripts": {
     "build": "./node_modules/jsdoc/jsdoc.js -d ./ -t ./ js-stubs && ./node_modules/typescript-formatter/bin/tsfmt -r bitwig-api.d.ts"
   },

@@ -66,11 +66,13 @@ module.exports.publish = function publishTsd(data, opts) {
     // remove undocumented stuff.
     // data({undocumented: true}).remove();
     data({name: 'constructor'}).remove();
+    data({name: 'host'}).remove();
 
     const docs = data().get();
 
     // BITWIG CHANGES
     for (let element of docs) {
+        if (element.name === 'host') console.log(element);
         const filename = element.meta ? element.meta.filename : '';
         if (element.name === filename.slice(0, -3)) {
             // element.kind = shouldRenderAsClass(element) ? 'class' : 'interface';
@@ -111,6 +113,17 @@ module.exports.publish = function publishTsd(data, opts) {
     }
 
     write('}');
+    endLine();
+    endLine();
+    write('declare const host: API.Host;');
+    endLine();
+    write('declare const loadAPI: typeof host.loadAPI;');
+    endLine();
+    write('declare const load: typeof host.load;');
+    endLine();
+    write('declare const println: typeof host.println;');
+    endLine();
+    write('declare function dump(obj: any);');
     endLine();
     // END BITWIG CHANGES
 
