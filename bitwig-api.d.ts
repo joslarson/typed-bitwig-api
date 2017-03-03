@@ -226,14 +226,17 @@ declare namespace API {
         previousProject(): void;
 
         /**
-         * Set BitwigStudio to navigate into the group. @
+         * Set BitwigStudio to navigate into the group.
          *
          * @param {Track} track
+         * @since API version 2
          */
         navigateIntoTrackGroup(track?: Track): void;
 
         /**
-         * Set BitwigStudio to navigate into the parent group. @
+         * Set BitwigStudio to navigate into the parent group.
+         *
+         * @since API version 2
          */
         navigateToParentTrackGroup(): void;
 
@@ -597,10 +600,10 @@ declare namespace API {
     }
 
     /**
-     * A bank provides access to a range of items in Bitwig Studio. Instances of a bank are configured
-     * with a fixed number of items and represent an excerpt of a larger list of items. Various methods are
-     * provided for scrolling to different sections of the item list. It basically acts like a window moving over
-     * the list of underlying items.
+     * A bank provides access to a range of items in Bitwig Studio. Instances of a bank are configured with a
+     * fixed number of items and represent an excerpt of a larger list of items. Various methods are provided for
+     * scrolling to different sections of the item list. It basically acts like a window moving over the list of
+     * underlying items.
      *
      * @since API version 2
      */
@@ -627,13 +630,22 @@ declare namespace API {
         getItemAt(index?: number): any;
 
         /**
-         * Value that reports the underlying total item count (not the number of items available
-         * in the bank window).
+         * Value that reports the underlying total item count (not the number of items available in the bank
+         * window).
          *
          * @return {IntegerValue}
          * @since API version 2
          */
         itemCount(): IntegerValue;
+
+        /**
+         * An integer value that defines the location of the cursor that this bank is following. If there is no
+         * cursor or the cursor is not within the bank then the value is -1.
+         *
+         * @return {SettableIntegerValue}
+         * @since API version 2
+         */
+        cursorIndex(): SettableIntegerValue;
 
     }
 
@@ -663,7 +675,16 @@ declare namespace API {
      *
      * @since API version 1
      */
-    interface BeatTimeValue extends SettableRangedValue {
+    interface BeatTimeValue extends DoubleValue {
+        /**
+         * Gets the current beat time formatted according to the supplied formatter.
+         *
+         * @param {BeatTimeFormatter} formatter
+         * @return {string}
+         * @since API version 2
+         */
+        getFormatted(formatter?: BeatTimeFormatter): string;
+
     }
 
     interface BooleanValue extends Value {
@@ -1430,18 +1451,18 @@ declare namespace API {
         /**
          * Returns the start of the clip in beat time.
          *
-         * @return {BeatTimeValue} the beat time object that represents the clips start time.
+         * @return {SettableBeatTimeValue} the beat time object that represents the clips start time.
          * @since API version 1
          */
-        getPlayStart(): BeatTimeValue;
+        getPlayStart(): SettableBeatTimeValue;
 
         /**
          * Returns the length of the clip in beat time.
          *
-         * @return {BeatTimeValue} the beat time object that represents the duration of the clip.
+         * @return {SettableBeatTimeValue} the beat time object that represents the duration of the clip.
          * @since API version 1
          */
-        getPlayStop(): BeatTimeValue;
+        getPlayStop(): SettableBeatTimeValue;
 
         /**
          * Returns an object that provides access to the loop enabled state of the clip.
@@ -1454,18 +1475,18 @@ declare namespace API {
         /**
          * Returns the loop start time of the clip in beat time.
          *
-         * @return {BeatTimeValue} the beat time object that represents the clips loop start time.
+         * @return {SettableBeatTimeValue} the beat time object that represents the clips loop start time.
          * @since API version 1
          */
-        getLoopStart(): BeatTimeValue;
+        getLoopStart(): SettableBeatTimeValue;
 
         /**
          * Returns the loop length of the clip in beat time.
          *
-         * @return {BeatTimeValue} the beat time object that represents the clips loop length.
+         * @return {SettableBeatTimeValue} the beat time object that represents the clips loop length.
          * @since API version 1
          */
-        getLoopLength(): BeatTimeValue;
+        getLoopLength(): SettableBeatTimeValue;
 
         /**
          * Get the color of the clip.
@@ -1583,6 +1604,13 @@ declare namespace API {
          * @since API version 2
          */
         color(): ColorValue;
+
+        /**
+         * Starts browsing for content that can be inserted in this slot in Bitwig Studio's popup browser.
+         *
+         * @since API version 2
+         */
+        browseToInsertClip(): void;
 
     }
 
@@ -2199,6 +2227,17 @@ declare namespace API {
 
     }
 
+    interface CursorDeviceFollowMode {
+        FOLLOW_SELECTION: any;
+
+        FIRST_DEVICE: any;
+
+        FIRST_INSTRUMENT: any;
+
+        FIRST_AUDIO_EFFECT: any;
+
+    }
+
     /**
      * Instances of this interface represent the cursor item in device layer selections.
      *
@@ -2236,6 +2275,71 @@ declare namespace API {
     }
 
     /**
+     * Represents a cursor that looks at a {@link RemoteControlsPage}.
+     *
+     * @since API version 2
+     */
+    interface CursorRemoteControlsPage extends Cursor {
+        /**
+         * Value that reports the names of the devices parameter pages.
+         *
+         * @return {StringArrayValue}
+         */
+        pageNames(): StringArrayValue;
+
+        /**
+         * Selects the next page.
+         *
+         * @param shouldCycle
+        If true then when the end is reached and there is no next page it selects the first page
+         * @since API version 2
+         */
+        selectNextPage(shouldCycle?: any): void;
+
+        /**
+         * Selects the previous page.
+         *
+         * @param shouldCycle
+        If true then when the end is reached and there is no next page it selects the first page
+         * @since API version 2
+         */
+        selectPreviousPage(shouldCycle?: any): void;
+
+        /**
+         * Selects the next page that matches the given expression.
+         *
+         * @param expression
+        An expression that can match a page based on how it has been tagged. For now this can only be
+        the name of a single tag that you would like to match.
+         * @param shouldCycle
+        If true then when the end is reached and there is no next page it selects the first page
+         * @since API version 2
+         */
+        selectNextPageMatching(expression?: any, shouldCycle?: any): void;
+
+        /**
+         * Selects the previous page that matches the given expression.
+         *
+         * @param expression
+        An expression that can match a page based on how it has been tagged. For now this can only be
+        the name of a single tag that you would like to match.
+         * @param shouldCycle
+        If true then when the end is reached and there is no next page it selects the first page
+         * @since API version 2
+         */
+        selectPreviousPageMatching(expression?: any, shouldCycle?: any): void;
+
+        /**
+         * Value that reports the currently selected parameter page index.
+         *
+         * @return {SettableIntegerValue}
+         * @since API version 2
+         */
+        selectedPageIndex(): SettableIntegerValue;
+
+    }
+
+    /**
      * Instances of this interface represent the cursor item of track selections.
      *
      * @since API version 1
@@ -2250,6 +2354,15 @@ declare namespace API {
         selectParent(): void;
 
         /**
+         * Makes the cursor track point to the first child found with the track group that this cursor currently
+         * points to. If this cursor is not pointing to a track group or the track group is empty then this has no
+         * effect.
+         *
+         * @since API version 2
+         */
+        selectFirstChild(): void;
+
+        /**
          * Specifies the behaviour of the functions {@link #selectPrevious()}, {@link #selectNext()},
          * {@link #selectFirst()} and {@link #selectLast()}. Calling those functions can either navigate the cursor
          * within the current nesting level, or over a flat list of either all tracks or only the expanded tracks.
@@ -2259,6 +2372,11 @@ declare namespace API {
          * @since API version 1
          */
         setCursorNavigationMode(mode?: CursorNavigationMode): void;
+
+        /**
+         * @return {PinnableCursorDevice}
+         */
+        createCursorDevice(): PinnableCursorDevice;
 
     }
 
@@ -2319,36 +2437,15 @@ declare namespace API {
         isRemoteControlsSectionVisible(): SettableBooleanValue;
 
         /**
-         * Creates remote controls with the supplied number of parameters that provides access to the selected
-         * remote controls in the device. This section will follow the current page selection made by the user in
-         * the application.
+         * Creates a cursor for the selected remote controls page in the device with the supplied number of
+         * parameters. This section will follow the current page selection made by the user in the application.
          *
          * @param parameterCount
         The number of parameters the remote controls should contain
-         * @return {RemoteControls}
+         * @return {CursorRemoteControlsPage}
          * @since API version 2
          */
-        createMainRemoteControls(parameterCount?: any): RemoteControls;
-
-        /**
-         * Creates a remote controls with the supplied number of parameters that provides access to the remote
-         * controls in the device. This section will be independent from the current page selected by the user in
-         * Bitwig Studio's user interface. The supplied filter is an expression that can be used to match pages
-         * this section is interested in. The expression is matched by looking at the tags added to the pages. If
-         * the expression is empty then no filtering will occur.
-         *
-         * @param name
-        A name to associate with this section. This will be used to remember manual mappings made by
-        the user within this section.
-         * @param parameterCount
-        The number of parameters the remote controls should contain
-         * @param filterExpression
-        An expression used to match pages that the user can navigate through. For now this can only be
-        the name of a tag the pages should contain (e.g "lfo").
-         * @return {RemoteControls}
-         * @since API version 2
-         */
-        createIndependentRemoteControls(name?: any, parameterCount?: any, filterExpression?: any): RemoteControls;
+        createCursorRemoteControlsPage(parameterCount?: any): CursorRemoteControlsPage;
 
         /**
          * Selects the device in Bitwig Studio.
@@ -2525,26 +2622,26 @@ declare namespace API {
         /**
          * Indicates if the device is contained by another device.
          *
-         * @return {SettableBooleanValue} a value object that indicates if the device is nested
+         * @return {BooleanValue} a value object that indicates if the device is nested
          * @since API version 1
          */
-        isNested(): SettableBooleanValue;
+        isNested(): BooleanValue;
 
         /**
          * Indicates if the device supports nested layers.
          *
-         * @return {SettableBooleanValue} a value object that indicates if the device supports nested layers.
+         * @return {BooleanValue} a value object that indicates if the device supports nested layers.
          * @since API version 1
          */
-        hasLayers(): SettableBooleanValue;
+        hasLayers(): BooleanValue;
 
         /**
          * Indicates if the device has individual device chains for each note value.
          *
-         * @return {SettableBooleanValue} a value object that indicates if the device has individual device chains for each note value.
+         * @return {BooleanValue} a value object that indicates if the device has individual device chains for each note value.
          * @since API version 1
          */
-        hasDrumPads(): SettableBooleanValue;
+        hasDrumPads(): BooleanValue;
 
         /**
          * Create a bank for navigating the nested layers of the device using a fixed-size window.
@@ -2652,8 +2749,8 @@ declare namespace API {
         incDirectParameterValueNormalized(id?: any, increment?: any, resolution?: any): void;
 
         /**
-         * Value that reports the file name of the currently loaded sample, in case the device is a
-         * sample container device.
+         * Value that reports the file name of the currently loaded sample, in case the device is a sample
+         * container device.
          *
          * @return {StringValue}
          * @since API version 2
@@ -2771,6 +2868,15 @@ declare namespace API {
          * @since API version 1
          */
         addCanScrollDownObserver(callback?: Function): void;
+
+        /**
+         * Browses for content to insert a device at the given index inside this bank.
+         *
+         * @param index
+        the index to insert the device at. Must be >= 0 and <= {@link #getSizeOfBank()}.
+         * @since API version 2
+         */
+        browseToInsertDevice(index?: any): void;
 
     }
 
@@ -2929,6 +3035,22 @@ declare namespace API {
      * @since API version 1
      */
     interface DocumentState extends Settings {
+    }
+
+    /**
+     * Instances of this interface represent double values.
+     *
+     * @since API version 2
+     */
+    interface DoubleValue extends Value {
+        /**
+         * Gets the current value.
+         *
+         * @return {double}
+         * @since API version 2
+         */
+        get(): number;
+
     }
 
     interface DoubleValueChangedCallback extends ValueChangedCallback {
@@ -3100,6 +3222,14 @@ declare namespace API {
          * @param {string} path
          */
         load(path?: string): void;
+
+        /**
+         * Sets an email address to use for reporting errors found in this script.
+         *
+         * @param {string} address
+         * @since API version 2
+         */
+        setErrorReportingEMail(address?: string): void;
 
         /**
          * Registers a controller script with the given parameters. This function must be called once at the global
@@ -3392,10 +3522,12 @@ declare namespace API {
          * } To create a custom device selection that is not connected to the main device selection in the user
          * interface, call {@link Track#createCursorDevice(String) cursorTrack.createCursorDevice(String name)}.
          *
+         * @param numSends
+        the number of sends that are simultaneously accessible in nested channels.
          * @return {CursorDevice} an object representing the currently selected device.
          * @since API version 1
          */
-        createEditorCursorDevice(): CursorDevice;
+        createEditorCursorDevice(numSends?: any): CursorDevice;
 
         /**
          * Returns a clip object that represents the cursor of the launcher clip selection. The gridWidth and
@@ -4314,6 +4446,31 @@ declare namespace API {
     }
 
     /**
+     * Interface that defines a cursor that can be "pinned".
+     *
+     * @since API version 2
+     */
+    interface PinnableCursor extends Cursor {
+        /**
+         * Determines if this cursor is currently pinned or not. If the cursor is pinned then it won't follow the
+         * selection the user makes in the application.
+         *
+         * @return {SettableBooleanValue}
+         * @since API version 2
+         */
+        isPinned(): SettableBooleanValue;
+
+    }
+
+    /**
+     * Cursor that can be pinned to the current device or follow the selection.
+     *
+     * @since API version 2
+     */
+    interface PinnableCursorDevice extends CursorDevice {
+    }
+
+    /**
      * @since API version 2
      */
     interface PlayingNote {
@@ -4526,53 +4683,6 @@ declare namespace API {
     }
 
     /**
-     * A special kind of device that represents the primary device of a track.
-     *
-     * @since API version 1
-     */
-    interface PrimaryDevice extends Device {
-        /**
-         * Makes the device with the given type and location the new primary device.
-         *
-         * @param deviceType
-        the requested device type of the new primary device
-         * @param chainLocation
-        the requested chain location of the new primary device
-         * @since API version 1
-         */
-        switchToDevice(deviceType?: any, chainLocation?: any): void;
-
-        /**
-         * Registers an observer that reports if navigation to another device with the provided characteristics is
-         * possible.
-         *
-         * @param deviceType
-        the requested device type of the new primary device
-         * @param chainLocation
-        the requested chain location of the new primary device
-         * @param callback
-        a callback function the receives a single boolean parameter
-         * @since API version 1
-         */
-        addCanSwitchToDeviceObserver(deviceType?: any, chainLocation?: any, callback?: Function): void;
-
-        /**
-         * An enum used to navigate the primary device within a device chain.
-         *
-         * @since API version 1
-         */
-        ChainLocation: any;
-
-        /**
-         * An enum used to specify different kinds of devices.
-         *
-         * @since API version 1
-         */
-        DeviceType: any;
-
-    }
-
-    /**
      * An interface for representing the current project.
      *
      * @since API version 1
@@ -4605,6 +4715,11 @@ declare namespace API {
 
     }
 
+    /**
+     * Instances of this interface represent numeric values that have an upper and lower limit.
+     *
+     * @since API version 1
+     */
     interface RangedValue extends Value {
         /**
          * The current value normalized between 0..1 where 0 represents the minimum value and 1 the maximum.
@@ -4700,84 +4815,11 @@ declare namespace API {
     }
 
     /**
-     * Represents the remote controls for a device.
+     * Represents a page of remote controls in a device.
      *
      * @since API version 2
      */
-    interface RemoteControls extends ParameterBank {
-        /**
-         * Value that reports the names of the devices parameter pages.
-         *
-         * @return {StringArrayValue}
-         */
-        pageNames(): StringArrayValue;
-
-        /**
-         * Selects the next page.
-         *
-         * @param shouldCycle
-        If true then when the end is reached and there is no next page it selects the first page
-         * @since API version 2
-         */
-        selectNextPage(shouldCycle?: any): void;
-
-        /**
-         * Selects the previous page.
-         *
-         * @param shouldCycle
-        If true then when the end is reached and there is no next page it selects the first page
-         * @since API version 2
-         */
-        selectPreviousPage(shouldCycle?: any): void;
-
-        /**
-         * Selects the next page that matches the given expression.
-         *
-         * @param expression
-        An expression that can match a page based on how it has been tagged. For now this can only be
-        the name of a single tag that you would like to match.
-         * @param shouldCycle
-        If true then when the end is reached and there is no next page it selects the first page
-         * @since API version 2
-         */
-        selectNextPageMatching(expression?: any, shouldCycle?: any): void;
-
-        /**
-         * Selects the previous page that matches the given expression.
-         *
-         * @param expression
-        An expression that can match a page based on how it has been tagged. For now this can only be
-        the name of a single tag that you would like to match.
-         * @param shouldCycle
-        If true then when the end is reached and there is no next page it selects the first page
-         * @since API version 2
-         */
-        selectPreviousPageMatching(expression?: any, shouldCycle?: any): void;
-
-        /**
-         * Value that reports the currently selected parameter page index.
-         *
-         * @return {SettableIntegerValue}
-         * @since API version 2
-         */
-        selectedPageIndex(): SettableIntegerValue;
-
-        /**
-         * Value that reports if there is a previous parameter page.
-         *
-         * @return {BooleanValue}
-         * @since API version 2
-         */
-        hasPreviousPage(): BooleanValue;
-
-        /**
-         * Value that reports if there is a previous parameter page.
-         *
-         * @return {BooleanValue}
-         * @since API version 2
-         */
-        hasNextPage(): BooleanValue;
-
+    interface RemoteControlsPage extends ParameterBank {
     }
 
     /**
@@ -4974,6 +5016,9 @@ declare namespace API {
     interface SendBank extends Bank {
     }
 
+    interface SettableBeatTimeValue extends BeatTimeValue {
+    }
+
     /**
      * Instances of this interface represent boolean values.
      *
@@ -5009,6 +5054,27 @@ declare namespace API {
          * @since API version 2
          */
         set(red?: number, green?: number, blue?: number): void;
+
+    }
+
+    interface SettableDoubleValue extends DoubleValue {
+        /**
+         * Sets the internal value.
+         *
+         * @param value
+        the new integer value.
+         * @since API version 1
+         */
+        set(value?: any): void;
+
+        /**
+         * Increases/decrease the internal value by the given amount.
+         *
+         * @param amount
+        the integer amount to increase
+         * @since API version 1
+         */
+        inc(amount?: any): void;
 
     }
 
@@ -5527,20 +5593,21 @@ declare namespace API {
         getCrossFadeMode(): SettableEnumValue;
 
         /**
-         * Returns a value object that provides access to the clip launcher playback state of the track.
+         * Value that reports if this track is currently stopped. When a track is stopped it is not playing content
+         * from the arranger or clip launcher.
          *
-         * @return {SettableBooleanValue} a boolean value object that indicates if the clip launcher is stopped for this track
-         * @since API version 1
+         * @return {BooleanValue}
+         * @since API version 2
          */
-        getIsMatrixStopped(): SettableBooleanValue;
+        isStopped(): BooleanValue;
 
         /**
          * Value that reports if the clip launcher slots are queued for stop.
          *
-         * @return {SettableBooleanValue}
+         * @return {BooleanValue}
          * @since API version 2
          */
-        isQueuedForStop(): SettableBooleanValue;
+        isQueuedForStop(): BooleanValue;
 
         /**
          * Returns the source selector for the track, which is shown in the IO section of the track in Bitwig
@@ -5633,8 +5700,8 @@ declare namespace API {
         sendMidi(status?: any, data1?: any, data2?: any): void;
 
         /**
-         * Value that reports the track type. Possible reported track types are `Group`,
-         * `Instrument`, `Audio`, `Hybrid`, `Effect` or `Master`.
+         * Value that reports the track type. Possible reported track types are `Group`, `Instrument`, `Audio`,
+         * `Hybrid`, `Effect` or `Master`.
          *
          * @return {StringValue}
          * @since API version 2
@@ -5642,8 +5709,7 @@ declare namespace API {
         trackType(): StringValue;
 
         /**
-         * Value  that reports if the track may contain child tracks, which is the case for group
-         * tracks.
+         * Value that reports if the track may contain child tracks, which is the case for group tracks.
          *
          * @return {BooleanValue}
          * @since API version 2
@@ -5843,6 +5909,16 @@ declare namespace API {
          */
         addSceneScrollPositionObserver(callback?: Function, valueWhenUnassigned?: any): void;
 
+        /**
+         * Causes this bank to follow the supplied cursor. When the cursor moves to a new item the bank will be
+         * scrolled so that the cursor is within the bank, if possible.
+         *
+         * @param cursorTrack
+        The {@link CursorTrack} that this bank should follow.
+         * @since API version 2
+         */
+        followCursorTrack(cursorTrack?: any): void;
+
     }
 
     /**
@@ -5942,14 +6018,13 @@ declare namespace API {
         isClipLauncherOverdubEnabled(): SettableBooleanValue;
 
         /**
-         * Registers an observer that reports the current automation write mode.
+         * Value that reports the current automation write mode. Possible values are `"latch"`, `"touch"` or
+         * `"write"`.
          *
-         * @param callback
-        a callback function that receives a single string argument. Possible values are `"latch"`,
-        `"touch"` or `"write"`.
-         * @since API version 1
+         * @return {SettableEnumValue}
+         * @since API version 2
          */
-        addAutomationWriteModeObserver(callback?: Function): void;
+        automationWriteMode(): SettableEnumValue;
 
         /**
          * Value that reports if automation write is currently enabled for the arranger.
@@ -6032,33 +6107,13 @@ declare namespace API {
         isMetronomeAudibleDuringPreRoll(): SettableBooleanValue;
 
         /**
-         * Registers an observer that reports the current pre-roll setting.
+         * Value that reports the current pre-roll setting. Possible values are `"none"`, `"one_bar"`,
+         * `"two_bars"`, or `"four_bars"`.
          *
-         * @param callback
-        a callback function that receives a single string argument. Possible values are `"none"`,
-        `"one_bar"`, `"two_bars"`, or `"four_bars"`.
-         * @since API version 1
+         * @return {SettableEnumValue}
+         * @since API version 2
          */
-        addPreRollObserver(callback?: Function): void;
-
-        /**
-         * Updates the transport pre-roll setting according to the given parameter.
-         *
-         * @param value
-        the new pre-roll setting, either `"none"`, `"one_bar"`, `"two_bars"`, or `"four_bars"`.
-         * @since API version 1
-         */
-        setPreRoll(value?: any): void;
-
-        /**
-         * Sets the automation write mode.
-         *
-         * @param mode
-        the string that identifies the new automation write mode. Possible values are `"latch"`,
-        `"touch"` or `"write"`.
-         * @since API version 1
-         */
-        setAutomationWriteMode(mode?: any): void;
+        preRoll(): SettableEnumValue;
 
         /**
          * Toggles the latch automation write mode in the Bitwig Studio transport.
@@ -6118,10 +6173,10 @@ declare namespace API {
         /**
          * Returns an object that provides access to the transport position in Bitwig Studio.
          *
-         * @return {BeatTimeValue} a beat time object that represents the transport position
+         * @return {SettableBeatTimeValue} a beat time object that represents the transport position
          * @since API version 1
          */
-        getPosition(): BeatTimeValue;
+        getPosition(): SettableBeatTimeValue;
 
         /**
          * Sets the transport playback position to the given beat time value.
@@ -6149,18 +6204,18 @@ declare namespace API {
         /**
          * Returns an object that provides access to the punch-in position in the Bitwig Studio transport.
          *
-         * @return {BeatTimeValue} a beat time object that represents the punch-in position
+         * @return {SettableBeatTimeValue} a beat time object that represents the punch-in position
          * @since API version 1
          */
-        getInPosition(): BeatTimeValue;
+        getInPosition(): SettableBeatTimeValue;
 
         /**
          * Returns an object that provides access to the punch-out position in the Bitwig Studio transport.
          *
-         * @return {BeatTimeValue} a beat time object that represents the punch-out position
+         * @return {SettableBeatTimeValue} a beat time object that represents the punch-out position
          * @since API version 1
          */
-        getOutPosition(): BeatTimeValue;
+        getOutPosition(): SettableBeatTimeValue;
 
         /**
          * Returns an object that provides access to the cross-fader, used for mixing between A/B-channels as
@@ -6180,34 +6235,22 @@ declare namespace API {
         getTimeSignature(): TimeSignatureValue;
 
         /**
-         * Registers an observer that reports the current clip launcher post recording action.
+         * Value that reports the current clip launcher post recording action. Possible values are `"off"`,
+         * `"play_recorded"`, `"record_next_free_slot"`, `"stop"`, `"return_to_arrangement"`,
+         * `"return_to_previous_clip"` or `"play_random"`.
          *
-         * @param callback
-        a callback function that receives a single string argument. Possible values are `"off"`,
-        `"play_recorded"`, `"record_next_free_slot"`, `"stop"`, `"return_to_arrangement"`,
-        `"return_to_previous_clip"` or `"play_random"`.
-         * @since API version 1
+         * @return {SettableEnumValue}
+         * @since API version 2
          */
-        addClipLauncherPostRecordingActionObserver(callback?: Function): void;
-
-        /**
-         * Sets the automation write mode.
-         *
-         * @param action
-        the string that identifies the new automation write mode. Possible values are `"off"`,
-        `"play_recorded"`, `"record_next_free_slot"`, `"stop"`, `"return_to_arrangement"`,
-        `"return_to_previous_clip"` or `"play_random"`.
-         * @since API version 1
-         */
-        setClipLauncherPostRecordingAction(action?: any): void;
+        clipLauncherPostRecordingAction(): SettableEnumValue;
 
         /**
          * Returns an object that provides access to the clip launcher post recording time offset.
          *
-         * @return {BeatTimeValue} a beat time object that represents the post recording time offset
+         * @return {SettableBeatTimeValue} a beat time object that represents the post recording time offset
          * @since API version 1
          */
-        getClipLauncherPostRecordingTimeOffset(): BeatTimeValue;
+        getClipLauncherPostRecordingTimeOffset(): SettableBeatTimeValue;
 
     }
 
@@ -6263,4 +6306,5 @@ declare const host: API.Host;
 declare const loadAPI: typeof host.loadAPI;
 declare const load: typeof host.load;
 declare const println: typeof host.println;
+declare const errorln: typeof host.errorln;
 declare function dump(obj: any);

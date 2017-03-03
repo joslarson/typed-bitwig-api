@@ -123,6 +123,8 @@ module.exports.publish = function publishTsd(data, opts) {
     endLine();
     write('declare const println: typeof host.println;');
     endLine();
+    write('declare const errorln: typeof host.errorln;');
+    endLine();
     write('declare function dump(obj: any);');
     endLine();
     // END BITWIG CHANGES
