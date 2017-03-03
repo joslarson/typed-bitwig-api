@@ -1,6 +1,6 @@
 {
   "name": "bitwig-api-ts-stubs",
-  "version": "2.0.0-beta.1",
+  "version": "2.0.0",
   "description": "TypeScript definition file for the Bitwig Control Surface API.",
   "types": "bitwig-api.d.ts",
   "scripts": {
