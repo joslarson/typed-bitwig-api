@@ -1,6 +1,7 @@
 {
   "name": "bitwig-api-ts-stubs",
   "version": "2.0.0",
+  "repository": "taktil/bitwig-api-ts-stubs",
   "description": "TypeScript definition file for the Bitwig Control Surface API.",
   "types": "bitwig-api.d.ts",
   "scripts": {
@@ -12,14 +13,5 @@
     "glob-fs": "^0.1.6",
     "jsdoc": "^3.4.3",
     "typescript-formatter": "^4.1.0"
-  },
-  "//": "The following is the default babel config used by gulp for gulpfile.babel.js. Webpack defines its own babel config inline.",
-  "babel": {
-    "presets": [
-      "es2015"
-    ],
-    "plugins": [
-      "transform-object-rest-spread"
-    ]
   }
 }
