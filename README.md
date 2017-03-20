@@ -1,4 +1,4 @@
-# bitwig-api-ts-stubs
+# typed-bitwig-api
 
 Typescript types definition file for Bitwig Control Surface API.
 
