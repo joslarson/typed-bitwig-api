@@ -1,6 +1,7 @@
 'use strict';
 // modified version of https://github.com/englercj/tsd-jsdoc/blob/90dbce0e05864883250b340764a813e46fb67de8/publish.js
 
+const VERSION = 'v2.0.0';
 
 const env = require('jsdoc/env');
 const fs = require('jsdoc/fs');
@@ -31,7 +32,7 @@ const blankClassFileList = stubFiles.filter(file => {
     return isBlank;
 }).map(file => path.basename(file).slice(0, -3));
 
-// TODO: reproduce this bug on another system (WIERDEST BUG OF MY LIFE)!!!!
+// TODO: reproduce this bug on another system (WEIRDEST BUG OF MY LIFE)!!!!
 const augmentsListRegex = /[A-Z][A-Za-z]*\.prototype = new ((?:[a-zA-Z])+)\(\);/g;
 const augmentsListRegexNoS = /[A-Z][A-Za-z]*\.prototype = new ((?:[a-zA-RT-Z])+)\(\);/g;
 function getAugmentsList(element) {
@@ -97,7 +98,13 @@ module.exports.publish = function publishTsd(data, opts) {
     }
 
     // BITWIG CHANGES
-    write('declare namespace API {');
+    write(`// Type definitions for Bitwig Studio Control Surface Scripting API ${VERSION}
+// Project: https://bitwig.com
+// Definitions by: Joseph Larson <https://github.com/joslarson/>
+// Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
+// TypeScript Version: 2.2
+
+declare namespace API {`);
     endLine();
     // END BITWIG CHANGES
 
@@ -125,7 +132,7 @@ module.exports.publish = function publishTsd(data, opts) {
     endLine();
     write('declare const errorln: typeof host.errorln;');
     endLine();
-    write('declare function dump(obj: any);');
+    write('declare function dump(obj: any): void;');
     endLine();
     // END BITWIG CHANGES
 
@@ -358,12 +365,12 @@ function getTypeName(obj) {
     name = name.replace(/Object\.?<([^,]*), ?([^>]*)>/gi, '{ [k: $1]: $2 }');
     name = name.replace(/\*|mixed/g, 'any');
     name = name.replace(/(^|[^\w])function(?:\(\))?([^\w]|$)/gi, '$1(() => any)$2');
-    name = name.replace(/object/g, 'Object');
+    name = name.replace(/object/g, 'object');
 
     // BITWIG CHANGES
 
     // set callback param type
-    if (obj.name === 'callback') name = 'Function';
+    if (obj.name === 'callback') name = '(...args: any[]) => any';
 
     // map Java types to js
     name = name.replace(/int/g, 'number');
@@ -371,8 +378,8 @@ function getTypeName(obj) {
     name = name.replace(/float/g, 'number');
     name = name.replace(/byte/g, 'number');
     name = name.replace(/long/g, 'number');
-    name = name.replace(/java\.lang\.Runnable/g, 'Function');
-    name = name.replace(/ObjectType/g, 'Object');
+    name = name.replace(/java\.lang\.Runnable/g, '(...args: any[]) => any');
+    name = name.replace(/ObjectType/g, 'object');
     name = name.replace(/ValueType/g, 'any');
     name = name.replace(/ItemType/g, 'any');
 

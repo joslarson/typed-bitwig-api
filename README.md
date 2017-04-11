@@ -6,23 +6,21 @@ Typescript types definition file for Bitwig Control Surface API.
 ## Installation
 
 ```bash
-$ npm install bitwig-api-ts-stubs
+$ npm install typed-bitwig-api
 ```
 
-In your `tsconfig.json` for your project add the following to the `include` list:
+In your `tsconfig.json` for your project add the following to the `types` list:
 
 ```js
 {
     ...
-    "include": [
+    "types": [
         ...,
-        "node_modules/bitwig-api-ts-stubs/bitwig-api.d.ts"
+        "typed-bitwig-api"
     ],
     ...
 }
 ```
-
-> Note: Make sure your exclude patterns aren't excluding the entire `node_modules` directory, as this seems to negate the include.
 
 
 ## Usage
