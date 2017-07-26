@@ -1,4 +1,4 @@
-// Type definitions for Bitwig Studio Control Surface Scripting API 2.1.0
+// Type definitions for Bitwig Studio Control Surface Scripting API 2.1.0-rc.0
 // Project: https://bitwig.com
 // Definitions by: Joseph Larson <https://github.com/joslarson/>
 // TypeScript Version: 2.4.2
@@ -6748,7 +6748,7 @@ declare namespace API {
     }
 }
 
-declare const host: API.Host;
+declare const host: API.ControllerHost;
 declare const loadAPI: typeof host.loadAPI;
 declare const load: typeof host.load;
 declare const println: typeof host.println;

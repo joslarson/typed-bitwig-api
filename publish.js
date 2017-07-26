@@ -48,8 +48,6 @@ const enumList = stubFiles
     })
     .map(file => path.basename(file).slice(0, -3));
 
-console.log(enumList);
-
 // TODO: reproduce this bug on another system (WEIRDEST BUG OF MY LIFE)!!!!
 const augmentsListRegex = /[A-Z][A-Za-z]*\.prototype = new ((?:[a-zA-Z])+)\(\);/g;
 const augmentsListRegexNoS = /[A-Z][A-Za-z]*\.prototype = new ((?:[a-zA-RT-Z])+)\(\);/g;
@@ -137,7 +135,7 @@ declare namespace API {`);
     write('}');
     endLine();
     endLine();
-    write('declare const host: API.Host;');
+    write('declare const host: API.ControllerHost;');
     endLine();
     write('declare const loadAPI: typeof host.loadAPI;');
     endLine();
