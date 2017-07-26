@@ -6,7 +6,7 @@
   "types": "bitwig-api.d.ts",
   "scripts": {
     "build": "jsdoc -d ./ -t ./ js-stubs && tsfmt -r bitwig-api.d.ts && prettier --parser typescript --print-width 100 --tab-width 4 --single-quote --trailing-comma=es5 --write bitwig-api.d.ts",
-    "postversion": "npm run build"
+    "version": "npm run build && git add bitwig-api.d.ts"
   },
   "author": "Joseph Larson",
   "license": "BSD-3-Clause",
