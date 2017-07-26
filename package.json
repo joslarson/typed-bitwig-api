@@ -4,22 +4,16 @@
   "description": "TypeScript definition file for the Bitwig Control Surface API.",
   "types": "bitwig-api.d.ts",
   "scripts": {
-    "build": "./node_modules/jsdoc/jsdoc.js -d ./ -t ./ js-stubs && ./node_modules/typescript-formatter/bin/tsfmt -r bitwig-api.d.ts"
+    "build": "jsdoc -d ./ -t ./ js-stubs && tsfmt -r bitwig-api.d.ts && prettier --parser typescript --print-width 100 --tab-width 4 --single-quote --trailing-comma=es5 --write bitwig-api.d.ts"
   },
   "author": "Joseph Larson",
   "license": "BSD-3-Clause",
   "devDependencies": {
-    "glob-fs": "^0.1.6",
-    "jsdoc": "^3.4.3",
-    "typescript-formatter": "^4.1.0"
-  },
-  "//": "The following is the default babel config used by gulp for gulpfile.babel.js. Webpack defines its own babel config inline.",
-  "babel": {
-    "presets": [
-      "es2015"
-    ],
-    "plugins": [
-      "transform-object-rest-spread"
-    ]
+    "glob": "^7.1.2",
+    "glob-fs": "0.1.6",
+    "jsdoc": "3.4.3",
+    "prettier": "1.5.3",
+    "typescript": "2.4.2",
+    "typescript-formatter": "4.1.0"
   }
 }
