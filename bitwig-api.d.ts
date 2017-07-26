@@ -1,4 +1,4 @@
-// Type definitions for Bitwig Studio Control Surface Scripting API 2.1.0-rc.0
+// Type definitions for Bitwig Studio Control Surface Scripting API 2.1.0-rc.1
 // Project: https://bitwig.com
 // Definitions by: Joseph Larson <https://github.com/joslarson/>
 // TypeScript Version: 2.4.2
