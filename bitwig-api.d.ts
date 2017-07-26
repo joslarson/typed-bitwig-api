@@ -1,7 +1,7 @@
-// Type definitions for Bitwig Studio Control Surface Scripting API v2.0.0
+// Type definitions for Bitwig Studio Control Surface Scripting API 2.1.0
 // Project: https://bitwig.com
 // Definitions by: Joseph Larson <https://github.com/joslarson/>
-// Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
+// TypeScript Version: 2.4.2
 
 declare namespace API {
     /**
@@ -16,6 +16,8 @@ declare namespace API {
      * @since API version 1
      */
     interface Action {
+        [key: string]: any;
+
         /**
          * Returns a string the identifies this action uniquely.
          *
@@ -54,7 +56,6 @@ declare namespace API {
          * @since API version 1
          */
         invoke(): void;
-
     }
 
     /**
@@ -67,6 +68,8 @@ declare namespace API {
      * @since API version 1
      */
     interface ActionCategory {
+        [key: string]: any;
+
         /**
          * Returns a string the identifies this action category uniquely.
          *
@@ -90,7 +93,6 @@ declare namespace API {
          * @since API version 1
          */
         getActions(): Action[];
-
     }
 
     /**
@@ -100,11 +102,13 @@ declare namespace API {
      * pretty much as displayed in the Bitwig Studio commander dialog (see {@link #getActions()},
      * {@link #getAction(String)}, {@link #getActionCategories()}), {@link #getActionCategory(String)}).<br/>
      *
-     * To receive an instance of the application interface call {@link Host#createApplication()}.
+     * To receive an instance of the application interface call {@link ControllerHost#createApplication()}.
      *
      * @since API version 1
      */
     interface Application {
+        [key: string]: any;
+
         /**
          * Creates a new audio track at the given position.
          *
@@ -523,17 +527,18 @@ declare namespace API {
          * @since API version 1
          */
         toggleFullScreen(): void;
-
     }
 
     /**
      * An interface representing various commands which can be performed on the Bitwig Studio arranger.<br/>
      *
-     * To receive an instance of the application interface call {@link Host#createArranger}.
+     * To receive an instance of the application interface call {@link ControllerHost#createArranger}.
      *
      * @since API version 1
      */
     interface Arranger {
+        [key: string]: any;
+
         /**
          * Gets an object that allows to enable/disable arranger playback follow. Observers can be registered on
          * the returned object for receiving notifications when the setting switches between on and off.
@@ -601,7 +606,46 @@ declare namespace API {
          * @since API version 1
          */
         areEffectTracksVisible(): SettableBooleanValue;
+    }
 
+    interface AutoDetectionMidiPortNames {
+        [key: string]: any;
+
+        /**
+         * @return {String[]}
+         */
+        getInputNames(): string[];
+
+        /**
+         * @return {String[]}
+         */
+        getOutputNames(): string[];
+    }
+
+    interface AutoDetectionMidiPortNamesList {
+        [key: string]: any;
+
+        /**
+         * @param {String[]} inputNames
+         * @param {String[]} outputNames
+         */
+        add(inputNames?: string[], outputNames?: string[]): void;
+
+        /**
+         * @return {java.util.List<AutoDetectionMidiPortNames>}
+         */
+        getPortNames(): AutoDetectionMidiPortNames[];
+
+        /**
+         * @return {int}
+         */
+        getCount(): number;
+
+        /**
+         * @param {int} index
+         * @return {AutoDetectionMidiPortNames}
+         */
+        getPortNamesAt(index?: number): AutoDetectionMidiPortNames;
     }
 
     /**
@@ -613,6 +657,8 @@ declare namespace API {
      * @since API version 2
      */
     interface Bank extends ObjectProxy {
+        [key: string]: any;
+
         /**
          * The fixed size of this bank.
          *
@@ -651,7 +697,6 @@ declare namespace API {
          * @since API version 2
          */
         cursorIndex(): SettableIntegerValue;
-
     }
 
     /**
@@ -660,6 +705,8 @@ declare namespace API {
      * @since API version 2
      */
     interface BeatTimeFormatter {
+        [key: string]: any;
+
         /**
          * Formats the supplied beat time as a string in the supplied time signature.
          *
@@ -671,8 +718,13 @@ declare namespace API {
          * @return {string}
          * @since API version 2
          */
-        formatBeatTime(beatTime?: number, isAbsolute?: boolean, timeSignatureNumerator?: number, timeSignatureDenominator?: number, timeSignatureTicks?: number): string;
-
+        formatBeatTime(
+            beatTime?: number,
+            isAbsolute?: boolean,
+            timeSignatureNumerator?: number,
+            timeSignatureDenominator?: number,
+            timeSignatureTicks?: number
+        ): string;
     }
 
     /**
@@ -681,6 +733,8 @@ declare namespace API {
      * @since API version 1
      */
     interface BeatTimeValue extends DoubleValue {
+        [key: string]: any;
+
         /**
          * Gets the current beat time formatted according to the supplied formatter.
          *
@@ -689,10 +743,11 @@ declare namespace API {
          * @since API version 2
          */
         getFormatted(formatter?: BeatTimeFormatter): string;
-
     }
 
     interface BooleanValue extends Value {
+        [key: string]: any;
+
         /**
          * Gets the current value.
          *
@@ -700,15 +755,15 @@ declare namespace API {
          * @since API version 2
          */
         get(): boolean;
-
     }
 
     interface BooleanValueChangedCallback extends ValueChangedCallback {
+        [key: string]: any;
+
         /**
          * @param {boolean} newValue
          */
         valueChanged(newValue?: boolean): void;
-
     }
 
     /**
@@ -717,6 +772,8 @@ declare namespace API {
      * @since API version 1
      */
     interface BrowserColumn extends ObjectProxy {
+        [key: string]: any;
+
         /**
          * Registers an observer that reports if the column exists.
          *
@@ -751,7 +808,6 @@ declare namespace API {
          * @return {BrowserItemBank} the requested item bank object
          */
         createItemBank(size?: any): BrowserItemBank;
-
     }
 
     /**
@@ -760,6 +816,8 @@ declare namespace API {
      * @since API version 1
      */
     interface BrowserFilterColumn extends BrowserColumn {
+        [key: string]: any;
+
         /**
          * Returns the filter item that represents the top-level all/any/everything wildcard item.
          *
@@ -775,7 +833,6 @@ declare namespace API {
          * @since API version2
          */
         name(): StringValue;
-
     }
 
     /**
@@ -784,6 +841,8 @@ declare namespace API {
      * @since API version 1
      */
     interface BrowserFilterItem extends BrowserItem {
+        [key: string]: any;
+
         /**
          * Value that reports the hit count of the filter item.
          *
@@ -791,7 +850,6 @@ declare namespace API {
          * @since API version 2
          */
         hitCount(): IntegerValue;
-
     }
 
     /**
@@ -800,6 +858,7 @@ declare namespace API {
      * @since API version 1
      */
     interface BrowserFilterItemBank extends BrowserItemBank {
+        [key: string]: any;
     }
 
     /**
@@ -808,6 +867,8 @@ declare namespace API {
      * @since API version 1
      */
     interface BrowserItem extends ObjectProxy {
+        [key: string]: any;
+
         /**
          * Value that reports the name of the browser item.
          *
@@ -823,7 +884,6 @@ declare namespace API {
          * @since API version 1
          */
         isSelected(): SettableBooleanValue;
-
     }
 
     /**
@@ -832,85 +892,7 @@ declare namespace API {
      * @since API version 1
      */
     interface BrowserItemBank extends Bank {
-        /**
-         * Returns the window size that was used to configure the filter column during creation.
-         *
-         * @return {int} the size of the filter column.
-         * @since API version 1
-         */
-        getSize(): number;
-
-        /**
-         * Returns the item for the given index.
-         *
-         * @param index
-        the item index, must be in the range `[0..getSize-1]`
-         * @return {BrowserItem} the requested item object
-         * @since API version 1
-         */
-        getItem(index?: any): BrowserItem;
-
-        /**
-         * Scrolls the filter column entries one item up.
-         *
-         * @since API version 1
-         */
-        scrollUp(): void;
-
-        /**
-         * Scrolls the filter column entries one item down.
-         *
-         * @since API version 1
-         */
-        scrollDown(): void;
-
-        /**
-         * Scrolls the filter column entries one page up. For example if the column is configured with a window
-         * size of 8 entries and is currently showing items [1..8], calling this method would scroll the column to
-         * show items [9..16].
-         *
-         * @since API version 1
-         */
-        scrollPageUp(): void;
-
-        /**
-         * Scrolls the filter column entries one page up. For example if the column is configured with a window
-         * size of 8 entries and is currently showing items [9..16], calling this method would scroll the column to
-         * show items [1..8].
-         *
-         * @since API version 1
-         */
-        scrollPageDown(): void;
-
-        /**
-         * Registers an observer that reports the current scroll position, more specifically the position of the
-         * first item within the underlying list of entries, that is shown as the first entry within the window.
-         *
-         * @param callback
-        a callback function that receives a single integer number parameter. The parameter reflects
-        the scroll position, or `-1` in case the column has no content.
-         * @since API version 1
-         */
-        addScrollPositionObserver(callback?: (...args: any[]) => any): void;
-
-        /**
-         * Registers an observer that reports if the column entries can be scrolled further up.
-         *
-         * @param callback
-        a callback function that receives a single boolean parameter
-         * @since API version 1
-         */
-        addCanScrollUpObserver(callback?: (...args: any[]) => any): void;
-
-        /**
-         * Registers an observer that reports if the column entries can be scrolled further down.
-         *
-         * @param callback
-        a callback function that receives a single boolean parameter
-         * @since API version 1
-         */
-        addCanScrollDownObserver(callback?: (...args: any[]) => any): void;
-
+        [key: string]: any;
     }
 
     /**
@@ -919,6 +901,7 @@ declare namespace API {
      * @since API version 1
      */
     interface BrowserResultsColumn extends BrowserColumn {
+        [key: string]: any;
     }
 
     /**
@@ -927,6 +910,7 @@ declare namespace API {
      * @since API version 1
      */
     interface BrowserResultsItem extends BrowserItem {
+        [key: string]: any;
     }
 
     /**
@@ -935,6 +919,7 @@ declare namespace API {
      * @since API version 1
      */
     interface BrowserResultsItemBank extends BrowserItemBank {
+        [key: string]: any;
     }
 
     /**
@@ -944,6 +929,8 @@ declare namespace API {
      * @since API version 1
      */
     interface BrowsingSessionBank extends Bank {
+        [key: string]: any;
+
         /**
          * Returns the window size that was used to configure the session bank during creation.
          *
@@ -961,10 +948,10 @@ declare namespace API {
          * @since API version 1
          */
         getSession(index?: any): any;
-
     }
 
     interface Callback {
+        [key: string]: any;
     }
 
     /**
@@ -974,6 +961,8 @@ declare namespace API {
      * @since API version 1
      */
     interface Channel extends DeviceChain {
+        [key: string]: any;
+
         /**
          * Returns an object that represents the activated state of the channel.
          *
@@ -1029,7 +1018,12 @@ declare namespace API {
         [0..range-1].
          * @since API version 1
          */
-        addVuMeterObserver(range?: any, channel?: any, peak?: any, callback?: (...args: any[]) => any): void;
+        addVuMeterObserver(
+            range?: any,
+            channel?: any,
+            peak?: any,
+            callback?: (...args: any[]) => any
+        ): void;
 
         /**
          * Returns an array of the playing notes.
@@ -1091,7 +1085,6 @@ declare namespace API {
          * @since API version 1
          */
         makeVisibleInMixer(): void;
-
     }
 
     /**
@@ -1103,6 +1096,8 @@ declare namespace API {
      * @since API version 1
      */
     interface ChannelBank extends ObjectProxy {
+        [key: string]: any;
+
         /**
          * Returns the channel for the given index.
          *
@@ -1201,7 +1196,6 @@ declare namespace API {
          * @since API version 2
          */
         channelCount(): IntegerValue;
-
     }
 
     /**
@@ -1213,6 +1207,8 @@ declare namespace API {
      * @since API version 1
      */
     interface Clip extends ObjectProxy {
+        [key: string]: any;
+
         /**
          * Scroll the note grid so that the given key becomes visible.
          *
@@ -1542,10 +1538,11 @@ declare namespace API {
          * @since API version 1
          */
         getTrack(): Track;
-
     }
 
     interface ClipLauncherSlot extends ClipLauncherSlotOrScene {
+        [key: string]: any;
+
         /**
          * Value that reports whether this slot is selected or not.
          *
@@ -1616,7 +1613,6 @@ declare namespace API {
          * @since API version 2
          */
         browseToInsertClip(): void;
-
     }
 
     /**
@@ -1626,6 +1622,8 @@ declare namespace API {
      * @since API version 1
      */
     interface ClipLauncherSlotBank extends ClipLauncherSlotOrSceneBank {
+        [key: string]: any;
+
         /**
          * Selects the slot with the given index.
          *
@@ -1799,10 +1797,11 @@ declare namespace API {
          * @return {SettableBooleanValue} a boolean value object.
          */
         isMasterTrackContentShownOnTrackGroups(): SettableBooleanValue;
-
     }
 
     interface ClipLauncherSlotBankPlaybackStateChangedCallback extends Callback {
+        [key: string]: any;
+
         /**
          * Registers an observer that reports the playback state of clips / slots. The reported states include
          * `stopped`, `playing`, `recording`, but also `queued for stop`, `queued for playback`, `queued for
@@ -1814,10 +1813,11 @@ declare namespace API {
          * @since API version 1
          */
         playbackStateChanged(slotIndex?: number, playbackState?: number, isQueued?: boolean): void;
-
     }
 
     interface ClipLauncherSlotOrScene extends ObjectProxy {
+        [key: string]: any;
+
         /**
          * Returns an object that provides access to the name of the scene.
          *
@@ -1840,7 +1840,6 @@ declare namespace API {
          * @since API version 2
          */
         sceneIndex(): IntegerValue;
-
     }
 
     /**
@@ -1849,6 +1848,8 @@ declare namespace API {
      * @since API version 1
      */
     interface ClipLauncherSlotOrSceneBank extends Bank {
+        [key: string]: any;
+
         /**
          * Launches the scene/slot with the given index.
          *
@@ -1883,10 +1884,11 @@ declare namespace API {
          * @since API version 1
          */
         addNameObserver(callback?: (...args: any[]) => any): void;
-
     }
 
     interface ColorValue extends Value {
+        [key: string]: any;
+
         /**
          * Gets the red component of the current value.
          *
@@ -1910,1273 +1912,132 @@ declare namespace API {
          * @since API version 2
          */
         blue(): number;
-
     }
 
     interface ColorValueChangedCallback extends ValueChangedCallback {
+        [key: string]: any;
+
         /**
          * @param {float} red
          * @param {float} green
          * @param {float} blue
          */
         valueChanged(red?: number, green?: number, blue?: number): void;
-
     }
 
     interface ConnectionEstablishedCallback extends Callback {
+        [key: string]: any;
+
         /**
          * @param {RemoteConnection} connection
          */
         connectionEstablished(connection?: RemoteConnection): void;
-
     }
 
     /**
-     * A generic interface that provides the foundation for working with selections.
-     *
-     * Implementations of this interface can either represent custom selection cursors that are created by
-     * controller scripts, or represent the cursor of user selections as shown in Bitwig Studio editors, such as
-     * the Arranger track selection cursor, the note editor event selection cursor and so on.
-     *
-     * @since API version 1
+     * Defines an extension that enabled a controller to work with Bitwig Studio.
      */
-    interface Cursor {
-        /**
-         * Select the previous item.
-         *
-         * @since API version 1
-         */
-        selectPrevious(): void;
+    interface ControllerExtension {
+        [key: string]: any;
 
         /**
-         * Select the next item.
-         *
-         * @since API version 1
+         * @param {int} index
+         * @return {MidiIn}
          */
-        selectNext(): void;
+        getMidiInPort(index?: number): MidiIn;
 
         /**
-         * Select the first item.
-         *
-         * @since API version 1
+         * @param {int} index
+         * @return {MidiOut}
          */
-        selectFirst(): void;
+        getMidiOutPort(index?: number): MidiOut;
 
         /**
-         * Select the last item.
-         *
-         * @since API version 1
+         * Initializes this controller extension. This will be called once when the extension is started. During initialization the
+         * extension should call the various create methods available via the {@link ControllerHost} interface in order to
+         * create objects used to communicate with various parts of the Bitwig Studio application (e.g
+         * {@link ControllerHost#createCursorTrack(int, int)}.
          */
-        selectLast(): void;
+        init(): void;
 
         /**
-         * Boolean value that reports whether there is an item after the current cursor position.
-         *
-         * @return {BooleanValue}
-         * @since API version 2
+         * Called once when this controller extension is stopped.
          */
-        hasNext(): BooleanValue;
+        exit(): void;
 
         /**
-         * Boolean value that reports whether there is an item before the current cursor position.
-         *
-         * @return {BooleanValue}
-         * @since API version 2
+         * Called when this controller extension should flush any pending updates to the controller.
          */
-        hasPrevious(): BooleanValue;
-
+        flush(): void;
     }
 
     /**
-     * Instances of this interface are used to navigate the filter columns of a Bitwig Studio browsing session.
-     *
-     * @since API version 1
+     * Defines an extension that enabled a controller to work with Bitwig Studio.
      */
-    interface CursorBrowserFilterColumn extends BrowserFilterColumn {
-    }
+    interface ControllerExtensionDefinition {
+        [key: string]: any;
 
-    /**
-     * Instances of this interface represent entries in a browser filter column.
-     *
-     * @since API version 1
-     */
-    interface CursorBrowserFilterItem extends BrowserFilterItem {
         /**
-         * Select the parent item.
-         *
-         * @since API version 1
+         * @return {string}
          */
-        selectParent(): void;
+        toString(): string;
 
         /**
-         * Select the first child item.
-         *
-         * @since API version 1
-         */
-        selectFirstChild(): void;
-
-        /**
-         * Select the last child item.
-         *
-         * @since API version 1
-         */
-        selectLastChild(): void;
-
-        /**
-         * Select the previous item.
-         *
-         * @since API version 1
-         */
-        moveToPrevious(): void;
-
-        /**
-         * Select the next item.
-         *
-         * @since API version 1
-         */
-        moveToNext(): void;
-
-        /**
-         * Select the first item.
-         *
-         * @since API version 1
-         */
-        moveToFirst(): void;
-
-        /**
-         * Select the last item.
-         *
-         * @since API version 1
-         */
-        moveToLast(): void;
-
-        /**
-         * Select the parent item.
-         *
-         * @since API version 1
-         */
-        moveToParent(): void;
-
-        /**
-         * Move the cursor to the first child item.
-         *
-         * @since API version 1
-         */
-        moveToFirstChild(): void;
-
-        /**
-         * Move the cursor to the last child item.
-         *
-         * @since API version 1
-         */
-        moveToLastChild(): void;
-
-    }
-
-    /**
-     * Instances of this interface represent entries in a browser filter column.
-     *
-     * @since API version 1
-     */
-    interface CursorBrowserItem extends BrowserItem {
-        /**
-         * Returns a bank object that provides access to the siblings of the cursor item. The bank will
-         * automatically scroll so that the cursor item is always visible.
-         *
-         * @param numSiblings
-        the number of simultaneously accessible siblings
-         * @return {BrowserItemBank} the requested item bank object
-         */
-        createSiblingsBank(numSiblings?: any): BrowserItemBank;
-
-    }
-
-    /**
-     * Instances of this interface represent entries in a browser column.
-     *
-     * @since API version 1
-     */
-    interface CursorBrowserResultItem extends BrowserResultsItem {
-    }
-
-    /**
-     * Instances of this interface are used for navigating the various browsing sessions of Bitwig Studio's
-     * contextual browser.
-     *
-     * @since API version 1
-     */
-    interface CursorBrowsingSession {
-    }
-
-    /**
-     * A special kind of channel that follows a channel selection cursor in Bitwig Studio. The selection can
-     * either be a custom selection cursor that gets created by the controller script, or represent the user
-     * selection cursor as shown in the Bitwig Studio editors, such as the Arranger track selection cursor.
-     *
-     * @since API version 1
-     */
-    interface CursorChannel extends Cursor {
-        /**
-         * Points the cursor to the given channel.
-         *
-         * @param channel
-        the channel that this channel cursor should point to
-         * @since API version 1
-         */
-        selectChannel(channel?: any): void;
-
-    }
-
-    /**
-     * A special kind of selection cursor used for devices.
-     *
-     * @since API version 1
-     */
-    interface CursorDevice extends Cursor {
-        /**
-         * Returns the channel that this cursor device was created on. Currently this will always be a track or
-         * cursor track instance.
-         *
-         * @return {Channel} the track or cursor track object that was used for creation of this cursor device.
-         * @since API version 1
-         */
-        getChannel(): Channel;
-
-        /**
-         * Selects the parent device if there is any.
-         *
-         * @since API version 1
-         */
-        selectParent(): void;
-
-        /**
-         * Moves this cursor to the given device.
-         *
-         * @param device
-        the device that this cursor should point to
-         * @since API version 1
-         */
-        selectDevice(device?: any): void;
-
-        /**
-         * Selects the first device in the given channel.
-         *
-         * @param channel
-        the channel in which the device should be selected
-         * @since API version 1
-         */
-        selectFirstInChannel(channel?: any): void;
-
-        /**
-         * Selects the last device in the given channel.
-         *
-         * @param channel
-        the channel in which the device should be selected
-         * @since API version 1
-         */
-        selectLastInChannel(channel?: any): void;
-
-        /**
-         * Selects the first device in the nested FX slot with the given name.
-         *
-         * @param chain
-        the name of the FX slot in which the device should be selected
-         * @since API version 1
-         */
-        selectFirstInSlot(chain?: any): void;
-
-        /**
-         * Selects the last device in the nested FX slot with the given name.
-         *
-         * @param chain
-        the name of the FX slot in which the device should be selected
-         * @since API version 1
-         */
-        selectLastInSlot(chain?: any): void;
-
-        /**
-         * Selects the first device in the drum pad associated with the given key.
-         *
-         * @param key
-        the key associated with the drum pad in which the device should be selected
-         * @since API version 1
-         */
-        selectFirstInKeyPad(key?: any): void;
-
-        /**
-         * Selects the last device in the drum pad associated with the given key.
-         *
-         * @param key
-        the key associated with the drum pad in which the device should be selected
-         * @since API version 1
-         */
-        selectLastInKeyPad(key?: any): void;
-
-        /**
-         * Selects the first device in the nested layer with the given index.
-         *
-         * @param index
-        the index of the nested layer in which the device should be selected
-         * @since API version 1
-         */
-        selectFirstInLayer(index?: any): void;
-
-        /**
-         * Selects the last device in the nested layer with the given index.
-         *
-         * @param index
-        the index of the nested layer in which the device should be selected
-         * @since API version 1
-         */
-        selectLastInLayer(index?: any): void;
-
-    }
-
-    interface CursorDeviceFollowMode {
-        FOLLOW_SELECTION: any;
-
-        FIRST_DEVICE: any;
-
-        FIRST_INSTRUMENT: any;
-
-        FIRST_AUDIO_EFFECT: any;
-
-    }
-
-    /**
-     * Instances of this interface represent the cursor item in device layer selections.
-     *
-     * @since API version 1
-     */
-    interface CursorDeviceLayer extends CursorChannel {
-    }
-
-    /**
-     * Instances of this interface represent the selected device slot as shown in the Bitwig Studio user
-     * interface.
-     *
-     * @since API version 1
-     */
-    interface CursorDeviceSlot extends DeviceChain {
-        /**
-         * @param {string} slot
-         */
-        selectSlot(slot?: string): void;
-
-    }
-
-    /**
-     * Instances of this interface represent the cursor item of track selections.
-     *
-     * @since API version 1
-     */
-    interface CursorNavigationMode {
-        NESTED: any;
-
-        FLAT: any;
-
-        GUI: any;
-
-    }
-
-    /**
-     * Represents a cursor that looks at a {@link RemoteControlsPage}.
-     *
-     * @since API version 2
-     */
-    interface CursorRemoteControlsPage extends Cursor {
-        /**
-         * Value that reports the names of the devices parameter pages.
-         *
-         * @return {StringArrayValue}
-         */
-        pageNames(): StringArrayValue;
-
-        /**
-         * Selects the next page.
-         *
-         * @param shouldCycle
-        If true then when the end is reached and there is no next page it selects the first page
-         * @since API version 2
-         */
-        selectNextPage(shouldCycle?: any): void;
-
-        /**
-         * Selects the previous page.
-         *
-         * @param shouldCycle
-        If true then when the end is reached and there is no next page it selects the first page
-         * @since API version 2
-         */
-        selectPreviousPage(shouldCycle?: any): void;
-
-        /**
-         * Selects the next page that matches the given expression.
-         *
-         * @param expression
-        An expression that can match a page based on how it has been tagged. For now this can only be
-        the name of a single tag that you would like to match.
-         * @param shouldCycle
-        If true then when the end is reached and there is no next page it selects the first page
-         * @since API version 2
-         */
-        selectNextPageMatching(expression?: any, shouldCycle?: any): void;
-
-        /**
-         * Selects the previous page that matches the given expression.
-         *
-         * @param expression
-        An expression that can match a page based on how it has been tagged. For now this can only be
-        the name of a single tag that you would like to match.
-         * @param shouldCycle
-        If true then when the end is reached and there is no next page it selects the first page
-         * @since API version 2
-         */
-        selectPreviousPageMatching(expression?: any, shouldCycle?: any): void;
-
-        /**
-         * Value that reports the currently selected parameter page index.
-         *
-         * @return {SettableIntegerValue}
-         * @since API version 2
-         */
-        selectedPageIndex(): SettableIntegerValue;
-
-    }
-
-    /**
-     * Instances of this interface represent the cursor item of track selections.
-     *
-     * @since API version 1
-     */
-    interface CursorTrack extends CursorChannel {
-        /**
-         * Makes the cursor track point to it's parent group track, in case it is not already pointing to the root
-         * group track.
-         *
-         * @since API version 1
-         */
-        selectParent(): void;
-
-        /**
-         * Makes the cursor track point to the first child found with the track group that this cursor currently
-         * points to. If this cursor is not pointing to a track group or the track group is empty then this has no
-         * effect.
-         *
-         * @since API version 2
-         */
-        selectFirstChild(): void;
-
-        /**
-         * Specifies the behaviour of the functions {@link #selectPrevious()}, {@link #selectNext()},
-         * {@link #selectFirst()} and {@link #selectLast()}. Calling those functions can either navigate the cursor
-         * within the current nesting level, or over a flat list of either all tracks or only the expanded tracks.
-         * Default is CursorNavigationMode.FLAT.
-         *
-         * @param {CursorNavigationMode} mode
-         * @since API version 1
-         */
-        setCursorNavigationMode(mode?: CursorNavigationMode): void;
-
-        /**
-         * @return {PinnableCursorDevice}
-         */
-        createCursorDevice(): PinnableCursorDevice;
-
-    }
-
-    interface DataReceivedCallback extends Callback {
-        /**
-         * @param {byte[]} data
-         */
-        dataReceived(data?: number[]): void;
-
-    }
-
-    /**
-     * This interface represents a device in Bitwig Studio, both internal devices and plugins.
-     *
-     * @since API version 1
-     */
-    interface Device extends ObjectProxy {
-        /**
-         * Returns a representation of the device chain that contains this device. Possible device chain instances
-         * are tracks, device layers, drums pads, or FX slots.
-         *
-         * @return {DeviceChain} the requested device chain object
-         * @since API version 1
-         */
-        getDeviceChain(): DeviceChain;
-
-        /**
-         * Value that reports the position of the device within the parent device chain.
-         *
-         * @return {IntegerValue}
-         * @since API version 2
-         */
-        position(): IntegerValue;
-
-        /**
-         * Returns an object that provides access to the open state of plugin windows.
-         *
-         * @return {SettableBooleanValue} a boolean value object that represents the open state of the editor window, in case the device
-        features a custom editor window (such as plugins).
-         * @since API version 1
-         */
-        isWindowOpen(): SettableBooleanValue;
-
-        /**
-         * Returns an object that provides access to the expanded state of the device.
-         *
-         * @return {SettableBooleanValue} a boolean value object that represents the expanded state of the device.
-         * @since API version 1
-         */
-        isExpanded(): SettableBooleanValue;
-
-        /**
-         * Returns an object that provides access to the visibility of the device remote controls section.
-         *
-         * @return {SettableBooleanValue} a boolean value object that represents the remote controls section visibility.
-         * @since API version 2
-         */
-        isRemoteControlsSectionVisible(): SettableBooleanValue;
-
-        /**
-         * Creates a cursor for the selected remote controls page in the device with the supplied number of
-         * parameters. This section will follow the current page selection made by the user in the application.
-         *
-         * @param parameterCount
-        The number of parameters the remote controls should contain
-         * @return {CursorRemoteControlsPage}
-         * @since API version 2
-         */
-        createCursorRemoteControlsPage(parameterCount?: any): CursorRemoteControlsPage;
-
-        /**
-         * Selects the device in Bitwig Studio.
-         *
-         * @since API version 1
-         */
-        selectInEditor(): void;
-
-        /**
-         * Value that reports if the device is a plugin.
-         *
-         * @return {BooleanValue}
-         * @since API version 2
-         */
-        isPlugin(): BooleanValue;
-
-        /**
-         * Switches to the previous parameter page.
-         *
-         * @since API version 1
-         */
-        previousParameterPage(): void;
-
-        /**
-         * Switches to the next parameter page.
-         *
-         * @since API version 1
-         */
-        nextParameterPage(): void;
-
-        /**
-         * Registers an observer that reports if there is a previous parameter page.
-         *
-         * @param callback
-        a callback function that receives a single boolean parameter
-         * @since API version 1
-         */
-        addPreviousParameterPageEnabledObserver(callback?: (...args: any[]) => any): void;
-
-        /**
-         * Registers an observer that reports if there is a next parameter page.
-         *
-         * @param callback
-        a callback function that receives a single boolean parameter
-         * @since API version 1
-         */
-        addNextParameterPageEnabledObserver(callback?: (...args: any[]) => any): void;
-
-        /**
-         * Switches to the parameter page at the given page index.
-         *
-         * @param page
-        the index of the desired parameter page
-         * @since API version 1
-         */
-        setParameterPage(page?: any): void;
-
-        /**
-         * Returns an object used for browsing devices, presets and other content. Committing the browsing session
-         * will load or create a device from the selected resource and replace the current device.
-         *
-         * @param numFilterColumnEntries
-        the size of the window used to navigate the filter column entries.
-         * @param numResultsColumnEntries
-        the size of the window used to navigate the results column entries.
-         * @return {Browser} the requested device browser object.
-         * @since API version 1
-         */
-        createDeviceBrowser(numFilterColumnEntries?: any, numResultsColumnEntries?: any): any;
-
-        /**
-         * Value that reports the name of the device.
-         *
-         * @return {StringValue}
-         * @since API version 2
-         */
-        name(): StringValue;
-
-        /**
-         * Value that reports the last loaded preset name.
-         *
-         * @return {StringValue}
-         * @since API version 2
-         */
-        presetName(): StringValue;
-
-        /**
-         * Value that reports the current preset category name.
-         *
-         * @return {StringValue}
-         * @since API version 2
-         */
-        presetCategory(): StringValue;
-
-        /**
-         * Value that reports the current preset creator name.
-         *
-         * @return {StringValue}
-         * @since API version 2
-         */
-        presetCreator(): StringValue;
-
-        /**
-         * Registers an observer that reports the currently selected parameter page.
-         *
-         * @param valueWhenUnassigned
-        the default page index that gets reported when the device is not associated with a device
-        instance in Bitwig Studio yet.
-         * @param callback
-        a callback function that receives a single page index parameter (integer)
-         * @since API version 1
-         */
-        addSelectedPageObserver(valueWhenUnassigned?: any, callback?: (...args: any[]) => any): void;
-
-        /**
-         * Registers an observer that reports the name of the active modulation source.
-         *
-         * @param len
-        the maximum length of the name. Longer names will get truncated.
-         * @param textWhenUnassigned
-        the default name that gets reported when the device is not associated with a Bitwig Studio
-        device yet.
-         * @param callback
-        a callback function that receives a single name parameter (string)
-         * @since API version 1
-         */
-        addActiveModulationSourceObserver(len?: any, textWhenUnassigned?: any, callback?: (...args: any[]) => any): void;
-
-        /**
-         * Registers an observer that reports the names of the devices parameter pages.
-         *
-         * @param callback
-        a callback function that receives a single string array parameter containing the names of the
-        parameter pages
-         * @since API version 1
-         */
-        addPageNamesObserver(callback?: (...args: any[]) => any): void;
-
-        /**
-         * Value that reports if the device is enabled.
-         *
-         * @return {SettableBooleanValue}
-         * @since API version 2
-         */
-        isEnabled(): SettableBooleanValue;
-
-        /**
-         * Indicates if the device has nested device chains in FX slots. Use {@link #addSlotsObserver(Callable)
-         * addSlotsObserver(Callable)} to get a list of available slot names, and navigate to devices in those
-         * slots using the {@link CursorDevice} interface.
-         *
-         * @return {BooleanValue} a value object that indicates if the device has nested device chains in FX slots.
-         * @since API version 1
-         */
-        hasSlots(): BooleanValue;
-
-        /**
-         * Value of the list of available FX slots in this device.
-         *
-         * @return {StringArrayValue}
-         * @since API version 2
-         */
-        slotNames(): StringArrayValue;
-
-        /**
-         * Returns an object that represents the selected device slot as shown in the user interface, and that
-         * provides access to the contents of slot's device chain.
-         *
-         * @return {DeviceSlot} the requested slot cursor object
-         * @since API version 1
-         */
-        getCursorSlot(): DeviceSlot;
-
-        /**
-         * Indicates if the device is contained by another device.
-         *
-         * @return {BooleanValue} a value object that indicates if the device is nested
-         * @since API version 1
-         */
-        isNested(): BooleanValue;
-
-        /**
-         * Indicates if the device supports nested layers.
-         *
-         * @return {BooleanValue} a value object that indicates if the device supports nested layers.
-         * @since API version 1
-         */
-        hasLayers(): BooleanValue;
-
-        /**
-         * Indicates if the device has individual device chains for each note value.
-         *
-         * @return {BooleanValue} a value object that indicates if the device has individual device chains for each note value.
-         * @since API version 1
-         */
-        hasDrumPads(): BooleanValue;
-
-        /**
-         * Create a bank for navigating the nested layers of the device using a fixed-size window.
-         *
-         * @param numChannels
-        the number of channels that the device layer bank should be configured with
-         * @return {DeviceLayerBank} a device layer bank object configured with the desired number of channels
-         * @since API version 1
-         */
-        createLayerBank(numChannels?: any): DeviceLayerBank;
-
-        /**
-         * Create a bank for navigating the nested layers of the device using a fixed-size window.
-         *
-         * @param numPads
-        the number of channels that the drum pad bank should be configured with
-         * @return {DrumPadBank} a drum pad bank object configured with the desired number of pads
-         * @since API version 1
-         */
-        createDrumPadBank(numPads?: any): DrumPadBank;
-
-        /**
-         * Returns a device layer instance that can be used to navigate the layers or drum pads of the device, in
-         * case it has any.
-         *
-         * @return {CursorDeviceLayer} a cursor device layer instance
-         * @since API version 1
-         */
-        createCursorLayer(): CursorDeviceLayer;
-
-        /**
-         * Adds an observer on a list of all parameters for the device.
-         *
-         * The callback always updates with an array containing all the IDs for the device.
-         *
-         * @param callback
-        function with the signature (String[])
-         * @since API version 1
-         */
-        addDirectParameterIdObserver(callback?: (...args: any[]) => any): void;
-
-        /**
-         * Adds an observer for the parameter names (initial and changes) of all parameters for the device.
-         *
-         * @param maxChars
-        maximum length of the string sent to the observer.
-         * @param callback
-        function with the signature (String ID, String name)
-         * @since API version 1
-         */
-        addDirectParameterNameObserver(maxChars?: any, callback?: (...args: any[]) => any): void;
-
-        /**
-         * Returns an observer that reports changes of parameter display values, i.e. parameter values formatted as
-         * a string to be read by the user, for example "-6.02 dB". The returned observer object can be used to
-         * configure which parameters should be observed. By default no parameters are observed. It should be
-         * avoided to observe all parameters at the same time for performance reasons.
-         *
-         * @param maxChars
-        maximum length of the string sent to the observer.
-         * @param callback
-        function with the signature (String ID, String valueDisplay)
-         * @return {DirectParameterValueDisplayObserver} an observer object that can be used to enable or disable actual observing for certain
-        parameters.
-         * @since API version 1
-         */
-        addDirectParameterValueDisplayObserver(maxChars?: any, callback?: (...args: any[]) => any): DirectParameterValueDisplayObserver;
-
-        /**
-         * Adds an observer for the parameter display value (initial and changes) of all parameters for the device.
-         *
-         * @param callback
-        a callback function with the signature (String ID, float normalizedValue). If the value is not
-        accessible 'Number.NaN' (not-a-number) is reported, can be checked with 'isNaN(value)'.
-         * @since API version 1
-         */
-        addDirectParameterNormalizedValueObserver(callback?: (...args: any[]) => any): void;
-
-        /**
-         * Sets the parameter with the specified `id` to the given `value` according to the given `resolution`.
-         *
-         * @param id
-        the parameter identifier string
-         * @param value
-        the new value normalized to the range [0..resolution-1]
-         * @param resolution
-        the resolution of the new value
-         * @since API version 1
-         */
-        setDirectParameterValueNormalized(id?: any, value?: any, resolution?: any): void;
-
-        /**
-         * Increases the parameter with the specified `id` by the given `increment` according to the given
-         * `resolution`. To decrease the parameter value pass in a negative increment.
-         *
-         * @param id
-        the parameter identifier string
-         * @param increment
-        the amount that the parameter value should be increased by, normalized to the range
-        [0..resolution-1]
-         * @param resolution
-        the resolution of the new value
-         * @since API version 1
-         */
-        incDirectParameterValueNormalized(id?: any, increment?: any, resolution?: any): void;
-
-        /**
-         * Value that reports the file name of the currently loaded sample, in case the device is a sample
-         * container device.
-         *
-         * @return {StringValue}
-         * @since API version 2
-         */
-        sampleName(): StringValue;
-
-        /**
-         * Returns an object that provides bank-wise navigation of sibling devices of the same device chain
-         * (including the device instance used to create the siblings bank).
-         *
-         * @param numDevices
-        the number of devices that are simultaneously accessible
-         * @return {DeviceBank} the requested device bank object
-        @since API version 1
-         */
-        createSiblingsDeviceBank(numDevices?: any): DeviceBank;
-
-        /**
-         * Starts browsing for content that can be inserted before this device in Bitwig Studio's popup browser.
-         *
-         * @since API version 2
-         */
-        browseToInsertBeforeDevice(): void;
-
-        /**
-         * Starts browsing for content that can be inserted before this device in Bitwig Studio's popup browser.
-         *
-         * @since API version 2
-         */
-        browseToInsertAfterDevice(): void;
-
-        /**
-         * Starts browsing for content that can replace this device in Bitwig Studio's popup browser.
-         *
-         * @since API version 2
-         */
-        browseToReplaceDevice(): void;
-
-    }
-
-    /**
-     * This interface is used for navigation of device chains in Bitwig Studio. Instances are configured with a
-     * fixed number of devices and provide access to a excerpt of the devices inside a device chain. Various
-     * methods are provided for scrolling to different sections of the device chain. It basically acts like a
-     * window moving over the devices.
-     *
-     * To receive an instance of DeviceBank call {@link Track#createDeviceBank}.
-     *
-     * @see {@link Track#createDeviceBank}
-     * @since API version 1
-     */
-    interface DeviceBank extends Bank {
-        /**
-         * Returns the object that was used to instantiate this device bank. Possible device chain instances are
-         * tracks, device layers, drums pads, or FX slots.
-         *
-         * @return {DeviceChain} the requested device chain object
-         * @since API version 1
-         */
-        getDeviceChain(): DeviceChain;
-
-        /**
-         * Returns the device at the given index within the bank.
-         *
-         * @param indexInBank
-        the device index within this bank, not the position within the device chain. Must be in the
-        range [0..sizeOfBank-1].
-         * @return {Device} the requested device object
-         * @since API version 1
-         */
-        getDevice(indexInBank?: any): Device;
-
-        /**
-         * Scrolls the device window one page up.
-         *
-         * @since API version 1
-         */
-        scrollPageUp(): void;
-
-        /**
-         * Scrolls the device window one page down.
-         *
-         * @since API version 1
-         */
-        scrollPageDown(): void;
-
-        /**
-         * Scrolls the device window one device up.
-         *
-         * @since API version 1
-         */
-        scrollUp(): void;
-
-        /**
-         * Scrolls the device window one device down.
-         *
-         * @since API version 1
-         */
-        scrollDown(): void;
-
-        /**
-         * Makes the device with the given position visible in the track bank.
-         *
-         * @param position
-        the position of the device within the device chain
-         * @since API version 1
-         */
-        scrollTo(position?: any): void;
-
-        /**
-         * Registers an observer that reports if the device window can be scrolled further down.
-         *
-         * @param callback
-        a callback function that takes a single boolean parameter
-         * @since API version 1
-         */
-        addCanScrollDownObserver(callback?: (...args: any[]) => any): void;
-
-        /**
-         * Browses for content to insert a device at the given index inside this bank.
-         *
-         * @param index
-        the index to insert the device at. Must be >= 0 and <= {@link #getSizeOfBank()}.
-         * @since API version 2
-         */
-        browseToInsertDevice(index?: any): void;
-
-    }
-
-    /**
-     * The foundation of all interfaces that contain devices, such as tracks, device layers, drum pads or FX
-     * slots.
-     *
-     * @since API version 1
-     */
-    interface DeviceChain extends ObjectProxy {
-        /**
-         * Selects the device chain in Bitwig Studio, in case it is a selectable object.
-         *
-         * @since API version 1
-         */
-        selectInEditor(): void;
-
-        /**
-         * Value that reports the name of the device chain, such as the track name or the drum pad
-         * name.
-         *
-         * @return {SettableStringValue}
-         * @since API version 2
-         */
-        name(): SettableStringValue;
-
-        /**
-         * Registers an observer that reports if the device chain is selected in Bitwig Studio editors.
-         *
-         * @param callback
-        a callback function that takes a single boolean parameter.
-         * @since API version 1
-         */
-        addIsSelectedInEditorObserver(callback?: (...args: any[]) => any): void;
-
-        /**
-         * Returns an object that provides bank-wise navigation of devices.
-         *
-         * @param numDevices
-        the number of devices should be accessible simultaneously
-         * @return {DeviceBank} the requested device bank object
-        @since API version 1
-         */
-        createDeviceBank(numDevices?: any): DeviceBank;
-
-        /**
-         * Returns an object used for browsing devices, presets and other content. Committing the browsing session
-         * will load or create a device from the selected resource and insert it into the device chain.
-         *
-         * @param numFilterColumnEntries
-        the size of the window used to navigate the filter column entries.
-         * @param numResultsColumnEntries
-        the size of the window used to navigate the results column entries.
-         * @return {Browser} the requested device browser object.
-         * @since API version 1
-         */
-        createDeviceBrowser(numFilterColumnEntries?: any, numResultsColumnEntries?: any): any;
-
-        /**
-         * Starts browsing for content that can be inserted at the start of this device chain.
-         *
-         * @since API version 2
-         */
-        browseToInsertAtStartOfChain(): void;
-
-        /**
-         * Starts browsing for content that can be inserted at the end of this device chain.
-         *
-         * @since API version 2
-         */
-        browseToInsertAtEndOfChain(): void;
-
-    }
-
-    /**
-     * Instances of this interface represent device layers in Bitwig Studio.
-     *
-     * @since API version 1
-     */
-    interface DeviceLayer extends Channel {
-    }
-
-    /**
-     * Devices layers are features of special Bitwig Studio devices, more specifically the Layer Instrument and
-     * Layer FX devices, and are also shown as sub-channels in the mixer panel.
-     *
-     * Instances of device layer bank are configured with a fixed number of channels and represent an excerpt of
-     * underlying complete list of channels. Various methods are provided for scrolling to different sections of
-     * the underlying list. It basically acts like a one-dimensional window moving over the device layers.
-     *
-     * To receive an instance of device layer bank call {@link Device#createLayerBank(int numChannels)}.
-     *
-     * @see {@link Device#createLayerBank}
-     * @since API version 1
-     */
-    interface DeviceLayerBank extends ChannelBank {
-    }
-
-    /**
-     * Instances of this interface represent nested FX slots in devices.
-     *
-     * @since API version 1
-     */
-    interface DeviceSlot extends DeviceChain {
-    }
-
-    interface DirectParameterDisplayedValueChangedCallback extends Callback {
-        /**
-         * @param {string} id
-         * @param {string} value
-         */
-        directParameterDisplayedValueChanged(id?: string, value?: string): void;
-
-    }
-
-    interface DirectParameterNameChangedCallback extends Callback {
-        /**
-         * @param {string} id
-         * @param {string} name
-         */
-        directParameterNameChanged(id?: string, name?: string): void;
-
-    }
-
-    interface DirectParameterNormalizedValueChangedCallback extends Callback {
-        /**
-         * @param {string} id
-         * @param {double} normalizedValue
-         */
-        directParameterNormalizedValueChanged(id?: string, normalizedValue?: number): void;
-
-    }
-
-    /**
-     * This interface is used to configure observation of pretty-printed device parameter values.
-     *
-     * @since API version 1
-     */
-    interface DirectParameterValueDisplayObserver {
-        /**
-         * Starts observing the parameters according to the given parameter ID array, or stops observing in case
-         * `null` is passed in for the parameter ID array.
-         *
-         * @param parameterIds
-        the array of parameter IDs or `null` to stop observing parameter display values.
-         * @since API version 1
-         */
-        setObservedParameterIds(parameterIds?: any): void;
-
-    }
-
-    /**
-     * This interface is used to save custom script settings inside Bitwig Studio documents. The settings are
-     * shown to the user in the `Studio IO` panel of Bitwig Studio.
-     *
-     * @since API version 1
-     */
-    interface DocumentState extends Settings {
-    }
-
-    /**
-     * Instances of this interface represent double values.
-     *
-     * @since API version 2
-     */
-    interface DoubleValue extends Value {
-        /**
-         * Gets the current value.
-         *
-         * @return {double}
-         * @since API version 2
-         */
-        get(): number;
-
-    }
-
-    interface DoubleValueChangedCallback extends ValueChangedCallback {
-        /**
-         * @param {double} newValue
-         */
-        valueChanged(newValue?: number): void;
-
-    }
-
-    /**
-     * Instances of this interface are special kind of channel objects that represent the pads of a drum machine
-     * instrument. Drum pads are typically associated to channel objects via note keys.
-     *
-     * @since API version 1
-     */
-    interface DrumPad extends Channel {
-    }
-
-    /**
-     * Drum pads are features of special Bitwig Studio devices (currently only the Bitwig Drum Machine
-     * instrument), and are also shown as sub-channels in the mixer panel.
-     *
-     * Instances of drum pad bank are configured with a fixed number of pads/channels and represent an excerpt of
-     * underlying complete list of channels. Various methods are provided for scrolling to different sections of
-     * the underlying list. It basically acts like a one-dimensional window moving over the drum pad channels.
-     *
-     * To receive an instance of drum pad bank call {@link Device#createDrumPadBank(int numChannels)}.
-     *
-     * @see {@link Device#createDrumPadBank}
-     * @since API version 1
-     */
-    interface DrumPadBank extends ChannelBank {
-        /**
-         * Specifies if the Drum Machine should visualize which pads are part of the window. By default indications
-         * are enabled.
-         *
-         * @param shouldIndicate
-        `true` if visual indications should be enabled, `false` otherwise
-         * @since API version 1
-         */
-        setIndication(shouldIndicate?: any): void;
-
-    }
-
-    interface EnumValue extends Value {
-        /**
-         * Gets the current value.
+         * The vendor of the controller that this extension is for.
          *
          * @return {string}
-         * @since API version 2
          */
-        get(): string;
+        getHardwareVendor(): string;
 
-    }
-
-    interface EnumValueChangedCallback extends ObjectValueChangedCallback {
-    }
-
-    interface FloatValueChangedCallback extends Callback {
         /**
-         * @param {float} newValue
-         */
-        valueChanged(newValue?: number): void;
-
-    }
-
-    /**
-     * An interface representing the global groove settings of the project.
-     *
-     * @since API version 1
-     */
-    interface Groove {
-        /**
-         * Returns the enabled state of the groove.
+         * The model name of the controller that this extension is for.
          *
-         * @return {Parameter} an object that provides access to the groove on/off setting
-         * @since API version 1
+         * @return {string}
          */
-        getEnabled(): Parameter;
+        getHardwareModel(): string;
 
         /**
-         * Returns the object that represents the shuffle amount in Bitwig Studio.
+         * The number of MIDI in ports that this controller extension has.
          *
-         * @return {Parameter} an ranged value object that provides access to the shuffle amount
-         * @since API version 1
+         * @return {int}
          */
-        getShuffleAmount(): Parameter;
+        getNumMidiInPorts(): number;
 
         /**
-         * Returns the object that represents the shuffle rate in Bitwig Studio.
+         * The number of MIDI out ports that this controller extension has.
          *
-         * @return {Parameter} an ranged value object that provides access to the shuffle rate
-         * @since API version 1
+         * @return {int}
          */
-        getShuffleRate(): Parameter;
+        getNumMidiOutPorts(): number;
 
         /**
-         * Returns the object that represents the accent amount in Bitwig Studio.
+         * Obtains a {@link AutoDetectionMidiPortNamesList} that defines the names of the MIDI in and out ports
+         * that can be used for auto detection of the controller for the supplied platform type.
          *
-         * @return {Parameter} an ranged value object that provides access to the accent amount
-         * @since API version 1
+         * @param {PlatformType} platformType
+         * @return {AutoDetectionMidiPortNamesList}
          */
-        getAccentAmount(): Parameter;
+        getAutoDetectionMidiPortNamesList(platformType?: any): AutoDetectionMidiPortNamesList;
 
         /**
-         * Returns the object that represents the accent rate in Bitwig Studio.
+         * Lists the {@link AutoDetectionMidiPortNames} that defines the names of the MIDI in and out ports
+         * that can be used for auto detection of the controller for the supplied platform type.
          *
-         * @return {Parameter} an ranged value object that provides access to the accent rate
-         * @since API version 1
+         * @param {AutoDetectionMidiPortNamesList} list
+         * @param {PlatformType} platformType
          */
-        getAccentRate(): Parameter;
+        listAutoDetectionMidiPortNames(
+            list?: AutoDetectionMidiPortNamesList,
+            platformType?: any
+        ): void;
 
         /**
-         * Returns the object that represents the accent phase in Bitwig Studio.
+         * Creates an instance of this extension.
          *
-         * @return {Parameter} an ranged value object that provides access to the accent phase
-         * @since API version 1
+         * @param {ControllerHost} host
+         * @return {ControllerExtension}
          */
-        getAccentPhase(): Parameter;
-
+        createInstance(host?: ControllerHost): ControllerExtension;
     }
 
     /**
@@ -3207,34 +2068,65 @@ declare namespace API {
      * @include api-changes
      * @since API version 1
      */
-    interface Host {
+    interface ControllerHost extends Host {
+        [key: string]: any;
+
         /**
+         * Loads the supplied API version into the calling script. This is only intended to be called from a controller
+         * script. It cannot be called from a Java controller extension.
+         *
          * @param {int} version
          */
         loadAPI(version?: number): void;
 
         /**
+         * Determines whether the calling script should fail if it calls a deprecated method based on the API version
+         * that it requested.
+         *
          * @return {boolean}
          */
         shouldFailOnDeprecatedUse(): boolean;
 
         /**
+         * Sets whether the calling script should fail if it calls a deprecated method based on the API version
+         * that it requested. This is only intended to be called from a controller
+         * script. It cannot be called from a Java controller extension.
+         *
          * @param {boolean} value
          */
         setShouldFailOnDeprecatedUse(value?: boolean): void;
 
         /**
+         * Loads the script defined by the supplied path. This is only intended to be called from a controller
+         * script. It cannot be called from a Java controller extension.
+         *
          * @param {string} path
          */
         load(path?: string): void;
 
         /**
-         * Sets an email address to use for reporting errors found in this script.
+         * Indicates if the host platform is Windows.
          *
-         * @param {string} address
-         * @since API version 2
+         * @return {boolean} `true` if the host platform is Windows, `false` otherwise.
+         * @since API version 1
          */
-        setErrorReportingEMail(address?: string): void;
+        platformIsWindows(): boolean;
+
+        /**
+         * Indicates if the host platform is Apple Mac OS X.
+         *
+         * @return {boolean} `true` if the host platform is Mac, `false` otherwise.
+         * @since API version 1
+         */
+        platformIsMac(): boolean;
+
+        /**
+         * Indicates if the host platform is Linux.
+         *
+         * @return {boolean} `true` if the host platform is Linux, `false` otherwise.
+         * @since API version 1
+         */
+        platformIsLinux(): boolean;
 
         /**
          * Registers a controller script with the given parameters. This function must be called once at the global
@@ -3589,62 +2481,6 @@ declare namespace API {
         requestFlush(): void;
 
         /**
-         * Returns the latest supported API version of the host application.
-         *
-         * @return {int} the latest supported API version of the host application
-         * @since API version 1
-         */
-        getHostApiVersion(): number;
-
-        /**
-         * Returns the vendor of the host application.
-         *
-         * @return {string} the vendor of the host application
-         * @since API version 1
-         */
-        getHostVendor(): string;
-
-        /**
-         * Returns the product name of the host application.
-         *
-         * @return {string} the product name of the host application
-         * @since API version 1
-         */
-        getHostProduct(): string;
-
-        /**
-         * Returns the version number of the host application.
-         *
-         * @return {string} the version number of the host application
-         * @since API version 1
-         */
-        getHostVersion(): string;
-
-        /**
-         * Indicates if the host platform is Windows.
-         *
-         * @return {boolean} `true` if the host platform is Windows, `false` otherwise.
-         * @since API version 1
-         */
-        platformIsWindows(): boolean;
-
-        /**
-         * Indicates if the host platform is Apple Mac OS X.
-         *
-         * @return {boolean} `true` if the host platform is Mac, `false` otherwise.
-         * @since API version 1
-         */
-        platformIsMac(): boolean;
-
-        /**
-         * Indicates if the host platform is Linux.
-         *
-         * @return {boolean} `true` if the host platform is Linux, `false` otherwise.
-         * @since API version 1
-         */
-        platformIsLinux(): boolean;
-
-        /**
          * Prints the given string in the control surface console window. The console window can be opened in the
          * view menu of Bitwig Studio.
          *
@@ -3729,7 +2565,11 @@ declare namespace API {
          * @return {boolean} {@true} if was possible to bind the port, false otherwise
         @since API version 1
          */
-        addDatagramPacketObserver(name?: any, port?: any, callback?: (...args: any[]) => any): boolean;
+        addDatagramPacketObserver(
+            name?: any,
+            port?: any,
+            callback?: (...args: any[]) => any
+        ): boolean;
 
         /**
          * Creates a {@link PopupBrowser} that represents the pop-up browser in Bitwig Studio.
@@ -3774,11 +2614,1423 @@ declare namespace API {
          * @return {BeatTimeFormatter}
          * @since API version 2
          */
-        createBeatTimeFormatter(separator?: any, barsLen?: any, beatsLen?: any, subdivisionLen?: any, ticksLen?: any): BeatTimeFormatter;
+        createBeatTimeFormatter(
+            separator?: any,
+            barsLen?: any,
+            beatsLen?: any,
+            subdivisionLen?: any,
+            ticksLen?: any
+        ): BeatTimeFormatter;
+    }
 
+    /**
+     * A generic interface that provides the foundation for working with selections.
+     *
+     * Implementations of this interface can either represent custom selection cursors that are created by
+     * controller scripts, or represent the cursor of user selections as shown in Bitwig Studio editors, such as
+     * the Arranger track selection cursor, the note editor event selection cursor and so on.
+     *
+     * @since API version 1
+     */
+    interface Cursor {
+        [key: string]: any;
+
+        /**
+         * Select the previous item.
+         *
+         * @since API version 1
+         */
+        selectPrevious(): void;
+
+        /**
+         * Select the next item.
+         *
+         * @since API version 1
+         */
+        selectNext(): void;
+
+        /**
+         * Select the first item.
+         *
+         * @since API version 1
+         */
+        selectFirst(): void;
+
+        /**
+         * Select the last item.
+         *
+         * @since API version 1
+         */
+        selectLast(): void;
+
+        /**
+         * Boolean value that reports whether there is an item after the current cursor position.
+         *
+         * @return {BooleanValue}
+         * @since API version 2
+         */
+        hasNext(): BooleanValue;
+
+        /**
+         * Boolean value that reports whether there is an item before the current cursor position.
+         *
+         * @return {BooleanValue}
+         * @since API version 2
+         */
+        hasPrevious(): BooleanValue;
+    }
+
+    /**
+     * Instances of this interface are used to navigate the filter columns of a Bitwig Studio browsing session.
+     *
+     * @since API version 1
+     */
+    interface CursorBrowserFilterColumn extends BrowserFilterColumn {
+        [key: string]: any;
+    }
+
+    /**
+     * Instances of this interface represent entries in a browser filter column.
+     *
+     * @since API version 1
+     */
+    interface CursorBrowserFilterItem extends BrowserFilterItem {
+        [key: string]: any;
+
+        /**
+         * Select the parent item.
+         *
+         * @since API version 1
+         */
+        selectParent(): void;
+
+        /**
+         * Select the first child item.
+         *
+         * @since API version 1
+         */
+        selectFirstChild(): void;
+
+        /**
+         * Select the last child item.
+         *
+         * @since API version 1
+         */
+        selectLastChild(): void;
+
+        /**
+         * Select the previous item.
+         *
+         * @since API version 1
+         */
+        moveToPrevious(): void;
+
+        /**
+         * Select the next item.
+         *
+         * @since API version 1
+         */
+        moveToNext(): void;
+
+        /**
+         * Select the first item.
+         *
+         * @since API version 1
+         */
+        moveToFirst(): void;
+
+        /**
+         * Select the last item.
+         *
+         * @since API version 1
+         */
+        moveToLast(): void;
+
+        /**
+         * Select the parent item.
+         *
+         * @since API version 1
+         */
+        moveToParent(): void;
+
+        /**
+         * Move the cursor to the first child item.
+         *
+         * @since API version 1
+         */
+        moveToFirstChild(): void;
+
+        /**
+         * Move the cursor to the last child item.
+         *
+         * @since API version 1
+         */
+        moveToLastChild(): void;
+    }
+
+    /**
+     * Instances of this interface represent entries in a browser filter column.
+     *
+     * @since API version 1
+     */
+    interface CursorBrowserItem extends BrowserItem {
+        [key: string]: any;
+
+        /**
+         * Returns a bank object that provides access to the siblings of the cursor item. The bank will
+         * automatically scroll so that the cursor item is always visible.
+         *
+         * @param numSiblings
+        the number of simultaneously accessible siblings
+         * @return {BrowserItemBank} the requested item bank object
+         */
+        createSiblingsBank(numSiblings?: any): BrowserItemBank;
+    }
+
+    /**
+     * Instances of this interface represent entries in a browser column.
+     *
+     * @since API version 1
+     */
+    interface CursorBrowserResultItem extends BrowserResultsItem {
+        [key: string]: any;
+    }
+
+    /**
+     * Instances of this interface are used for navigating the various browsing sessions of Bitwig Studio's
+     * contextual browser.
+     *
+     * @since API version 1
+     */
+    interface CursorBrowsingSession {
+        [key: string]: any;
+    }
+
+    /**
+     * A special kind of channel that follows a channel selection cursor in Bitwig Studio. The selection can
+     * either be a custom selection cursor that gets created by the controller script, or represent the user
+     * selection cursor as shown in the Bitwig Studio editors, such as the Arranger track selection cursor.
+     *
+     * @since API version 1
+     */
+    interface CursorChannel extends Cursor {
+        [key: string]: any;
+
+        /**
+         * Points the cursor to the given channel.
+         *
+         * @param channel
+        the channel that this channel cursor should point to
+         * @since API version 1
+         */
+        selectChannel(channel?: any): void;
+    }
+
+    /**
+     * A special kind of selection cursor used for devices.
+     *
+     * @since API version 1
+     */
+    interface CursorDevice extends Cursor {
+        [key: string]: any;
+
+        /**
+         * Returns the channel that this cursor device was created on. Currently this will always be a track or
+         * cursor track instance.
+         *
+         * @return {Channel} the track or cursor track object that was used for creation of this cursor device.
+         * @since API version 1
+         */
+        getChannel(): Channel;
+
+        /**
+         * Selects the parent device if there is any.
+         *
+         * @since API version 1
+         */
+        selectParent(): void;
+
+        /**
+         * Moves this cursor to the given device.
+         *
+         * @param device
+        the device that this cursor should point to
+         * @since API version 1
+         */
+        selectDevice(device?: any): void;
+
+        /**
+         * Selects the first device in the given channel.
+         *
+         * @param channel
+        the channel in which the device should be selected
+         * @since API version 1
+         */
+        selectFirstInChannel(channel?: any): void;
+
+        /**
+         * Selects the last device in the given channel.
+         *
+         * @param channel
+        the channel in which the device should be selected
+         * @since API version 1
+         */
+        selectLastInChannel(channel?: any): void;
+
+        /**
+         * Selects the first device in the nested FX slot with the given name.
+         *
+         * @param chain
+        the name of the FX slot in which the device should be selected
+         * @since API version 1
+         */
+        selectFirstInSlot(chain?: any): void;
+
+        /**
+         * Selects the last device in the nested FX slot with the given name.
+         *
+         * @param chain
+        the name of the FX slot in which the device should be selected
+         * @since API version 1
+         */
+        selectLastInSlot(chain?: any): void;
+
+        /**
+         * Selects the first device in the drum pad associated with the given key.
+         *
+         * @param key
+        the key associated with the drum pad in which the device should be selected
+         * @since API version 1
+         */
+        selectFirstInKeyPad(key?: any): void;
+
+        /**
+         * Selects the last device in the drum pad associated with the given key.
+         *
+         * @param key
+        the key associated with the drum pad in which the device should be selected
+         * @since API version 1
+         */
+        selectLastInKeyPad(key?: any): void;
+
+        /**
+         * Selects the first device in the nested layer with the given index.
+         *
+         * @param index
+        the index of the nested layer in which the device should be selected
+         * @since API version 1
+         */
+        selectFirstInLayer(index?: any): void;
+
+        /**
+         * Selects the last device in the nested layer with the given index.
+         *
+         * @param index
+        the index of the nested layer in which the device should be selected
+         * @since API version 1
+         */
+        selectLastInLayer(index?: any): void;
+    }
+
+    /**
+     * Instances of this interface represent the cursor item in device layer selections.
+     *
+     * @since API version 1
+     */
+    interface CursorDeviceLayer extends CursorChannel {
+        [key: string]: any;
+    }
+
+    /**
+     * Instances of this interface represent the selected device slot as shown in the Bitwig Studio user
+     * interface.
+     *
+     * @since API version 1
+     */
+    interface CursorDeviceSlot extends DeviceChain {
+        [key: string]: any;
+
+        /**
+         * @param {string} slot
+         */
+        selectSlot(slot?: string): void;
+    }
+
+    /**
+     * Represents a cursor that looks at a {@link RemoteControlsPage}.
+     *
+     * @since API version 2
+     */
+    interface CursorRemoteControlsPage extends Cursor {
+        [key: string]: any;
+
+        /**
+         * Value that reports the names of the devices parameter pages.
+         *
+         * @return {StringArrayValue}
+         */
+        pageNames(): StringArrayValue;
+
+        /**
+         * Selects the next page.
+         *
+         * @param shouldCycle
+        If true then when the end is reached and there is no next page it selects the first page
+         * @since API version 2
+         */
+        selectNextPage(shouldCycle?: any): void;
+
+        /**
+         * Selects the previous page.
+         *
+         * @param shouldCycle
+        If true then when the end is reached and there is no next page it selects the first page
+         * @since API version 2
+         */
+        selectPreviousPage(shouldCycle?: any): void;
+
+        /**
+         * Selects the next page that matches the given expression.
+         *
+         * @param expression
+        An expression that can match a page based on how it has been tagged. For now this can only be
+        the name of a single tag that you would like to match.
+         * @param shouldCycle
+        If true then when the end is reached and there is no next page it selects the first page
+         * @since API version 2
+         */
+        selectNextPageMatching(expression?: any, shouldCycle?: any): void;
+
+        /**
+         * Selects the previous page that matches the given expression.
+         *
+         * @param expression
+        An expression that can match a page based on how it has been tagged. For now this can only be
+        the name of a single tag that you would like to match.
+         * @param shouldCycle
+        If true then when the end is reached and there is no next page it selects the first page
+         * @since API version 2
+         */
+        selectPreviousPageMatching(expression?: any, shouldCycle?: any): void;
+
+        /**
+         * Value that reports the currently selected parameter page index.
+         *
+         * @return {SettableIntegerValue}
+         * @since API version 2
+         */
+        selectedPageIndex(): SettableIntegerValue;
+    }
+
+    /**
+     * Instances of this interface represent the cursor item of track selections.
+     *
+     * @since API version 1
+     */
+    interface CursorTrack extends CursorChannel {
+        [key: string]: any;
+
+        /**
+         * Makes the cursor track point to it's parent group track, in case it is not already pointing to the root
+         * group track.
+         *
+         * @since API version 1
+         */
+        selectParent(): void;
+
+        /**
+         * Makes the cursor track point to the first child found with the track group that this cursor currently
+         * points to. If this cursor is not pointing to a track group or the track group is empty then this has no
+         * effect.
+         *
+         * @since API version 2
+         */
+        selectFirstChild(): void;
+
+        /**
+         * Specifies the behaviour of the functions {@link #selectPrevious()}, {@link #selectNext()},
+         * {@link #selectFirst()} and {@link #selectLast()}. Calling those functions can either navigate the cursor
+         * within the current nesting level, or over a flat list of either all tracks or only the expanded tracks.
+         * Default is CursorNavigationMode.FLAT.
+         *
+         * @param {CursorNavigationMode} mode
+         * @since API version 1
+         */
+        setCursorNavigationMode(mode?: any): void;
+
+        /**
+         * @return {PinnableCursorDevice}
+         */
+        createCursorDevice(): PinnableCursorDevice;
+    }
+
+    interface DataReceivedCallback extends Callback {
+        [key: string]: any;
+
+        /**
+         * @param {byte[]} data
+         */
+        dataReceived(data?: number[]): void;
+    }
+
+    /**
+     * This interface represents a device in Bitwig Studio, both internal devices and plugins.
+     *
+     * @since API version 1
+     */
+    interface Device extends ObjectProxy {
+        [key: string]: any;
+
+        /**
+         * Returns a representation of the device chain that contains this device. Possible device chain instances
+         * are tracks, device layers, drums pads, or FX slots.
+         *
+         * @return {DeviceChain} the requested device chain object
+         * @since API version 1
+         */
+        getDeviceChain(): DeviceChain;
+
+        /**
+         * Value that reports the position of the device within the parent device chain.
+         *
+         * @return {IntegerValue}
+         * @since API version 2
+         */
+        position(): IntegerValue;
+
+        /**
+         * Returns an object that provides access to the open state of plugin windows.
+         *
+         * @return {SettableBooleanValue} a boolean value object that represents the open state of the editor window, in case the device
+        features a custom editor window (such as plugins).
+         * @since API version 1
+         */
+        isWindowOpen(): SettableBooleanValue;
+
+        /**
+         * Returns an object that provides access to the expanded state of the device.
+         *
+         * @return {SettableBooleanValue} a boolean value object that represents the expanded state of the device.
+         * @since API version 1
+         */
+        isExpanded(): SettableBooleanValue;
+
+        /**
+         * Returns an object that provides access to the visibility of the device remote controls section.
+         *
+         * @return {SettableBooleanValue} a boolean value object that represents the remote controls section visibility.
+         * @since API version 2
+         */
+        isRemoteControlsSectionVisible(): SettableBooleanValue;
+
+        /**
+         * Creates a cursor for the selected remote controls page in the device with the supplied number of
+         * parameters. This section will follow the current page selection made by the user in the application.
+         *
+         * @param parameterCount
+        The number of parameters the remote controls should contain
+         * @return {CursorRemoteControlsPage}
+         * @since API version 2
+         */
+        createCursorRemoteControlsPage(parameterCount?: any): CursorRemoteControlsPage;
+
+        /**
+         * Selects the device in Bitwig Studio.
+         *
+         * @since API version 1
+         */
+        selectInEditor(): void;
+
+        /**
+         * Value that reports if the device is a plugin.
+         *
+         * @return {BooleanValue}
+         * @since API version 2
+         */
+        isPlugin(): BooleanValue;
+
+        /**
+         * Switches to the previous parameter page.
+         *
+         * @since API version 1
+         */
+        previousParameterPage(): void;
+
+        /**
+         * Switches to the next parameter page.
+         *
+         * @since API version 1
+         */
+        nextParameterPage(): void;
+
+        /**
+         * Registers an observer that reports if there is a previous parameter page.
+         *
+         * @param callback
+        a callback function that receives a single boolean parameter
+         * @since API version 1
+         */
+        addPreviousParameterPageEnabledObserver(callback?: (...args: any[]) => any): void;
+
+        /**
+         * Registers an observer that reports if there is a next parameter page.
+         *
+         * @param callback
+        a callback function that receives a single boolean parameter
+         * @since API version 1
+         */
+        addNextParameterPageEnabledObserver(callback?: (...args: any[]) => any): void;
+
+        /**
+         * Switches to the parameter page at the given page index.
+         *
+         * @param page
+        the index of the desired parameter page
+         * @since API version 1
+         */
+        setParameterPage(page?: any): void;
+
+        /**
+         * Returns an object used for browsing devices, presets and other content. Committing the browsing session
+         * will load or create a device from the selected resource and replace the current device.
+         *
+         * @param numFilterColumnEntries
+        the size of the window used to navigate the filter column entries.
+         * @param numResultsColumnEntries
+        the size of the window used to navigate the results column entries.
+         * @return {Browser} the requested device browser object.
+         * @since API version 1
+         */
+        createDeviceBrowser(numFilterColumnEntries?: any, numResultsColumnEntries?: any): any;
+
+        /**
+         * Value that reports the name of the device.
+         *
+         * @return {StringValue}
+         * @since API version 2
+         */
+        name(): StringValue;
+
+        /**
+         * Value that reports the last loaded preset name.
+         *
+         * @return {StringValue}
+         * @since API version 2
+         */
+        presetName(): StringValue;
+
+        /**
+         * Value that reports the current preset category name.
+         *
+         * @return {StringValue}
+         * @since API version 2
+         */
+        presetCategory(): StringValue;
+
+        /**
+         * Value that reports the current preset creator name.
+         *
+         * @return {StringValue}
+         * @since API version 2
+         */
+        presetCreator(): StringValue;
+
+        /**
+         * Registers an observer that reports the currently selected parameter page.
+         *
+         * @param valueWhenUnassigned
+        the default page index that gets reported when the device is not associated with a device
+        instance in Bitwig Studio yet.
+         * @param callback
+        a callback function that receives a single page index parameter (integer)
+         * @since API version 1
+         */
+        addSelectedPageObserver(
+            valueWhenUnassigned?: any,
+            callback?: (...args: any[]) => any
+        ): void;
+
+        /**
+         * Registers an observer that reports the name of the active modulation source.
+         *
+         * @param len
+        the maximum length of the name. Longer names will get truncated.
+         * @param textWhenUnassigned
+        the default name that gets reported when the device is not associated with a Bitwig Studio
+        device yet.
+         * @param callback
+        a callback function that receives a single name parameter (string)
+         * @since API version 1
+         */
+        addActiveModulationSourceObserver(
+            len?: any,
+            textWhenUnassigned?: any,
+            callback?: (...args: any[]) => any
+        ): void;
+
+        /**
+         * Registers an observer that reports the names of the devices parameter pages.
+         *
+         * @param callback
+        a callback function that receives a single string array parameter containing the names of the
+        parameter pages
+         * @since API version 1
+         */
+        addPageNamesObserver(callback?: (...args: any[]) => any): void;
+
+        /**
+         * Value that reports if the device is enabled.
+         *
+         * @return {SettableBooleanValue}
+         * @since API version 2
+         */
+        isEnabled(): SettableBooleanValue;
+
+        /**
+         * Indicates if the device has nested device chains in FX slots. Use {@link #addSlotsObserver(Callable)
+         * addSlotsObserver(Callable)} to get a list of available slot names, and navigate to devices in those
+         * slots using the {@link CursorDevice} interface.
+         *
+         * @return {BooleanValue} a value object that indicates if the device has nested device chains in FX slots.
+         * @since API version 1
+         */
+        hasSlots(): BooleanValue;
+
+        /**
+         * Value of the list of available FX slots in this device.
+         *
+         * @return {StringArrayValue}
+         * @since API version 2
+         */
+        slotNames(): StringArrayValue;
+
+        /**
+         * Returns an object that represents the selected device slot as shown in the user interface, and that
+         * provides access to the contents of slot's device chain.
+         *
+         * @return {DeviceSlot} the requested slot cursor object
+         * @since API version 1
+         */
+        getCursorSlot(): DeviceSlot;
+
+        /**
+         * Indicates if the device is contained by another device.
+         *
+         * @return {BooleanValue} a value object that indicates if the device is nested
+         * @since API version 1
+         */
+        isNested(): BooleanValue;
+
+        /**
+         * Indicates if the device supports nested layers.
+         *
+         * @return {BooleanValue} a value object that indicates if the device supports nested layers.
+         * @since API version 1
+         */
+        hasLayers(): BooleanValue;
+
+        /**
+         * Indicates if the device has individual device chains for each note value.
+         *
+         * @return {BooleanValue} a value object that indicates if the device has individual device chains for each note value.
+         * @since API version 1
+         */
+        hasDrumPads(): BooleanValue;
+
+        /**
+         * Create a bank for navigating the nested layers of the device using a fixed-size window.
+         *
+         * @param numChannels
+        the number of channels that the device layer bank should be configured with
+         * @return {DeviceLayerBank} a device layer bank object configured with the desired number of channels
+         * @since API version 1
+         */
+        createLayerBank(numChannels?: any): DeviceLayerBank;
+
+        /**
+         * Create a bank for navigating the nested layers of the device using a fixed-size window.
+         *
+         * @param numPads
+        the number of channels that the drum pad bank should be configured with
+         * @return {DrumPadBank} a drum pad bank object configured with the desired number of pads
+         * @since API version 1
+         */
+        createDrumPadBank(numPads?: any): DrumPadBank;
+
+        /**
+         * Returns a device layer instance that can be used to navigate the layers or drum pads of the device, in
+         * case it has any.
+         *
+         * @return {CursorDeviceLayer} a cursor device layer instance
+         * @since API version 1
+         */
+        createCursorLayer(): CursorDeviceLayer;
+
+        /**
+         * Adds an observer on a list of all parameters for the device.
+         *
+         * The callback always updates with an array containing all the IDs for the device.
+         *
+         * @param callback
+        function with the signature (String[])
+         * @since API version 1
+         */
+        addDirectParameterIdObserver(callback?: (...args: any[]) => any): void;
+
+        /**
+         * Adds an observer for the parameter names (initial and changes) of all parameters for the device.
+         *
+         * @param maxChars
+        maximum length of the string sent to the observer.
+         * @param callback
+        function with the signature (String ID, String name)
+         * @since API version 1
+         */
+        addDirectParameterNameObserver(maxChars?: any, callback?: (...args: any[]) => any): void;
+
+        /**
+         * Returns an observer that reports changes of parameter display values, i.e. parameter values formatted as
+         * a string to be read by the user, for example "-6.02 dB". The returned observer object can be used to
+         * configure which parameters should be observed. By default no parameters are observed. It should be
+         * avoided to observe all parameters at the same time for performance reasons.
+         *
+         * @param maxChars
+        maximum length of the string sent to the observer.
+         * @param callback
+        function with the signature (String ID, String valueDisplay)
+         * @return {DirectParameterValueDisplayObserver} an observer object that can be used to enable or disable actual observing for certain
+        parameters.
+         * @since API version 1
+         */
+        addDirectParameterValueDisplayObserver(
+            maxChars?: any,
+            callback?: (...args: any[]) => any
+        ): DirectParameterValueDisplayObserver;
+
+        /**
+         * Adds an observer for the parameter display value (initial and changes) of all parameters for the device.
+         *
+         * @param callback
+        a callback function with the signature (String ID, float normalizedValue). If the value is not
+        accessible 'Number.NaN' (not-a-number) is reported, can be checked with 'isNaN(value)'.
+         * @since API version 1
+         */
+        addDirectParameterNormalizedValueObserver(callback?: (...args: any[]) => any): void;
+
+        /**
+         * Sets the parameter with the specified `id` to the given `value` according to the given `resolution`.
+         *
+         * @param id
+        the parameter identifier string
+         * @param value
+        the new value normalized to the range [0..resolution-1]
+         * @param resolution
+        the resolution of the new value
+         * @since API version 1
+         */
+        setDirectParameterValueNormalized(id?: any, value?: any, resolution?: any): void;
+
+        /**
+         * Increases the parameter with the specified `id` by the given `increment` according to the given
+         * `resolution`. To decrease the parameter value pass in a negative increment.
+         *
+         * @param id
+        the parameter identifier string
+         * @param increment
+        the amount that the parameter value should be increased by, normalized to the range
+        [0..resolution-1]
+         * @param resolution
+        the resolution of the new value
+         * @since API version 1
+         */
+        incDirectParameterValueNormalized(id?: any, increment?: any, resolution?: any): void;
+
+        /**
+         * Value that reports the file name of the currently loaded sample, in case the device is a sample
+         * container device.
+         *
+         * @return {StringValue}
+         * @since API version 2
+         */
+        sampleName(): StringValue;
+
+        /**
+         * Returns an object that provides bank-wise navigation of sibling devices of the same device chain
+         * (including the device instance used to create the siblings bank).
+         *
+         * @param numDevices
+        the number of devices that are simultaneously accessible
+         * @return {DeviceBank} the requested device bank object
+        @since API version 1
+         */
+        createSiblingsDeviceBank(numDevices?: any): DeviceBank;
+
+        /**
+         * Starts browsing for content that can be inserted before this device in Bitwig Studio's popup browser.
+         *
+         * @since API version 2
+         */
+        browseToInsertBeforeDevice(): void;
+
+        /**
+         * Starts browsing for content that can be inserted before this device in Bitwig Studio's popup browser.
+         *
+         * @since API version 2
+         */
+        browseToInsertAfterDevice(): void;
+
+        /**
+         * Starts browsing for content that can replace this device in Bitwig Studio's popup browser.
+         *
+         * @since API version 2
+         */
+        browseToReplaceDevice(): void;
+    }
+
+    /**
+     * This interface is used for navigation of device chains in Bitwig Studio. Instances are configured with a
+     * fixed number of devices and provide access to a excerpt of the devices inside a device chain. Various
+     * methods are provided for scrolling to different sections of the device chain. It basically acts like a
+     * window moving over the devices.
+     *
+     * To receive an instance of DeviceBank call {@link Track#createDeviceBank}.
+     *
+     * @see {@link Track#createDeviceBank}
+     * @since API version 1
+     */
+    interface DeviceBank extends Bank {
+        [key: string]: any;
+
+        /**
+         * Returns the object that was used to instantiate this device bank. Possible device chain instances are
+         * tracks, device layers, drums pads, or FX slots.
+         *
+         * @return {DeviceChain} the requested device chain object
+         * @since API version 1
+         */
+        getDeviceChain(): DeviceChain;
+
+        /**
+         * Returns the device at the given index within the bank.
+         *
+         * @param indexInBank
+        the device index within this bank, not the position within the device chain. Must be in the
+        range [0..sizeOfBank-1].
+         * @return {Device} the requested device object
+         * @since API version 1
+         */
+        getDevice(indexInBank?: any): Device;
+
+        /**
+         * Scrolls the device window one page up.
+         *
+         * @since API version 1
+         */
+        scrollPageUp(): void;
+
+        /**
+         * Scrolls the device window one page down.
+         *
+         * @since API version 1
+         */
+        scrollPageDown(): void;
+
+        /**
+         * Scrolls the device window one device up.
+         *
+         * @since API version 1
+         */
+        scrollUp(): void;
+
+        /**
+         * Scrolls the device window one device down.
+         *
+         * @since API version 1
+         */
+        scrollDown(): void;
+
+        /**
+         * Makes the device with the given position visible in the track bank.
+         *
+         * @param position
+        the position of the device within the device chain
+         * @since API version 1
+         */
+        scrollTo(position?: any): void;
+
+        /**
+         * Registers an observer that reports if the device window can be scrolled further down.
+         *
+         * @param callback
+        a callback function that takes a single boolean parameter
+         * @since API version 1
+         */
+        addCanScrollDownObserver(callback?: (...args: any[]) => any): void;
+
+        /**
+         * Browses for content to insert a device at the given index inside this bank.
+         *
+         * @param index
+        the index to insert the device at. Must be >= 0 and <= {@link #getSizeOfBank()}.
+         * @since API version 2
+         */
+        browseToInsertDevice(index?: any): void;
+    }
+
+    /**
+     * The foundation of all interfaces that contain devices, such as tracks, device layers, drum pads or FX
+     * slots.
+     *
+     * @since API version 1
+     */
+    interface DeviceChain extends ObjectProxy {
+        [key: string]: any;
+
+        /**
+         * Selects the device chain in Bitwig Studio, in case it is a selectable object.
+         *
+         * @since API version 1
+         */
+        selectInEditor(): void;
+
+        /**
+         * Value that reports the name of the device chain, such as the track name or the drum pad
+         * name.
+         *
+         * @return {SettableStringValue}
+         * @since API version 2
+         */
+        name(): SettableStringValue;
+
+        /**
+         * Registers an observer that reports if the device chain is selected in Bitwig Studio editors.
+         *
+         * @param callback
+        a callback function that takes a single boolean parameter.
+         * @since API version 1
+         */
+        addIsSelectedInEditorObserver(callback?: (...args: any[]) => any): void;
+
+        /**
+         * Returns an object that provides bank-wise navigation of devices.
+         *
+         * @param numDevices
+        the number of devices should be accessible simultaneously
+         * @return {DeviceBank} the requested device bank object
+        @since API version 1
+         */
+        createDeviceBank(numDevices?: any): DeviceBank;
+
+        /**
+         * Returns an object used for browsing devices, presets and other content. Committing the browsing session
+         * will load or create a device from the selected resource and insert it into the device chain.
+         *
+         * @param numFilterColumnEntries
+        the size of the window used to navigate the filter column entries.
+         * @param numResultsColumnEntries
+        the size of the window used to navigate the results column entries.
+         * @return {Browser} the requested device browser object.
+         * @since API version 1
+         */
+        createDeviceBrowser(numFilterColumnEntries?: any, numResultsColumnEntries?: any): any;
+
+        /**
+         * Starts browsing for content that can be inserted at the start of this device chain.
+         *
+         * @since API version 2
+         */
+        browseToInsertAtStartOfChain(): void;
+
+        /**
+         * Starts browsing for content that can be inserted at the end of this device chain.
+         *
+         * @since API version 2
+         */
+        browseToInsertAtEndOfChain(): void;
+    }
+
+    /**
+     * Instances of this interface represent device layers in Bitwig Studio.
+     *
+     * @since API version 1
+     */
+    interface DeviceLayer extends Channel {
+        [key: string]: any;
+    }
+
+    /**
+     * Devices layers are features of special Bitwig Studio devices, more specifically the Layer Instrument and
+     * Layer FX devices, and are also shown as sub-channels in the mixer panel.
+     *
+     * Instances of device layer bank are configured with a fixed number of channels and represent an excerpt of
+     * underlying complete list of channels. Various methods are provided for scrolling to different sections of
+     * the underlying list. It basically acts like a one-dimensional window moving over the device layers.
+     *
+     * To receive an instance of device layer bank call {@link Device#createLayerBank(int numChannels)}.
+     *
+     * @see {@link Device#createLayerBank}
+     * @since API version 1
+     */
+    interface DeviceLayerBank extends ChannelBank {
+        [key: string]: any;
+    }
+
+    /**
+     * Instances of this interface represent nested FX slots in devices.
+     *
+     * @since API version 1
+     */
+    interface DeviceSlot extends DeviceChain {
+        [key: string]: any;
+    }
+
+    interface DirectParameterDisplayedValueChangedCallback extends Callback {
+        [key: string]: any;
+
+        /**
+         * @param {string} id
+         * @param {string} value
+         */
+        directParameterDisplayedValueChanged(id?: string, value?: string): void;
+    }
+
+    interface DirectParameterNameChangedCallback extends Callback {
+        [key: string]: any;
+
+        /**
+         * @param {string} id
+         * @param {string} name
+         */
+        directParameterNameChanged(id?: string, name?: string): void;
+    }
+
+    interface DirectParameterNormalizedValueChangedCallback extends Callback {
+        [key: string]: any;
+
+        /**
+         * @param {string} id
+         * @param {double} normalizedValue
+         */
+        directParameterNormalizedValueChanged(id?: string, normalizedValue?: number): void;
+    }
+
+    /**
+     * This interface is used to configure observation of pretty-printed device parameter values.
+     *
+     * @since API version 1
+     */
+    interface DirectParameterValueDisplayObserver {
+        [key: string]: any;
+
+        /**
+         * Starts observing the parameters according to the given parameter ID array, or stops observing in case
+         * `null` is passed in for the parameter ID array.
+         *
+         * @param parameterIds
+        the array of parameter IDs or `null` to stop observing parameter display values.
+         * @since API version 1
+         */
+        setObservedParameterIds(parameterIds?: any): void;
+    }
+
+    /**
+     * This interface is used to save custom script settings inside Bitwig Studio documents. The settings are
+     * shown to the user in the `Studio IO` panel of Bitwig Studio.
+     *
+     * @since API version 1
+     */
+    interface DocumentState extends Settings {
+        [key: string]: any;
+    }
+
+    /**
+     * Instances of this interface represent double values.
+     *
+     * @since API version 2
+     */
+    interface DoubleValue extends Value {
+        [key: string]: any;
+
+        /**
+         * Gets the current value.
+         *
+         * @return {double}
+         * @since API version 2
+         */
+        get(): number;
+    }
+
+    interface DoubleValueChangedCallback extends ValueChangedCallback {
+        [key: string]: any;
+
+        /**
+         * @param {double} newValue
+         */
+        valueChanged(newValue?: number): void;
+    }
+
+    /**
+     * Instances of this interface are special kind of channel objects that represent the pads of a drum machine
+     * instrument. Drum pads are typically associated to channel objects via note keys.
+     *
+     * @since API version 1
+     */
+    interface DrumPad extends Channel {
+        [key: string]: any;
+    }
+
+    /**
+     * Drum pads are features of special Bitwig Studio devices (currently only the Bitwig Drum Machine
+     * instrument), and are also shown as sub-channels in the mixer panel.
+     *
+     * Instances of drum pad bank are configured with a fixed number of pads/channels and represent an excerpt of
+     * underlying complete list of channels. Various methods are provided for scrolling to different sections of
+     * the underlying list. It basically acts like a one-dimensional window moving over the drum pad channels.
+     *
+     * To receive an instance of drum pad bank call {@link Device#createDrumPadBank(int numChannels)}.
+     *
+     * @see {@link Device#createDrumPadBank}
+     * @since API version 1
+     */
+    interface DrumPadBank extends ChannelBank {
+        [key: string]: any;
+
+        /**
+         * Specifies if the Drum Machine should visualize which pads are part of the window. By default indications
+         * are enabled.
+         *
+         * @param shouldIndicate
+        `true` if visual indications should be enabled, `false` otherwise
+         * @since API version 1
+         */
+        setIndication(shouldIndicate?: any): void;
+    }
+
+    interface EnumValue extends Value {
+        [key: string]: any;
+
+        /**
+         * Gets the current value.
+         *
+         * @return {string}
+         * @since API version 2
+         */
+        get(): string;
+    }
+
+    interface EnumValueChangedCallback extends ObjectValueChangedCallback {
+        [key: string]: any;
+    }
+
+    interface Extension {
+        [key: string]: any;
+
+        /**
+         * @return {HostType}
+         */
+        getHost(): any;
+
+        /**
+         * @return {DefinitionType}
+         */
+        getExtensionDefinition(): any;
+    }
+
+    /**
+     * Base class for defining any kind of extension for Bitwig Studio.
+     */
+    interface ExtensionDefinition {
+        [key: string]: any;
+
+        /**
+         * The name of the extension.
+         *
+         * @return {string}
+         */
+        getName(): string;
+
+        /**
+         * The author of the extension.
+         *
+         * @return {string}
+         */
+        getAuthor(): string;
+
+        /**
+         * The version of the extension.
+         *
+         * @return {string}
+         */
+        getVersion(): string;
+
+        /**
+         * A unique id that identifies this extension.
+         *
+         * @return {java.util.UUID}
+         */
+        getId(): any;
+
+        /**
+         * The minimum API version number that this extensions requires.
+         *
+         * @return {int}
+         */
+        getRequiredAPIVersion(): number;
+
+        /**
+         * Gets a path within the extension's jar file where documentation for this extension can be found or null
+         * if there is none. At the moment this file needs to be a PDF file but other file formats maybe supported
+         * in the future.
+         *
+         * @return {string}
+         */
+        getHelpFilePath(): string;
+
+        /**
+         * If true then this extension should fail when it calls a deprecated method in the API. This is useful
+         * during development.
+         *
+         * @return {boolean}
+         */
+        shouldFailOnDeprecatedUse(): boolean;
+
+        /**
+         * An e-mail address that can be used to contact the author of this extension if a problem is detected with
+         * it or null if none.
+         *
+         * @return {string}
+         */
+        getErrorReportingEMail(): string;
+
+        /**
+         * @return {string}
+         */
+        toString(): string;
+    }
+
+    interface FloatValueChangedCallback extends Callback {
+        [key: string]: any;
+
+        /**
+         * @param {float} newValue
+         */
+        valueChanged(newValue?: number): void;
+    }
+
+    /**
+     * An interface representing the global groove settings of the project.
+     *
+     * @since API version 1
+     */
+    interface Groove {
+        [key: string]: any;
+
+        /**
+         * Returns the enabled state of the groove.
+         *
+         * @return {Parameter} an object that provides access to the groove on/off setting
+         * @since API version 1
+         */
+        getEnabled(): Parameter;
+
+        /**
+         * Returns the object that represents the shuffle amount in Bitwig Studio.
+         *
+         * @return {Parameter} an ranged value object that provides access to the shuffle amount
+         * @since API version 1
+         */
+        getShuffleAmount(): Parameter;
+
+        /**
+         * Returns the object that represents the shuffle rate in Bitwig Studio.
+         *
+         * @return {Parameter} an ranged value object that provides access to the shuffle rate
+         * @since API version 1
+         */
+        getShuffleRate(): Parameter;
+
+        /**
+         * Returns the object that represents the accent amount in Bitwig Studio.
+         *
+         * @return {Parameter} an ranged value object that provides access to the accent amount
+         * @since API version 1
+         */
+        getAccentAmount(): Parameter;
+
+        /**
+         * Returns the object that represents the accent rate in Bitwig Studio.
+         *
+         * @return {Parameter} an ranged value object that provides access to the accent rate
+         * @since API version 1
+         */
+        getAccentRate(): Parameter;
+
+        /**
+         * Returns the object that represents the accent phase in Bitwig Studio.
+         *
+         * @return {Parameter} an ranged value object that provides access to the accent phase
+         * @since API version 1
+         */
+        getAccentPhase(): Parameter;
+    }
+
+    /**
+     * Defines the interface through which an extension can talk to the host application.
+     */
+    interface Host {
+        [key: string]: any;
+
+        /**
+         * Returns the latest supported API version of the host application.
+         *
+         * @return {int} the latest supported API version of the host application
+         * @since API version 1
+         */
+        getHostApiVersion(): number;
+
+        /**
+         * Returns the vendor of the host application.
+         *
+         * @return {string} the vendor of the host application
+         * @since API version 1
+         */
+        getHostVendor(): string;
+
+        /**
+         * Returns the product name of the host application.
+         *
+         * @return {string} the product name of the host application
+         * @since API version 1
+         */
+        getHostProduct(): string;
+
+        /**
+         * Returns the version number of the host application.
+         *
+         * @return {string} the version number of the host application
+         * @since API version 1
+         */
+        getHostVersion(): string;
+
+        /**
+         * The platform type that this host is running on.
+         *
+         * @return {PlatformType}
+         */
+        getPlatformType(): any;
+
+        /**
+         * Sets an email address to use for reporting errors found in this script.
+         *
+         * @param {string} address
+         * @since API version 2
+         */
+        setErrorReportingEMail(address?: string): void;
     }
 
     interface IndexedBooleanValueChangedCallback extends IndexedValueChangedCallback {
+        [key: string]: any;
+
         /**
          * Registers an observer that reports the names of the scenes and slots. The slot names reflect the names
          * of containing clips.
@@ -3788,10 +4040,11 @@ declare namespace API {
          * @since API version 1
          */
         valueChanged(index?: number, newValue?: boolean): void;
-
     }
 
     interface IndexedColorValueChangedCallback extends IndexedValueChangedCallback {
+        [key: string]: any;
+
         /**
          * Registers an observer that reports the names of the scenes and slots. The slot names reflect the names
          * of containing clips.
@@ -3803,10 +4056,11 @@ declare namespace API {
          * @since API version 1
          */
         valueChanged(index?: number, red?: number, green?: number, blue?: number): void;
-
     }
 
     interface IndexedStringValueChangedCallback extends IndexedValueChangedCallback {
+        [key: string]: any;
+
         /**
          * Registers an observer that reports the names of the scenes and slots. The slot names reflect the names
          * of containing clips.
@@ -3816,13 +4070,15 @@ declare namespace API {
          * @since API version 1
          */
         valueChanged(index?: number, newValue?: string): void;
-
     }
 
     interface IndexedValueChangedCallback extends Callback {
+        [key: string]: any;
     }
 
     interface IntegerValue extends Value {
+        [key: string]: any;
+
         /**
          * Gets the current value.
          *
@@ -3830,15 +4086,15 @@ declare namespace API {
          * @since API version 2
          */
         get(): number;
-
     }
 
     interface IntegerValueChangedCallback extends ValueChangedCallback {
+        [key: string]: any;
+
         /**
          * @param {int} newValue
          */
         valueChanged(newValue?: number): void;
-
     }
 
     /**
@@ -3847,6 +4103,7 @@ declare namespace API {
      * @since API version 1
      */
     interface MasterTrack extends Track {
+        [key: string]: any;
     }
 
     /**
@@ -3856,6 +4113,8 @@ declare namespace API {
      * @since API version 1
      */
     interface MidiIn {
+        [key: string]: any;
+
         /**
          * Registers a callback for receiving short (normal) MIDI messages on this MIDI input port.
          *
@@ -3886,11 +4145,12 @@ declare namespace API {
         a filter string formatted as hexadecimal value with `?` as wildcard. For example `80????`
         would match note-off on channel 1 (0). When this parameter is {@null}, a standard filter will
         be used to forward note-related messages on channel 1 (0).
+        If multiple note input match the same MIDI event then they'll all receive the MIDI event, and
+        if one of them does not consume events then the events wont' be consumed.
          * @return {NoteInput} the object representing the requested note input
          * @since API version 1
          */
         createNoteInput(name?: any, masks?: any): NoteInput;
-
     }
 
     /**
@@ -3899,6 +4159,8 @@ declare namespace API {
      * @since API version 1
      */
     interface MidiOut {
+        [key: string]: any;
+
         /**
          * Sends a MIDI message to the hardware device.
          *
@@ -3920,17 +4182,18 @@ declare namespace API {
         @since API version 1
          */
         sendSysex(hexString?: any): void;
-
     }
 
     /**
      * An interface used to access various commands that can be performed on the Bitwig Studio mixer panel.<br/>
      *
-     * To get an instance of the mixer interface call {@link Host#createMixer}.
+     * To get an instance of the mixer interface call {@link ControllerHost#createMixer}.
      *
      * @since API version 1
      */
     interface Mixer {
+        [key: string]: any;
+
         /**
          * Gets an object that allows to show/hide the meter section of the mixer panel. Observers can be
          * registered on the returned object for receiving notifications when the meter section switches between
@@ -3990,7 +4253,6 @@ declare namespace API {
          * @since API version 1
          */
         isCrossFadeSectionVisible(): SettableBooleanValue;
-
     }
 
     /**
@@ -3999,6 +4261,8 @@ declare namespace API {
      * @since API version 1
      */
     interface ModulationSource {
+        [key: string]: any;
+
         /**
          * Value which reports when the modulation source is in mapping mode.
          *
@@ -4029,12 +4293,12 @@ declare namespace API {
          * @since API version 2
          */
         isMapped(): BooleanValue;
-
     }
 
     interface NoArgsCallback extends Callback {
-        call(): void;
+        [key: string]: any;
 
+        call(): void;
     }
 
     /**
@@ -4045,6 +4309,8 @@ declare namespace API {
      * @since API version 1
      */
     interface NoteInput {
+        [key: string]: any;
+
         /**
          * Specifies if the note input should consume MIDI notes, or in other words if it should prevent forwarding
          * incoming notes to the MIDI callback registered in {@link MidiIn#setMidiCallback}. This setting is `true`
@@ -4105,7 +4371,11 @@ declare namespace API {
         ignored for non-pitch expressions.
         @since API version 1
          */
-        assignPolyphonicAftertouchToExpression(channel?: any, expression?: any, pitchRange?: any): void;
+        assignPolyphonicAftertouchToExpression(
+            channel?: any,
+            expression?: any,
+            pitchRange?: any
+        ): void;
 
         /**
          * Enables use of Expressive MIDI mode. (note-per-channel)
@@ -4117,7 +4387,11 @@ declare namespace API {
          * @param pitchBendRange
         initial pitch bend range used
          */
-        setUseExpressiveMidi(useExpressiveMidi?: any, baseChannel?: any, pitchBendRange?: any): void;
+        setUseExpressiveMidi(
+            useExpressiveMidi?: any,
+            baseChannel?: any,
+            pitchBendRange?: any
+        ): void;
 
         /**
          * Sends MIDI data directly to the note input. This will bypass both the event filter and translation
@@ -4132,15 +4406,6 @@ declare namespace API {
          * @since API version 1
          */
         sendRawMidiEvent(status?: any, data0?: any, data1?: any): void;
-
-        /**
-         * An enum defining the note expressions available in Bitwig Studio, used for the expression parameter of
-         * {@link #assignPolyphonicAftertouchToExpression}.
-         *
-         * @since API version 1
-         */
-        NoteExpression: any;
-
     }
 
     /**
@@ -4149,6 +4414,8 @@ declare namespace API {
      * @since API version 1
      */
     interface NoteLane {
+        [key: string]: any;
+
         /**
          * Value which represents the id of this lane. is either the note pitch represented by this lane, or in
          * case of audio a lane index (currently always 0 in that case).
@@ -4182,17 +4449,17 @@ declare namespace API {
          * @since API version 1
          */
         play(velocity?: any): void;
-
     }
 
     interface NotePlaybackCallback extends Callback {
+        [key: string]: any;
+
         /**
          * @param {boolean} isNoteOn
          * @param {int} key
          * @param {float} velocity
          */
         notePlaybackEventOccurred(isNoteOn?: boolean, key?: number, velocity?: number): void;
-
     }
 
     /**
@@ -4212,6 +4479,8 @@ declare namespace API {
      * @since API version 1
      */
     interface NotificationSettings {
+        [key: string]: any;
+
         /**
          * Returns an object that reports if user notifications are enabled and that allows to enable/disable user
          * notifications from the control surface. If user notifications are disabled, no automatic notifications
@@ -4310,27 +4579,30 @@ declare namespace API {
          * @since API version 1
          */
         setShouldShowValueNotifications(shouldShowNotifications?: any): void;
-
     }
 
     /**
      * @since API version 2
      */
     interface ObjectArrayValue extends Value {
+        [key: string]: any;
+
         /**
          * @return {ObjectType[]}
          * @since API version 2
          */
         get(): object[];
-
     }
 
     /**
-     * Interface for an object that acts as a proxy for the actual object in Bitwig Studio (for example a track, a device etc).
+     * Interface for an object that acts as a proxy for the actual object in Bitwig Studio (for example a track, a
+     * device etc).
      *
      * @since API version 2
      */
     interface ObjectProxy extends Subscribable {
+        [key: string]: any;
+
         /**
          * Returns a value object that indicates if the object being proxied exists, or if it has content.
          *
@@ -4338,14 +4610,24 @@ declare namespace API {
          */
         exists(): BooleanValue;
 
+        /**
+         * Creates a {@link BooleanValue} that determines this proxy is considered equal to another proxy. For this
+         * to be the case both proxies need to be proxying the same target object.
+         *
+         * @param {ObjectProxy} other
+         * @return {BooleanValue}
+         * @since API version 3
+         */
+        createEqualsValue(other?: ObjectProxy): BooleanValue;
     }
 
     interface ObjectValueChangedCallback extends ValueChangedCallback {
+        [key: string]: any;
+
         /**
          * @param {ValueType} newValue
          */
         valueChanged(newValue?: any): void;
-
     }
 
     /**
@@ -4355,6 +4637,8 @@ declare namespace API {
      * @since API version 1
      */
     interface Parameter extends SettableRangedValue {
+        [key: string]: any;
+
         /**
          * Gets the current value of this parameter.
          *
@@ -4421,7 +4705,6 @@ declare namespace API {
          * @since API version 1
          */
         restoreAutomationControl(): void;
-
     }
 
     /**
@@ -4430,6 +4713,8 @@ declare namespace API {
      * @since API version 2
      */
     interface ParameterBank {
+        [key: string]: any;
+
         /**
          * Gets the number of slots that these remote controls have.
          *
@@ -4447,7 +4732,6 @@ declare namespace API {
          * @since API version 2
          */
         getParameter(indexInBank?: any): Parameter;
-
     }
 
     /**
@@ -4456,6 +4740,8 @@ declare namespace API {
      * @since API version 2
      */
     interface PinnableCursor extends Cursor {
+        [key: string]: any;
+
         /**
          * Determines if this cursor is currently pinned or not. If the cursor is pinned then it won't follow the
          * selection the user makes in the application.
@@ -4464,7 +4750,6 @@ declare namespace API {
          * @since API version 2
          */
         isPinned(): SettableBooleanValue;
-
     }
 
     /**
@@ -4473,12 +4758,15 @@ declare namespace API {
      * @since API version 2
      */
     interface PinnableCursorDevice extends CursorDevice {
+        [key: string]: any;
     }
 
     /**
      * @since API version 2
      */
     interface PlayingNote {
+        [key: string]: any;
+
         /**
          * @return {int}
          * @since API version 2
@@ -4490,19 +4778,19 @@ declare namespace API {
          * @since API version 2
          */
         velocity(): number;
-
     }
 
     /**
      * @since API version 2
      */
     interface PlayingNoteArrayValue extends ObjectArrayValue {
+        [key: string]: any;
+
         /**
          * @param {int} note
          * @return {boolean}
          */
         isNotePlaying(note?: number): boolean;
-
     }
 
     /**
@@ -4511,6 +4799,8 @@ declare namespace API {
      * @since API version 2
      */
     interface PopupBrowser extends ObjectProxy {
+        [key: string]: any;
+
         /**
          * The title of the popup browser.
          *
@@ -4675,7 +4965,6 @@ declare namespace API {
          * @since API version 2
          */
         commit(): void;
-
     }
 
     /**
@@ -4685,6 +4974,7 @@ declare namespace API {
      * @since API version 1
      */
     interface Preferences extends Settings {
+        [key: string]: any;
     }
 
     /**
@@ -4693,6 +4983,8 @@ declare namespace API {
      * @since API version 1
      */
     interface Project extends ObjectProxy {
+        [key: string]: any;
+
         /**
          * Returns an object that represents the root track group of the active Bitwig Studio project.
          *
@@ -4717,7 +5009,6 @@ declare namespace API {
          * @since API version 1
          */
         createSceneFromPlayingLauncherClips(): void;
-
     }
 
     /**
@@ -4726,6 +5017,8 @@ declare namespace API {
      * @since API version 1
      */
     interface RangedValue extends Value {
+        [key: string]: any;
+
         /**
          * The current value normalized between 0..1 where 0 represents the minimum value and 1 the maximum.
          *
@@ -4758,17 +5051,18 @@ declare namespace API {
          * @since API version 1
          */
         addRawValueObserver(callback?: (...args: any[]) => any): void;
-
     }
 
     /**
      * Instances of this interface are reported to the supplied script callback when connecting to a remote TCP
-     * socket via {@link Host#connectToRemoteHost}.
+     * socket via {@link ControllerHost#connectToRemoteHost}.
      *
-     * @see {@link Host#connectToRemoteHost}
+     * @see {@link ControllerHost#connectToRemoteHost}
      * @since API version 1
      */
     interface RemoteConnection {
+        [key: string]: any;
+
         /**
          * Disconnects from the remote host.
          *
@@ -4808,7 +5102,6 @@ declare namespace API {
          * @since API version 1
          */
         send(data?: any): void;
-
     }
 
     /**
@@ -4817,6 +5110,7 @@ declare namespace API {
      * @sice API version 2
      */
     interface RemoteControl extends Parameter {
+        [key: string]: any;
     }
 
     /**
@@ -4825,16 +5119,19 @@ declare namespace API {
      * @since API version 2
      */
     interface RemoteControlsPage extends ParameterBank {
+        [key: string]: any;
     }
 
     /**
      * Instances of this interface represent a TCP socket that other network clients can connect to, typically
-     * created by calling {@link Host#createRemoteConnection}.
+     * created by calling {@link ControllerHost#createRemoteConnection}.
      *
-     * @see {@link Host#createRemoteConnection}
+     * @see {@link ControllerHost#createRemoteConnection}
      * @since API version 1
      */
     interface RemoteSocket {
+        [key: string]: any;
+
         /**
          * Sets a callback which receives a remote connection object for each incoming connection.
          *
@@ -4846,14 +5143,13 @@ declare namespace API {
 
         /**
          * Gets the actual port used for the remote socket, which might differ from the originally requested port
-         * when calling {@link Host#createRemoteConnection(String name, int port)} in case the requested port was
+         * when calling {@link ControllerHost#createRemoteConnection(String name, int port)} in case the requested port was
          * already used.
          *
          * @return {int} the actual port used for the remote socket
          * @since API version 1
          */
         getPort(): number;
-
     }
 
     /**
@@ -4862,6 +5158,8 @@ declare namespace API {
      * @since API version 1
      */
     interface Scene extends ClipLauncherSlotOrScene {
+        [key: string]: any;
+
         /**
          * Value that reports the number of clips in the scene.
          *
@@ -4892,7 +5190,6 @@ declare namespace API {
          * @since API version 1
          */
         showInEditor(): void;
-
     }
 
     /**
@@ -4902,12 +5199,14 @@ declare namespace API {
      * the list of underlying scenes.
      *
      * To receive an instance of scene bank call
-     * {@link com.bitwig.base.control_surface.iface.Host#createSceneBank}.
+     * {@link ControllerHost#createSceneBank}.
      *
-     * @see {@link com.bitwig.base.control_surface.iface.Host#createSceneBank}
+     * @see {@link ControllerHost#createSceneBank}
      * @since API version 1
      */
     interface SceneBank extends ClipLauncherSlotOrSceneBank {
+        [key: string]: any;
+
         /**
          * Returns the scene at the given index within the bank.
          *
@@ -4928,7 +5227,6 @@ declare namespace API {
          * @since API version 1
          */
         launchScene(indexInWindow?: any): void;
-
     }
 
     /**
@@ -4937,6 +5235,8 @@ declare namespace API {
      * @since API version 2
      */
     interface Scrollable {
+        [key: string]: any;
+
         /**
          * Value that reports the current scene scroll position.
          *
@@ -5004,10 +5304,11 @@ declare namespace API {
          * @since API version 2
          */
         canScrollForwards(): BooleanValue;
-
     }
 
     interface Send extends Parameter {
+        [key: string]: any;
+
         /**
          * Value that reports the color of the channel that this send sends to.
          *
@@ -5015,13 +5316,14 @@ declare namespace API {
          * @since API version 2
          */
         sendChannelColor(): SettableColorValue;
-
     }
 
     interface SendBank extends Bank {
+        [key: string]: any;
     }
 
     interface SettableBeatTimeValue extends BeatTimeValue {
+        [key: string]: any;
     }
 
     /**
@@ -5030,6 +5332,8 @@ declare namespace API {
      * @since API version 1
      */
     interface SettableBooleanValue extends BooleanValue {
+        [key: string]: any;
+
         /**
          * Sets the internal value.
          *
@@ -5046,10 +5350,11 @@ declare namespace API {
          * @since API version 1
          */
         toggle(): void;
-
     }
 
     interface SettableColorValue extends ColorValue {
+        [key: string]: any;
+
         /**
          * Sets the internal value.
          *
@@ -5059,10 +5364,11 @@ declare namespace API {
          * @since API version 2
          */
         set(red?: number, green?: number, blue?: number): void;
-
     }
 
     interface SettableDoubleValue extends DoubleValue {
+        [key: string]: any;
+
         /**
          * Sets the internal value.
          *
@@ -5080,7 +5386,6 @@ declare namespace API {
          * @since API version 1
          */
         inc(amount?: any): void;
-
     }
 
     /**
@@ -5090,6 +5395,8 @@ declare namespace API {
      * @since API version 1
      */
     interface SettableEnumValue extends EnumValue {
+        [key: string]: any;
+
         /**
          * Sets the value to the enumeration item with the given name.
          *
@@ -5098,7 +5405,6 @@ declare namespace API {
          * @since API version 1
          */
         set(name?: any): void;
-
     }
 
     /**
@@ -5107,6 +5413,8 @@ declare namespace API {
      * @since API version 1
      */
     interface SettableIntegerValue extends IntegerValue {
+        [key: string]: any;
+
         /**
          * Sets the internal value.
          *
@@ -5124,7 +5432,6 @@ declare namespace API {
          * @since API version 1
          */
         inc(amount?: any): void;
-
     }
 
     /**
@@ -5133,6 +5440,8 @@ declare namespace API {
      * @since API version 1
      */
     interface SettableRangedValue extends RangedValue {
+        [key: string]: any;
+
         /**
          * Sets the value in an absolute fashion as a value between 0 .. 1 where 0 represents the minimum value and
          * 1 the maximum.
@@ -5169,13 +5478,14 @@ declare namespace API {
          * @since API version 1
          */
         incRaw(delta?: any): void;
-
     }
 
     /**
      * @since API version 2
      */
     interface SettableStringArrayValue extends StringArrayValue {
+        [key: string]: any;
+
         /**
          * Sets the internal value.
          *
@@ -5184,7 +5494,6 @@ declare namespace API {
          * @since API version 2
          */
         set(value?: any): void;
-
     }
 
     /**
@@ -5193,6 +5502,8 @@ declare namespace API {
      * @since API version 1
      */
     interface SettableStringValue extends StringValue {
+        [key: string]: any;
+
         /**
          * Sets the value object to the given string.
          *
@@ -5201,7 +5512,6 @@ declare namespace API {
          * @since API version 1
          */
         set(value?: any): void;
-
     }
 
     /**
@@ -5210,6 +5520,8 @@ declare namespace API {
      * @since API version 1
      */
     interface Setting {
+        [key: string]: any;
+
         /**
          * Returns the category name of the setting.
          *
@@ -5253,7 +5565,6 @@ declare namespace API {
          * @since API version 1
          */
         hide(): void;
-
     }
 
     /**
@@ -5263,6 +5574,8 @@ declare namespace API {
      * @since API version 1
      */
     interface Settings {
+        [key: string]: any;
+
         /**
          * Returns a signal setting object, which is shown a push button with the given label in Bitwig Studio.
          *
@@ -5297,7 +5610,15 @@ declare namespace API {
          * @return {SettableRangedValue} the object that encapsulates the requested numeric setting
         @since API version 1
          */
-        getNumberSetting(label?: any, category?: any, minValue?: any, maxValue?: any, stepResolution?: any, unit?: any, initialValue?: any): SettableRangedValue;
+        getNumberSetting(
+            label?: any,
+            category?: any,
+            minValue?: any,
+            maxValue?: any,
+            stepResolution?: any,
+            unit?: any,
+            initialValue?: any
+        ): SettableRangedValue;
 
         /**
          * Returns an enumeration setting that is shown either as a chooser or as a button group in Bitwig Studio,
@@ -5314,7 +5635,12 @@ declare namespace API {
          * @return {SettableEnumValue} the object that encapsulates the requested enum setting
         @since API version 1
          */
-        getEnumSetting(label?: any, category?: any, options?: any, initialValue?: any): SettableEnumValue;
+        getEnumSetting(
+            label?: any,
+            category?: any,
+            options?: any,
+            initialValue?: any
+        ): SettableEnumValue;
 
         /**
          * Returns a textual setting that is shown as a text field in the Bitwig Studio user interface.
@@ -5330,11 +5656,17 @@ declare namespace API {
          * @return {SettableStringValue} the object that encapsulates the requested string setting
         @since API version 1
          */
-        getStringSetting(label?: any, category?: any, numChars?: any, initialText?: any): SettableStringValue;
-
+        getStringSetting(
+            label?: any,
+            category?: any,
+            numChars?: any,
+            initialText?: any
+        ): SettableStringValue;
     }
 
-    interface ShortMidiReceivedCallback extends Callback {
+    interface ShortMidiDataReceivedCallback extends Callback {
+        [key: string]: any;
+
         /**
          * Registers a callback for receiving short (normal) MIDI messages on this MIDI input port.
          *
@@ -5343,7 +5675,69 @@ declare namespace API {
          * @param {int} data2
          */
         midiReceived(statusByte?: number, data1?: number, data2?: number): void;
+    }
 
+    interface ShortMidiMessage {
+        [key: string]: any;
+
+        /**
+         * @return {int}
+         */
+        getStatusByte(): number;
+
+        /**
+         * @return {int}
+         */
+        getData1(): number;
+
+        /**
+         * @return {int}
+         */
+        getData2(): number;
+
+        /**
+         * @return {int}
+         */
+        getChannel(): number;
+
+        /**
+         * @return {int}
+         */
+        getStatusMessage(): number;
+
+        /**
+         * @return {boolean}
+         */
+        isNoteOff(): boolean;
+
+        /**
+         * @return {boolean}
+         */
+        isNoteOn(): boolean;
+
+        /**
+         * @return {boolean}
+         */
+        isPolyPressure(): boolean;
+
+        /**
+         * @return {boolean}
+         */
+        isControlChange(): boolean;
+
+        /**
+         * @return {boolean}
+         */
+        isProgramChange(): boolean;
+
+        /**
+         * @return {boolean}
+         */
+        isChannelPressure(): boolean;
+    }
+
+    interface ShortMidiMessageReceivedCallback extends ShortMidiDataReceivedCallback {
+        [key: string]: any;
     }
 
     /**
@@ -5352,6 +5746,8 @@ declare namespace API {
      * @since API version 1
      */
     interface Signal {
+        [key: string]: any;
+
         /**
          * Registers an observer that gets notified when the signal gets fired.
          *
@@ -5367,7 +5763,6 @@ declare namespace API {
          * @since API version 1
          */
         fire(): void;
-
     }
 
     /**
@@ -5376,6 +5771,7 @@ declare namespace API {
      * @since API version 1
      */
     interface SoloValue extends SettableBooleanValue {
+        [key: string]: any;
     }
 
     /**
@@ -5388,6 +5784,8 @@ declare namespace API {
      * @since API version 1
      */
     interface SourceSelector extends ObjectProxy {
+        [key: string]: any;
+
         /**
          * Returns an object that indicates if the source selector has note inputs enabled.
          *
@@ -5403,10 +5801,11 @@ declare namespace API {
          * @since API version 1
          */
         getHasAudioInputSelected(): SettableBooleanValue;
-
     }
 
     interface StepDataChangedCallback extends Callback {
+        [key: string]: any;
+
         /**
          * A callback function that receives three parameters: 1. the x (step) coordinate within the note grid
          * (integer), 2. the y (key) coordinate within the note grid (integer), and 3. an integer value that
@@ -5417,19 +5816,22 @@ declare namespace API {
          * @param {int} state
          */
         stepStateChanged(x?: number, y?: number, state?: number): void;
-
     }
 
     /**
      * @since API version 2
      */
     interface StringArrayValue extends ObjectArrayValue {
+        [key: string]: any;
     }
 
     interface StringArrayValueChangedCallback extends ObjectValueChangedCallback {
+        [key: string]: any;
     }
 
     interface StringValue extends Value {
+        [key: string]: any;
+
         /**
          * Gets the current value.
          *
@@ -5447,25 +5849,28 @@ declare namespace API {
          * @since API version 2
          */
         getLimited(maxLength?: number): string;
-
     }
 
     interface StringValueChangedCallback extends ObjectValueChangedCallback {
+        [key: string]: any;
     }
 
     /**
-     * Interface for an object that can be 'subscribed' or not. An active object will notify any observers when
-     * changes occur to it. When it is unsubscribed the observers will no longer be notified. A driver can use this to
-     * say which objects it is interested in and which ones it is not (for example in one mode the driver may not
-     * be interested in track meters). This allows the driver to improve efficiency by only getting notified about
-     * changes that are really relevant to it.
+     * Interface for an object that can be 'subscribed' or not. A subscribed object will notify any observers when
+     * changes occur to it. When it is unsubscribed the observers will no longer be notified. A driver can use
+     * this to say which objects it is interested in and which ones it is not (for example in one mode the driver
+     * may not be interested in track meters) at runtime. This allows the driver to improve efficiency by only
+     * getting notified about changes that are really relevant to it. By default a driver is subscribed to
+     * everything.
      *
      * @since API version 2
      */
     interface Subscribable {
+        [key: string]: any;
+
         /**
-         * Determines if this object is currently 'active'. In the active state it will notify any observers
-         * registered on it.
+         * Determines if this object is currently 'subscribed'. In the subscribed state it will notify any
+         * observers registered on it.
          *
          * @return {boolean}
          */
@@ -5478,19 +5883,27 @@ declare namespace API {
          */
         setIsSubscribed(value?: boolean): void;
 
+        /**
+         * Subscribes the driver to this object. This is equivalent to calling {@link #setIsSubscribed(boolean)}
+         * with true.
+         */
         subscribe(): void;
 
+        /**
+         * Unsubscribes the driver from this object. This is equivalent to calling {@link #setIsSubscribed(boolean)}
+         * with false.
+         */
         unsubscribe(): void;
-
     }
 
-    interface SysexStringReceivedCallback extends Callback {
+    interface SysexMidiDataReceivedCallback extends Callback {
+        [key: string]: any;
+
         /**
          * @param data
         The data encoded as a hex string
          */
         sysexDataReceived(data?: any): void;
-
     }
 
     /**
@@ -5499,6 +5912,8 @@ declare namespace API {
      * @since API version 1
      */
     interface TimeSignatureValue extends Value {
+        [key: string]: any;
+
         /**
          * Gets the current value.
          *
@@ -5540,7 +5955,6 @@ declare namespace API {
          * @since API version 1
          */
         getTicks(): SettableIntegerValue;
-
     }
 
     /**
@@ -5549,6 +5963,8 @@ declare namespace API {
      * @since API version 1
      */
     interface Track extends Channel {
+        [key: string]: any;
+
         /**
          * Value that reports the position of the track within the list of Bitwig Studio tracks.
          *
@@ -5776,7 +6192,12 @@ declare namespace API {
          * @return {TrackBank} an object for bank-wise navigation of tracks, sends and scenes
          * @since API version 1
          */
-        createTrackBank(numTracks?: any, numSends?: any, numScenes?: any, hasFlatTrackList?: any): TrackBank;
+        createTrackBank(
+            numTracks?: any,
+            numSends?: any,
+            numScenes?: any,
+            hasFlatTrackList?: any
+        ): TrackBank;
 
         /**
          * Returns a track bank with the given number of child tracks, sends and scenes. Only audio tracks,
@@ -5796,7 +6217,12 @@ declare namespace API {
          * @return {TrackBank} an object for bank-wise navigation of tracks, sends and scenes
          * @since API version 1
          */
-        createMainTrackBank(numTracks?: any, numSends?: any, numScenes?: any, hasFlatTrackList?: any): TrackBank;
+        createMainTrackBank(
+            numTracks?: any,
+            numSends?: any,
+            numScenes?: any,
+            hasFlatTrackList?: any
+        ): TrackBank;
 
         /**
          * Returns a track bank with the given number of child effect tracks and scenes. Only effect tracks are
@@ -5844,8 +6270,13 @@ declare namespace API {
          * @return {TrackBank} an object for bank-wise navigation of sibling tracks
          * @since API version 1
          */
-        createSiblingsTrackBank(numTracks?: any, numSends?: any, numScenes?: any, shouldIncludeEffectTracks?: any, shouldIncludeMasterTrack?: any): TrackBank;
-
+        createSiblingsTrackBank(
+            numTracks?: any,
+            numSends?: any,
+            numScenes?: any,
+            shouldIncludeEffectTracks?: any,
+            shouldIncludeMasterTrack?: any
+        ): TrackBank;
     }
 
     /**
@@ -5854,16 +6285,18 @@ declare namespace API {
      * a larger list of tracks and scenes. Various methods are provided for scrolling to different sections of the
      * track/scene list. It basically acts like a 2-dimensional window moving over the grid of tracks and scenes.
      *
-     * To receive an instance of track bank that supports all kinds of tracks call {@link Host#createTrackBank}.
-     * Additional methods are provided in the {@link Host} interface to create track banks that include only main
-     * tracks ({@link Host#createMainTrackBank}) or only effect tracks ({@link Host#createEffectTrackBank}).
+     * To receive an instance of track bank that supports all kinds of tracks call {@link ControllerHost#createTrackBank}.
+     * Additional methods are provided in the {@link ControllerHost} interface to create track banks that include only main
+     * tracks ({@link ControllerHost#createMainTrackBank}) or only effect tracks ({@link ControllerHost#createEffectTrackBank}).
      *
-     * @see {@link Host#createTrackBank}
-     * @see {@link Host#createMainTrackBank}
-     * @see {@link Host#createEffectTrackBank}
+     * @see {@link ControllerHost#createTrackBank}
+     * @see {@link ControllerHost#createMainTrackBank}
+     * @see {@link ControllerHost#createEffectTrackBank}
      * @since API version 1
      */
     interface TrackBank extends ChannelBank {
+        [key: string]: any;
+
         /**
          * {@link SceneBank} that represents a view on the screnes in this {@link TrackBank}.
          *
@@ -5912,7 +6345,10 @@ declare namespace API {
         Studio document
          * @since API version 1
          */
-        addSceneScrollPositionObserver(callback?: (...args: any[]) => any, valueWhenUnassigned?: any): void;
+        addSceneScrollPositionObserver(
+            callback?: (...args: any[]) => any,
+            valueWhenUnassigned?: any
+        ): void;
 
         /**
          * Causes this bank to follow the supplied cursor. When the cursor moves to a new item the bank will be
@@ -5923,7 +6359,6 @@ declare namespace API {
          * @since API version 2
          */
         followCursorTrack(cursorTrack?: any): void;
-
     }
 
     /**
@@ -5932,6 +6367,8 @@ declare namespace API {
      * @since API version 1
      */
     interface Transport extends ObjectProxy {
+        [key: string]: any;
+
         /**
          * Starts playback in the Bitwig Studio transport.
          *
@@ -6256,7 +6693,6 @@ declare namespace API {
          * @since API version 1
          */
         getClipLauncherPostRecordingTimeOffset(): SettableBeatTimeValue;
-
     }
 
     /**
@@ -6266,6 +6702,8 @@ declare namespace API {
      * @since API version 1
      */
     interface UserControlBank {
+        [key: string]: any;
+
         /**
          * Gets the user control at the given bank index.
          *
@@ -6275,7 +6713,6 @@ declare namespace API {
          * @since API version 1
          */
         getControl(index?: any): Parameter;
-
     }
 
     /**
@@ -6284,8 +6721,13 @@ declare namespace API {
      * @since API version 1
      */
     interface Value extends Subscribable {
+        [key: string]: any;
+
         /**
-         * Marks this value as being of interest to the driver.
+         * Marks this value as being of interest to the driver. This can only be called once during the driver's
+         * init method. A value that is of interest to the driver can be obtained using the value's get method. If
+         * a value has not been marked as interested then an error will be reported if the driver attempts to get
+         * the current value. Adding an observer to a value will automatically mark this value as interested.
          *
          * @since API version 2
          */
@@ -6299,12 +6741,11 @@ declare namespace API {
          * @since API version 1
          */
         addValueObserver(callback?: (...args: any[]) => any): void;
-
     }
 
     interface ValueChangedCallback extends Callback {
+        [key: string]: any;
     }
-
 }
 
 declare const host: API.Host;
@@ -6312,4 +6753,4 @@ declare const loadAPI: typeof host.loadAPI;
 declare const load: typeof host.load;
 declare const println: typeof host.println;
 declare const errorln: typeof host.errorln;
-declare function dump(obj: any): void;
+declare function dump(obj: any): void
