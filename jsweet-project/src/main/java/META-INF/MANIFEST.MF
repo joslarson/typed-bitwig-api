@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+Built-By: nick
+Created-By: Apache Maven 3.0.5
+Build-Jdk: 1.8.0_121
+

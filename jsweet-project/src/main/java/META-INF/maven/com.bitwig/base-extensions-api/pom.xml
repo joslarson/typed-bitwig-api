@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<parent>
+		<artifactId>base</artifactId>
+		<groupId>com.bitwig</groupId>
+		<version>LOCAL</version>
+	</parent>
+
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.bitwig</groupId>
+	<artifactId>base-extensions-api</artifactId>
+	<packaging>jar</packaging>
+	<name>Base / Extensions API</name>
+	<version>LOCAL</version>
+
+	<properties>
+		<externalDoxDir>${basedir}/target/api-docs/external</externalDoxDir>
+	</properties>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+			</plugin>
+			<plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-jar-plugin</artifactId>
+            <configuration>
+                <archive>
+                    <addMavenDescriptor>false</addMavenDescriptor>
+                    <manifest>
+                        <addDefaultImplementationEntries>false</addDefaultImplementationEntries>
+                        <addDefaultSpecificationEntries>false</addDefaultSpecificationEntries>
+                        <addClasspath>false</addClasspath>
+                    </manifest>
+                </archive>
+            </configuration>
+        </plugin>
+        
+			<plugin>
+				<groupId>com.soebes.maven.plugins.dmg</groupId>
+				<artifactId>doxygen-maven-plugin</artifactId>
+				<version>1.0.1</version>
+				<configuration>
+					<projectName>"Control Surface API"</projectName>
+					<projectNumber>${version_name}</projectNumber>
+					<optimizeOutputJava>true</optimizeOutputJava>
+					<filePatterns>*.java *.dox *.md *.markdown</filePatterns>
+					<input>${basedir}/src/main/java/com/bitwig/extension ${externalDoxDir}</input>
+					<showDirectories>false</showDirectories>
+					<showFiles>false</showFiles>
+					<showNamespaces>false</showNamespaces>
+					<fullPathNames>false</fullPathNames>
+					<hideScopeNames>true</hideScopeNames>
+					<extractAll>false</extractAll>
+					<extractStatic>true</extractStatic>
+					<recursive>true</recursive>
+					<generateDeprecatedlist>true</generateDeprecatedlist>
+					<generateTreeview>ALL</generateTreeview>
+					<umlLook>false</umlLook>
+					<generateLatex>false</generateLatex>
+					<hideScopeNames>true</hideScopeNames>
+					<htmlDynamicSections>false</htmlDynamicSections>
+					<collaborationGraph>false</collaborationGraph>
+					<outputDirectory>${basedir}/target/api-docs</outputDirectory>
+					<directoryGraph>false</directoryGraph>
+					<layoutFile>src/main/doxygen/DoxygenLayout.xml</layoutFile>
+					<imagePath>${basedir}/src/main/doxygen/images</imagePath>
+					<searchengine>true</searchengine>
+					<javadocAutobrief>false</javadocAutobrief>
+					<generateHtml>true</generateHtml>
+					<htmlStylesheet>${basedir}/src/main/doxygen/resources/doxygen.css</htmlStylesheet>
+					<htmlFooter>${basedir}/src/main/doxygen/footer.html</htmlFooter>
+					<shortNames>true</shortNames>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>compile</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<!--<plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-javadoc-plugin</artifactId> 
+				<version>2.9.1</version> <configuration> <doclet>com.bitwig.tools.doclets.standard.Standard</doclet> 
+				<docletArtifact> <groupId>com.bitwig</groupId> <artifactId>javadoc-doclets</artifactId> 
+				<version>LOCAL</version> </docletArtifact> <useStandardDocletOptions>true</useStandardDocletOptions> 
+				</configuration> <executions> <execution> <phase>compile</phase> <goals> 
+				<goal>javadoc</goal> </goals> <configuration> <sourcepath>src/main/java/com/bitwig/base/control_surface/iface</sourcepath> 
+				<nodeprecated>false</nodeprecated> <doctitle>Bitwig Control Surface Scripting 
+				API</doctitle> <windowtitle>Bitwig Control Surface Scripting API</windowtitle> 
+				<stylesheetfile>${basedir}/src/main/javadoc/stylesheet.css</stylesheetfile> 
+				<docfilessubdirs>true</docfilessubdirs> </configuration> </execution> </executions> 
+				</plugin> -->
+			<plugin>
+				<groupId>com.bitwig</groupId>
+				<artifactId>js-stubs-maven-plugin</artifactId>
+				<version>LOCAL</version>
+				<executions>
+					<execution>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>js-stubs</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<sourceDir>${basedir}/src/main/java/com/bitwig/extension</sourceDir>
+					<destinationDir>${basedir}/target/js-stubs</destinationDir>
+					<changesFile>${externalDoxDir}/history.dox</changesFile>
+					<releaseVersionName>${version_name}</releaseVersionName>
+				</configuration>
+			</plugin>
+		</plugins>
+
+		<resources>
+			<resource>
+				<filtering>false</filtering>
+				<directory>src/main/java</directory>
+				<includes>
+					<include>**/*.properties</include>
+				</includes>
+			</resource>
+		</resources>
+
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<artifactId>maven-resources-plugin</artifactId>
+					<version>2.6</version>
+					<executions>
+						<execution>
+							<id>copy-resources</id>
+							<phase>compile</phase>
+							<goals>
+								<goal>copy-resources</goal>
+							</goals>
+							<configuration>
+								<overwrite>true</overwrite>
+								<outputDirectory>${basedir}/target/api-docs/doxygen/</outputDirectory>
+								<resources>
+									<resource>
+										<directory>src/main/doxygen/resources</directory>
+										<filtering>true</filtering>
+										<includes>
+											<include>*.css</include>
+											<include>*.png</include>
+											<include>*.svg</include>
+										</includes>
+									</resource>
+								</resources>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+				<!--This plugin's configuration is used to store Eclipse m2e settings 
+					only. It has no influence on the Maven build itself. -->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											org.apache.maven.plugins
+										</groupId>
+										<artifactId>
+											maven-javadoc-plugin
+										</artifactId>
+										<versionRange>
+											[2.9.1,)
+										</versionRange>
+										<goals>
+											<goal>javadoc</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+
+</project>

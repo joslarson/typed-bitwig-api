@@ -1,0 +1,6 @@
+/bin/
+/target/
+.generated
+.ts
+.jsweet
+src/main/java/com
