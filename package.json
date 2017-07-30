@@ -11,11 +11,9 @@
   "author": "Joseph Larson",
   "license": "BSD-3-Clause",
   "devDependencies": {
-    "glob": "^7.1.2",
-    "glob-fs": "0.1.6",
-    "jsdoc": "3.4.3",
-    "prettier": "1.5.3",
-    "typescript": "2.4.2",
-    "typescript-formatter": "4.1.0"
-  }
+    "fs-extra": "^4.0.0",
+    "download": "^6.2.5",
+    "prettier": "1.5.3"
+  },
+  "dependencies": {}
 }
