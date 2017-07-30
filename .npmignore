@@ -1,5 +1,5 @@
 .vscode
-/interfaces
-/jsweet-project
+/java_source
+/jsweet_project
 node_modules
 /build.js
