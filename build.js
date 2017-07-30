@@ -7,7 +7,7 @@ const prettier = require('prettier');
 const pkg = require('./package.json');
 const tspkg = require('typescript/package.json');
 
-const API_VERSION = parseInt(String(fs.readFileSync('API_VERSION')));
+const API_VERSION = 3;
 
 fs.removeSync('java_source');
 
@@ -77,7 +77,11 @@ declare function dump(obj: any): void;
 
 downloadApiSource(API_VERSION + 1)
     .then(() => {
-        fs.writeFileSync('API_VERSION', `${API_VERSION + 1}`);
+        const buildFileData = String(fs.readFileSync('build.js')).replace(
+            `API_VERSION = ${API_VERSION}`,
+            `API_VERSION = ${API_VERSION + 1}`
+        );
+        fs.writeFileSync('build.js', buildFileData);
     })
     .catch(() =>
         downloadApiSource(API_VERSION).then(() => {
