@@ -9,28 +9,32 @@ const tspkg = require('typescript/package.json');
 
 const API_VERSION = parseInt(String(fs.readFileSync('API_VERSION')));
 
-fs.removeSync('interfaces');
+fs.removeSync('java_source');
 
 function downloadApiSource(version) {
     return download(
         `https://maven.bitwig.com/com/bitwig/extension-api/${version}/extension-api-${version}-sources.jar`,
-        'interfaces',
+        'java_source',
         { extract: true }
     );
 }
 
 function buildTypesDefinition() {
     // replace API Java source files
-    fs.removeSync(path.join('jsweet-project', 'src', 'main', 'java', 'com'));
-    fs.copySync(path.join('interfaces'), path.join('jsweet-project', 'src', 'main', 'java'));
+    fs.removeSync(path.join('jsweet_project', 'src', 'main', 'java', 'com'));
+    fs.copySync(path.join('java_source'), path.join('jsweet_project', 'src', 'main', 'java'));
 
     // rebuild d.ts file
-    process.chdir('jsweet-project');
-    spawn('mvn', ['generate-sources'], { stderr: 'inherit' });
+    process.chdir('jsweet_project');
+    spawn(
+        'mvn',
+        ['generate-sources']
+        // { stdio: 'inherit' }
+    );
     process.chdir('../');
 
     // cleanup uneeded namespacing
-    let types = String(fs.readFileSync(path.join('jsweet-project', 'target', 'dts', 'bundle.d.ts')))
+    let types = String(fs.readFileSync(path.join('jsweet_project', 'target', 'dts', 'bundle.d.ts')))
         .replace(/com\.bitwig\.extension[a-z\.]*\.([A-Z])/g, (match, p1) => p1)
         .replace(/com\.bitwig\.extension[a-z\.]*/g, 'API')
         .replace(/declare namespace API \{/g, '')
