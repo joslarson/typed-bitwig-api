@@ -1,7 +1,7 @@
 import org.jsweet.transpiler.extension.PrinterAdapter;
 
-public class HelloWorldAdapter extends PrinterAdapter {
-    public HelloWorldAdapter(PrinterAdapter parent) {
+public class BitwigAdapter extends PrinterAdapter {
+    public BitwigAdapter(PrinterAdapter parent) {
         super(parent);
         addTypeMapping(java.util.UUID.class.getName(), "string");
     }

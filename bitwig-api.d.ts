@@ -1,3 +1,8 @@
+// Type definitions for Bitwig Studio 2.1 Control Surface Scripting API
+// Project: https://bitwig.com
+// Definitions by: Joseph Larson <https://github.com/joslarson/>
+// TypeScript Version: 2.4.2
+
 declare namespace API {
     /**
      * Defines the interface through which an extension can talk to the host application.
@@ -89,8 +94,7 @@ declare namespace API {
         valueChanged(newValue: boolean): any;
     }
 
-    interface Callback {
-    }
+    interface Callback {}
 
     interface ClipLauncherSlotBankPlaybackStateChangedCallback extends Callback {
         /**
@@ -139,8 +143,7 @@ declare namespace API {
         valueChanged(newValue: number): any;
     }
 
-    interface EnumValueChangedCallback extends ObjectValueChangedCallback<string> {
-    }
+    interface EnumValueChangedCallback extends ObjectValueChangedCallback<string> {}
 
     interface FloatValueChangedCallback extends Callback {
         valueChanged(newValue: number): any;
@@ -193,8 +196,7 @@ declare namespace API {
         valueChanged(index: number, newValue: string): any;
     }
 
-    interface IndexedValueChangedCallback extends Callback {
-    }
+    interface IndexedValueChangedCallback extends Callback {}
 
     interface IntegerValueChangedCallback extends ValueChangedCallback {
         valueChanged(newValue: number): any;
@@ -249,11 +251,9 @@ declare namespace API {
         stepStateChanged(x: number, y: number, state: number): any;
     }
 
-    interface StringArrayValueChangedCallback extends ObjectValueChangedCallback<string[]> {
-    }
+    interface StringArrayValueChangedCallback extends ObjectValueChangedCallback<string[]> {}
 
-    interface StringValueChangedCallback extends ObjectValueChangedCallback<string> {
-    }
+    interface StringValueChangedCallback extends ObjectValueChangedCallback<string> {}
 
     interface SysexMidiDataReceivedCallback extends Callback {
         /**
@@ -263,8 +263,7 @@ declare namespace API {
         sysexDataReceived(data: string): any;
     }
 
-    interface ValueChangedCallback extends Callback {
-    }
+    interface ValueChangedCallback extends Callback {}
 
     /**
      * Instances of this interface represent actions in Bitwig Studio, such as commands that can be launched from
@@ -794,7 +793,11 @@ declare namespace API {
          * @param {number} maxChars
          * @param {string} fallbackText
          */
-        addSelectedModeObserver(callable: StringValueChangedCallback, maxChars: number, fallbackText: string): any;
+        addSelectedModeObserver(
+            callable: StringValueChangedCallback,
+            maxChars: number,
+            fallbackText: string
+        ): any;
     }
     namespace Application {
         /**
@@ -1014,7 +1017,13 @@ declare namespace API {
          * @param {number} timeSignatureTicks
          * @return {string}
          */
-        formatBeatTime(beatTime: number, isAbsolute: boolean, timeSignatureNumerator: number, timeSignatureDenominator: number, timeSignatureTicks: number): string;
+        formatBeatTime(
+            beatTime: number,
+            isAbsolute: boolean,
+            timeSignatureNumerator: number,
+            timeSignatureDenominator: number,
+            timeSignatureTicks: number
+        ): string;
     }
 
     /**
@@ -1062,7 +1071,14 @@ declare namespace API {
          * @since API version 1
          * @deprecated Use {@link #getFormatted(BeatTimeFormatter)} instead.
          */
-        addTimeObserver(separator: string, barsLen: number, beatsLen: number, subdivisionLen: number, ticksLen: number, callback: StringValueChangedCallback): any;
+        addTimeObserver(
+            separator: string,
+            barsLen: number,
+            beatsLen: number,
+            subdivisionLen: number,
+            ticksLen: number,
+            callback: StringValueChangedCallback
+        ): any;
     }
 
     /**
@@ -1325,7 +1341,11 @@ declare namespace API {
          * @param {number} maxCharacters
          * @param {string} textWhenUnassigned
          */
-        addNameObserver(maxCharacters: number, textWhenUnassigned: string, callback: StringValueChangedCallback): any;
+        addNameObserver(
+            maxCharacters: number,
+            textWhenUnassigned: string,
+            callback: StringValueChangedCallback
+        ): any;
     }
 
     /**
@@ -1445,8 +1465,7 @@ declare namespace API {
      * @since API version 1
      * @class
      */
-    interface BrowserFilterItemBank extends BrowserItemBank<BrowserFilterItem> {
-    }
+    interface BrowserFilterItemBank extends BrowserItemBank<BrowserFilterItem> {}
 
     /**
      * Instances of this interface represent entries in a browser filter column.
@@ -1481,7 +1500,11 @@ declare namespace API {
          * @since API version 1
          * @deprecated Use {@link #name()} instead.
          */
-        addValueObserver(maxCharacters: number, textWhenUnassigned: string, callback: StringValueChangedCallback): any;
+        addValueObserver(
+            maxCharacters: number,
+            textWhenUnassigned: string,
+            callback: StringValueChangedCallback
+        ): any;
         /**
          * Returns an object that provides access to the selected state of the browser item.
          *
@@ -1610,8 +1633,7 @@ declare namespace API {
      * @since API version 1
      * @class
      */
-    interface BrowserResultsItem extends BrowserItem {
-    }
+    interface BrowserResultsItem extends BrowserItem {}
 
     /**
      * Instances of this interface are used to navigate the results column in the Bitwig Studio browser.
@@ -1619,8 +1641,7 @@ declare namespace API {
      * @since API version 1
      * @class
      */
-    interface BrowserResultsItemBank extends BrowserItemBank<BrowserResultsItem> {
-    }
+    interface BrowserResultsItemBank extends BrowserItemBank<BrowserResultsItem> {}
 
     /**
      * Instances of this interface are used for browsing material according to a certain type. Possible material
@@ -1873,7 +1894,12 @@ declare namespace API {
          * @throws com.bitwig.base.control_surface.ControlSurfaceException
          * @since API version 1
          */
-        addVuMeterObserver(range: number, channel: number, peak: boolean, callback: IntegerValueChangedCallback): any;
+        addVuMeterObserver(
+            range: number,
+            channel: number,
+            peak: boolean,
+            callback: IntegerValueChangedCallback
+        ): any;
         /**
          * Registers an observer that reports notes when they are played on the channel.
          *
@@ -2050,7 +2076,10 @@ declare namespace API {
          * @since API version 1
          * @deprecated Use {@link #channelScrollPosition()} instead
          */
-        addChannelScrollPositionObserver(callback: IntegerValueChangedCallback, valueWhenUnassigned: number): any;
+        addChannelScrollPositionObserver(
+            callback: IntegerValueChangedCallback,
+            valueWhenUnassigned: number
+        ): any;
         /**
          * Value that reports if the channel bank can be scrolled further down.
          *
@@ -2818,7 +2847,8 @@ declare namespace API {
      * @since API version 1
      * @class
      */
-    interface ClipLauncherSlotOrSceneBank<ItemType extends ClipLauncherSlotOrScene> extends Bank<ItemType> {
+    interface ClipLauncherSlotOrSceneBank<ItemType extends ClipLauncherSlotOrScene>
+        extends Bank<ItemType> {
         /**
          * Launches the scene/slot with the given index.
          *
@@ -3145,7 +3175,12 @@ declare namespace API {
          * @see #createEffectTrackBank
          * @since API version 1
          */
-        createTrackBank(numTracks?: any, numSends?: any, numScenes?: any, hasFlatTrackList?: any): any;
+        createTrackBank(
+            numTracks?: any,
+            numSends?: any,
+            numScenes?: any,
+            hasFlatTrackList?: any
+        ): any;
         /**
          * Returns a track bank with the given number of tracks, sends and scenes. Only audio tracks, instrument
          * tracks and hybrid tracks are considered. For more information about track banks and the `bank pattern`
@@ -3222,7 +3257,13 @@ declare namespace API {
          * @param {string} id
          * @param {boolean} shouldFollowSelection
          */
-        createCursorTrack(id?: any, name?: any, numSends?: any, numScenes?: any, shouldFollowSelection?: any): any;
+        createCursorTrack(
+            id?: any,
+            name?: any,
+            numSends?: any,
+            numScenes?: any,
+            shouldFollowSelection?: any
+        ): any;
         /**
          * Returns a scene bank with the given number of scenes.<br/>
          *
@@ -3374,7 +3415,11 @@ declare namespace API {
          * {@link RemoteConnection} parameter is passed into the callback function.
          * @ @since API version 1
          */
-        connectToRemoteHost(host: string, port: number, callback: ConnectionEstablishedCallback): any;
+        connectToRemoteHost(
+            host: string,
+            port: number,
+            callback: ConnectionEstablishedCallback
+        ): any;
         /**
          * Sends a UDP (User Datagram Protocol) packet with the given data to the specified host.
          *
@@ -3402,7 +3447,11 @@ declare namespace API {
          * @return {boolean} {@true} if was possible to bind the port, false otherwise
          * @ @since API version 1
          */
-        addDatagramPacketObserver(name: string, port: number, callback: DataReceivedCallback): boolean;
+        addDatagramPacketObserver(
+            name: string,
+            port: number,
+            callback: DataReceivedCallback
+        ): boolean;
         /**
          * @deprecated Use {@link #createTransport} instead.
          * @since API version 1
@@ -3453,7 +3502,11 @@ declare namespace API {
          * @param {number} numScenes
          * @return {*}
          */
-        createMainTrackBankSection(numTracks: number, numSends: number, numScenes: number): TrackBank;
+        createMainTrackBankSection(
+            numTracks: number,
+            numSends: number,
+            numScenes: number
+        ): TrackBank;
         /**
          * @deprecated Use {@link #createEffectTrackBank(int, int)} instead.
          * @since API version 1
@@ -3554,7 +3607,13 @@ declare namespace API {
          * @since API version 2
          * @return {*}
          */
-        createBeatTimeFormatter(separator: string, barsLen: number, beatsLen: number, subdivisionLen: number, ticksLen: number): BeatTimeFormatter;
+        createBeatTimeFormatter(
+            separator: string,
+            barsLen: number,
+            beatsLen: number,
+            subdivisionLen: number,
+            ticksLen: number
+        ): BeatTimeFormatter;
     }
 
     /**
@@ -3631,8 +3690,7 @@ declare namespace API {
      * @since API version 1
      * @class
      */
-    interface CursorBrowserFilterColumn extends BrowserFilterColumn, Cursor {
-    }
+    interface CursorBrowserFilterColumn extends BrowserFilterColumn, Cursor {}
 
     /**
      * Instances of this interface represent entries in a browser filter column.
@@ -3727,8 +3785,7 @@ declare namespace API {
      * @since API version 1
      * @class
      */
-    interface CursorBrowserResultItem extends BrowserResultsItem, CursorBrowserItem {
-    }
+    interface CursorBrowserResultItem extends BrowserResultsItem, CursorBrowserItem {}
 
     /**
      * Instances of this interface are used for navigating the various browsing sessions of Bitwig Studio's
@@ -3737,8 +3794,7 @@ declare namespace API {
      * @since API version 1
      * @class
      */
-    interface CursorBrowsingSession extends GenericBrowsingSession, Cursor {
-    }
+    interface CursorBrowsingSession extends GenericBrowsingSession, Cursor {}
 
     /**
      * A special kind of channel that follows a channel selection cursor in Bitwig Studio. The selection can
@@ -3867,8 +3923,7 @@ declare namespace API {
      * @since API version 1
      * @class
      */
-    interface CursorDeviceLayer extends CursorChannel, DeviceLayer {
-    }
+    interface CursorDeviceLayer extends CursorChannel, DeviceLayer {}
 
     /**
      * Instances of this interface represent the selected device slot as shown in the Bitwig Studio user
@@ -4118,7 +4173,11 @@ declare namespace API {
          * @since API version 2
          * @return {*}
          */
-        createCursorRemoteControlsPage(name?: any, parameterCount?: any, filterExpression?: any): any;
+        createCursorRemoteControlsPage(
+            name?: any,
+            parameterCount?: any,
+            filterExpression?: any
+        ): any;
         /**
          * Returns the parameter with the given index in the envelope parameter page.
          *
@@ -4283,7 +4342,10 @@ declare namespace API {
          * @return {*} the requested device browser object.
          * @since API version 1
          */
-        createDeviceBrowser(numFilterColumnEntries: number, numResultsColumnEntries: number): Browser;
+        createDeviceBrowser(
+            numFilterColumnEntries: number,
+            numResultsColumnEntries: number
+        ): Browser;
         /**
          * Value that reports the name of the device.
          *
@@ -4304,7 +4366,11 @@ declare namespace API {
          * @since API version 1
          * @deprecated Use {@link #name()} instead
          */
-        addNameObserver(len: number, textWhenUnassigned: string, callback: StringValueChangedCallback): any;
+        addNameObserver(
+            len: number,
+            textWhenUnassigned: string,
+            callback: StringValueChangedCallback
+        ): any;
         /**
          * Value that reports the last loaded preset name.
          *
@@ -4325,7 +4391,11 @@ declare namespace API {
          * @since API version 1
          * @deprecated Use {@link #presetName()}.addValueObserver(callback) instead.
          */
-        addPresetNameObserver(len: number, textWhenUnassigned: string, callback: StringValueChangedCallback): any;
+        addPresetNameObserver(
+            len: number,
+            textWhenUnassigned: string,
+            callback: StringValueChangedCallback
+        ): any;
         /**
          * Value that reports the current preset category name.
          *
@@ -4346,7 +4416,11 @@ declare namespace API {
          * @since API version 1
          * @deprecated use {@link #presetCategory()} instead.
          */
-        addPresetCategoryObserver(len: number, textWhenUnassigned: string, callback: StringValueChangedCallback): any;
+        addPresetCategoryObserver(
+            len: number,
+            textWhenUnassigned: string,
+            callback: StringValueChangedCallback
+        ): any;
         /**
          * Value that reports the current preset creator name.
          *
@@ -4367,7 +4441,11 @@ declare namespace API {
          * @since API version 1
          * @deprecated Use {@link #presetCreator()} instead.
          */
-        addPresetCreatorObserver(len: number, textWhenUnassigned: string, callback: StringValueChangedCallback): any;
+        addPresetCreatorObserver(
+            len: number,
+            textWhenUnassigned: string,
+            callback: StringValueChangedCallback
+        ): any;
         /**
          * Registers an observer that reports the currently selected parameter page.
          *
@@ -4378,7 +4456,10 @@ declare namespace API {
          * a callback function that receives a single page index parameter (integer)
          * @since API version 1
          */
-        addSelectedPageObserver(valueWhenUnassigned: number, callback: IntegerValueChangedCallback): any;
+        addSelectedPageObserver(
+            valueWhenUnassigned: number,
+            callback: IntegerValueChangedCallback
+        ): any;
         /**
          * Registers an observer that reports the name of the active modulation source.
          *
@@ -4391,7 +4472,11 @@ declare namespace API {
          * a callback function that receives a single name parameter (string)
          * @since API version 1
          */
-        addActiveModulationSourceObserver(len: number, textWhenUnassigned: string, callback: StringValueChangedCallback): any;
+        addActiveModulationSourceObserver(
+            len: number,
+            textWhenUnassigned: string,
+            callback: StringValueChangedCallback
+        ): any;
         /**
          * Registers an observer that reports the names of the devices parameter pages.
          *
@@ -4585,7 +4670,10 @@ declare namespace API {
          * function with the signature (String ID, String name)
          * @since API version 1
          */
-        addDirectParameterNameObserver(maxChars: number, callback: DirectParameterNameChangedCallback): any;
+        addDirectParameterNameObserver(
+            maxChars: number,
+            callback: DirectParameterNameChangedCallback
+        ): any;
         /**
          * Returns an observer that reports changes of parameter display values, i.e. parameter values formatted as
          * a string to be read by the user, for example "-6.02 dB". The returned observer object can be used to
@@ -4600,7 +4688,10 @@ declare namespace API {
          * function with the signature (String ID, String valueDisplay)
          * @since API version 1
          */
-        addDirectParameterValueDisplayObserver(maxChars: number, callback: DirectParameterDisplayedValueChangedCallback): DirectParameterValueDisplayObserver;
+        addDirectParameterValueDisplayObserver(
+            maxChars: number,
+            callback: DirectParameterDisplayedValueChangedCallback
+        ): DirectParameterValueDisplayObserver;
         /**
          * Adds an observer for the parameter display value (initial and changes) of all parameters for the device.
          *
@@ -4609,7 +4700,9 @@ declare namespace API {
          * accessible 'Number.NaN' (not-a-number) is reported, can be checked with 'isNaN(value)'.
          * @since API version 1
          */
-        addDirectParameterNormalizedValueObserver(callback: DirectParameterNormalizedValueChangedCallback): any;
+        addDirectParameterNormalizedValueObserver(
+            callback: DirectParameterNormalizedValueChangedCallback
+        ): any;
         /**
          * Sets the parameter with the specified `id` to the given `value` according to the given `resolution`.
          *
@@ -4657,7 +4750,11 @@ declare namespace API {
          * a callback function that receives a single string parameter.
          * @deprecated Use {@link #sampleName()} instead.
          */
-        addSampleNameObserver(maxChars: number, textWhenUnassigned: string, callback: StringValueChangedCallback): any;
+        addSampleNameObserver(
+            maxChars: number,
+            textWhenUnassigned: string,
+            callback: StringValueChangedCallback
+        ): any;
         /**
          * Returns an object that provides bank-wise navigation of sibling devices of the same device chain
          * (including the device instance used to create the siblings bank).
@@ -4762,7 +4859,10 @@ declare namespace API {
          * @since API version 1
          * @deprecated Use {@link #scrollPosition()} instead.
          */
-        addScrollPositionObserver(callback: IntegerValueChangedCallback, valueWhenUnassigned: number): any;
+        addScrollPositionObserver(
+            callback: IntegerValueChangedCallback,
+            valueWhenUnassigned: number
+        ): any;
         /**
          * Registers an observer that reports if the device window can be scrolled further up.
          *
@@ -4870,7 +4970,11 @@ declare namespace API {
          * @since API version 1
          * @deprecated Use {@link #name()} instead.
          */
-        addNameObserver(numChars: number, textWhenUnassigned: string, callback: StringValueChangedCallback): any;
+        addNameObserver(
+            numChars: number,
+            textWhenUnassigned: string,
+            callback: StringValueChangedCallback
+        ): any;
         /**
          * Registers an observer that reports if the device chain is selected in Bitwig Studio editors.
          *
@@ -4905,7 +5009,10 @@ declare namespace API {
          * @return {*} the requested device browser object.
          * @since API version 1
          */
-        createDeviceBrowser(numFilterColumnEntries: number, numResultsColumnEntries: number): Browser;
+        createDeviceBrowser(
+            numFilterColumnEntries: number,
+            numResultsColumnEntries: number
+        ): Browser;
         /**
          * @deprecated Use {@link #selectInEditor()} or {@link Channel#selectInMixer()} instead.
          * @since API version 1
@@ -4931,8 +5038,7 @@ declare namespace API {
      * @since API version 1
      * @class
      */
-    interface DeviceLayer extends Channel {
-    }
+    interface DeviceLayer extends Channel {}
 
     /**
      * Devices layers are features of special Bitwig Studio devices, more specifically the Layer Instrument and
@@ -4967,8 +5073,7 @@ declare namespace API {
      * @since API version 1
      * @class
      */
-    interface DeviceSlot extends DeviceChain {
-    }
+    interface DeviceSlot extends DeviceChain {}
 
     /**
      * This interface is used to configure observation of pretty-printed device parameter values.
@@ -4995,8 +5100,7 @@ declare namespace API {
      * @since API version 1
      * @class
      */
-    interface DocumentState extends Settings {
-    }
+    interface DocumentState extends Settings {}
 
     /**
      * Instances of this interface represent double values.
@@ -5020,8 +5124,7 @@ declare namespace API {
      * @since API version 1
      * @class
      */
-    interface DrumPad extends Channel {
-    }
+    interface DrumPad extends Channel {}
 
     /**
      * Drum pads are features of special Bitwig Studio devices (currently only the Bitwig Drum Machine
@@ -5085,7 +5188,11 @@ declare namespace API {
          * @param {number} maxCharacters
          * @param {string} textWhenUnassigned
          */
-        addNameObserver(maxCharacters: number, textWhenUnassigned: string, callback: StringValueChangedCallback): any;
+        addNameObserver(
+            maxCharacters: number,
+            textWhenUnassigned: string,
+            callback: StringValueChangedCallback
+        ): any;
     }
 
     /**
@@ -5194,7 +5301,11 @@ declare namespace API {
          * @param {*} callback
          * a callback function that receives a single string parameter.
          */
-        addLabelObserver(numChars: number, textWhenUnassigned: string, callback: StringValueChangedCallback): any;
+        addLabelObserver(
+            numChars: number,
+            textWhenUnassigned: string,
+            callback: StringValueChangedCallback
+        ): any;
     }
 
     /**
@@ -5203,8 +5314,7 @@ declare namespace API {
      * @since API version 1
      * @class
      */
-    interface MasterTrack extends Track {
-    }
+    interface MasterTrack extends Track {}
 
     /**
      * Instances of this interface are used to setup handler functions for incoming MIDI messages from a specific
@@ -5519,7 +5629,11 @@ declare namespace API {
          * @since API version 1
          * @deprecated Use {@link #name()} instead.
          */
-        addNameObserver(numChars: number, textWhenUnassigned: string, callback: StringValueChangedCallback): any;
+        addNameObserver(
+            numChars: number,
+            textWhenUnassigned: string,
+            callback: StringValueChangedCallback
+        ): any;
         /**
          * Value which reports if the modulation source is mapped to any destination(s).
          *
@@ -5642,7 +5756,11 @@ declare namespace API {
          * ignored for non-pitch expressions.
          * @ @since API version 1
          */
-        assignPolyphonicAftertouchToExpression(channel: number, expression: NoteInput.NoteExpression, pitchRange: number): any;
+        assignPolyphonicAftertouchToExpression(
+            channel: number,
+            expression: NoteInput.NoteExpression,
+            pitchRange: number
+        ): any;
         /**
          * Enables use of Expressive MIDI mode. (note-per-channel)
          *
@@ -5653,7 +5771,11 @@ declare namespace API {
          * @param {number} pitchBendRange
          * initial pitch bend range used
          */
-        setUseExpressiveMidi(useExpressiveMidi: boolean, baseChannel: number, pitchBendRange: number): any;
+        setUseExpressiveMidi(
+            useExpressiveMidi: boolean,
+            baseChannel: number,
+            pitchBendRange: number
+        ): any;
         /**
          * Enables use of Multidimensional Polyphonic Expression mode. (note-per-channel)
          *
@@ -5752,7 +5874,11 @@ declare namespace API {
          * @since API version 1
          * @deprecated Use {@link #name()} instead.
          */
-        addNameObserver(numChars: number, textWhenUnassigned: string, callback: StringValueChangedCallback): any;
+        addNameObserver(
+            numChars: number,
+            textWhenUnassigned: string,
+            callback: StringValueChangedCallback
+        ): any;
         /**
          * Value the color of the note lane. By default the reported color will be the
          * track color, or in case an associated drum pad has a custom color it will be the color of that pad
@@ -5978,7 +6104,11 @@ declare namespace API {
          * @since API version 1
          * @deprecated
          */
-        addNameObserver(maxChars: number, textWhenUnassigned: string, callback: StringValueChangedCallback): any;
+        addNameObserver(
+            maxChars: number,
+            textWhenUnassigned: string,
+            callback: StringValueChangedCallback
+        ): any;
         /**
          * Adds an observer which sends a formatted text representation of the value whenever the value changes.
          * The callback will get called at least once immediately after calling this method for reporting the
@@ -5993,7 +6123,11 @@ declare namespace API {
          * @since API version 1
          * @deprecated Use {@link #value()#displayedValue()} instead
          */
-        addValueDisplayObserver(maxChars: number, textWhenUnassigned: string, callback: StringValueChangedCallback): any;
+        addValueDisplayObserver(
+            maxChars: number,
+            textWhenUnassigned: string,
+            callback: StringValueChangedCallback
+        ): any;
         /**
          * Resets the value to its default.
          *
@@ -6082,8 +6216,7 @@ declare namespace API {
      * @since API version 2
      * @class
      */
-    interface PinnableCursorDevice extends CursorDevice, PinnableCursor {
-    }
+    interface PinnableCursorDevice extends CursorDevice, PinnableCursor {}
 
     /**
      * @since API version 2
@@ -6270,8 +6403,7 @@ declare namespace API {
      * @since API version 1
      * @class
      */
-    interface Preferences extends Settings {
-    }
+    interface Preferences extends Settings {}
 
     /**
      * Instances of this interface are used for browsing presets, including access to all filter columns and the
@@ -6324,7 +6456,10 @@ declare namespace API {
          * the requested chain location of the new primary device
          * @since API version 1
          */
-        switchToDevice(deviceType: PrimaryDevice.DeviceType, chainLocation: PrimaryDevice.ChainLocation): any;
+        switchToDevice(
+            deviceType: PrimaryDevice.DeviceType,
+            chainLocation: PrimaryDevice.ChainLocation
+        ): any;
         /**
          * Registers an observer that reports if navigation to another device with the provided characteristics is
          * possible.
@@ -6338,7 +6473,11 @@ declare namespace API {
          * @since API version 1
          * @deprecated This method never did anything. Please do not use.
          */
-        addCanSwitchToDeviceObserver(deviceType: PrimaryDevice.DeviceType, chainLocation: PrimaryDevice.ChainLocation, callback: BooleanValueChangedCallback): any;
+        addCanSwitchToDeviceObserver(
+            deviceType: PrimaryDevice.DeviceType,
+            chainLocation: PrimaryDevice.ChainLocation,
+            callback: BooleanValueChangedCallback
+        ): any;
     }
     namespace PrimaryDevice {
         /**
@@ -6708,7 +6847,10 @@ declare namespace API {
          * @since API version 1
          * @deprecated Use {@link #scrollPosition()} instead
          */
-        addScrollPositionObserver(callback: IntegerValueChangedCallback, valueWhenUnassigned: number): any;
+        addScrollPositionObserver(
+            callback: IntegerValueChangedCallback,
+            valueWhenUnassigned: number
+        ): any;
         /**
          * Registers an observer that reports if the scene window can be scrolled further up.
          *
@@ -6827,8 +6969,7 @@ declare namespace API {
         sendChannelColor(): SettableColorValue;
     }
 
-    interface SendBank extends Bank<Send> {
-    }
+    interface SendBank extends Bank<Send> {}
 
     interface SettableBeatTimeValue extends BeatTimeValue, SettableDoubleValue {
         /**
@@ -7115,7 +7256,15 @@ declare namespace API {
          * @return {*} the object that encapsulates the requested numeric setting
          * @ @since API version 1
          */
-        getNumberSetting(label: string, category: string, minValue: number, maxValue: number, stepResolution: number, unit: string, initialValue: number): SettableRangedValue;
+        getNumberSetting(
+            label: string,
+            category: string,
+            minValue: number,
+            maxValue: number,
+            stepResolution: number,
+            unit: string,
+            initialValue: number
+        ): SettableRangedValue;
         /**
          * Returns an enumeration setting that is shown either as a chooser or as a button group in Bitwig Studio,
          * depending on the number of provided options.
@@ -7131,7 +7280,12 @@ declare namespace API {
          * @return {*} the object that encapsulates the requested enum setting
          * @ @since API version 1
          */
-        getEnumSetting(label: string, category: string, options: string[], initialValue: string): SettableEnumValue;
+        getEnumSetting(
+            label: string,
+            category: string,
+            options: string[],
+            initialValue: string
+        ): SettableEnumValue;
         /**
          * Returns a textual setting that is shown as a text field in the Bitwig Studio user interface.
          *
@@ -7146,7 +7300,12 @@ declare namespace API {
          * @return {*} the object that encapsulates the requested string setting
          * @ @since API version 1
          */
-        getStringSetting(label: string, category: string, numChars: number, initialText: string): SettableStringValue;
+        getStringSetting(
+            label: string,
+            category: string,
+            numChars: number,
+            initialText: string
+        ): SettableStringValue;
     }
 
     /**
@@ -7544,7 +7703,11 @@ declare namespace API {
          * @since API version 1
          * @deprecated Use {@link #trackType()} instead.
          */
-        addTrackTypeObserver(numChars: number, textWhenUnassigned: string, callback: StringValueChangedCallback): any;
+        addTrackTypeObserver(
+            numChars: number,
+            textWhenUnassigned: string,
+            callback: StringValueChangedCallback
+        ): any;
         /**
          * Value that reports if the track may contain child tracks, which is the case for group tracks.
          *
@@ -7623,7 +7786,12 @@ declare namespace API {
          * @see #createEffectTrackBank
          * @since API version 1
          */
-        createTrackBank(numTracks: number, numSends: number, numScenes: number, hasFlatTrackList: boolean): TrackBank;
+        createTrackBank(
+            numTracks: number,
+            numSends: number,
+            numScenes: number,
+            hasFlatTrackList: boolean
+        ): TrackBank;
         /**
          * Returns a track bank with the given number of child tracks, sends and scenes. Only audio tracks,
          * instrument tracks and hybrid tracks are considered. The track bank will only have content if the
@@ -7644,7 +7812,12 @@ declare namespace API {
          * @see #createEffectTrackBank
          * @since API version 1
          */
-        createMainTrackBank(numTracks: number, numSends: number, numScenes: number, hasFlatTrackList: boolean): TrackBank;
+        createMainTrackBank(
+            numTracks: number,
+            numSends: number,
+            numScenes: number,
+            hasFlatTrackList: boolean
+        ): TrackBank;
         /**
          * Returns a track bank with the given number of child effect tracks and scenes. Only effect tracks are
          * considered. The track bank will only have content if the connected track is a group track. For more
@@ -7663,7 +7836,11 @@ declare namespace API {
          * @see #createMainTrackBank
          * @since API version 1
          */
-        createEffectTrackBank(numTracks: number, numScenes: number, hasFlatTrackList: boolean): TrackBank;
+        createEffectTrackBank(
+            numTracks: number,
+            numScenes: number,
+            hasFlatTrackList: boolean
+        ): TrackBank;
         /**
          * Returns an object that represents the master track of the connected track group. The returned object
          * will only have content if the connected track is a group track.
@@ -7692,7 +7869,13 @@ declare namespace API {
          * @see #createTrackBank
          * @since API version 1
          */
-        createSiblingsTrackBank(numTracks: number, numSends: number, numScenes: number, shouldIncludeEffectTracks: boolean, shouldIncludeMasterTrack: boolean): TrackBank;
+        createSiblingsTrackBank(
+            numTracks: number,
+            numSends: number,
+            numScenes: number,
+            shouldIncludeEffectTracks: boolean,
+            shouldIncludeMasterTrack: boolean
+        ): TrackBank;
     }
 
     /**
@@ -7760,7 +7943,10 @@ declare namespace API {
          * @param {*} callback
          * @param {number} valueWhenUnassigned
          */
-        addTrackScrollPositionObserver(callback: IntegerValueChangedCallback, valueWhenUnassigned: number): any;
+        addTrackScrollPositionObserver(
+            callback: IntegerValueChangedCallback,
+            valueWhenUnassigned: number
+        ): any;
         /**
          * {@link SceneBank} that represents a view on the screnes in this {@link TrackBank}.
          *
@@ -7811,7 +7997,10 @@ declare namespace API {
          * Studio document
          * @since API version 1
          */
-        addSceneScrollPositionObserver(callback: IntegerValueChangedCallback, valueWhenUnassigned: number): any;
+        addSceneScrollPositionObserver(
+            callback: IntegerValueChangedCallback,
+            valueWhenUnassigned: number
+        ): any;
         /**
          * @deprecated use {@link #canScrollChannelsUp()} instead.
          * @param {*} callback
@@ -8611,7 +8800,10 @@ declare namespace API {
      * @extends Extension
      * @class
      */
-    abstract class ControllerExtension extends Extension<ControllerHost, ControllerExtensionDefinition> {
+    abstract class ControllerExtension extends Extension<
+        ControllerHost,
+        ControllerExtensionDefinition
+    > {
         constructor(definition: ControllerExtensionDefinition, host: ControllerHost);
         getMidiInPort(index: number): MidiIn;
         getMidiOutPort(index: number): MidiOut;
@@ -8670,14 +8862,19 @@ declare namespace API {
          * @param {PlatformType} platformType
          * @return {AutoDetectionMidiPortNamesList}
          */
-        getAutoDetectionMidiPortNamesList(platformType: PlatformType): AutoDetectionMidiPortNamesList;
+        getAutoDetectionMidiPortNamesList(
+            platformType: PlatformType
+        ): AutoDetectionMidiPortNamesList;
         /**
          * Lists the {@link AutoDetectionMidiPortNames} that defines the names of the MIDI in and out ports
          * that can be used for auto detection of the controller for the supplied platform type.
          * @param {AutoDetectionMidiPortNamesList} list
          * @param {PlatformType} platformType
          */
-        abstract listAutoDetectionMidiPortNames(list: AutoDetectionMidiPortNamesList, platformType: PlatformType): any;
+        abstract listAutoDetectionMidiPortNames(
+            list: AutoDetectionMidiPortNamesList,
+            platformType: PlatformType
+        ): any;
         /**
          * Creates an instance of this extension.
          * @param {*} host
@@ -8686,3 +8883,10 @@ declare namespace API {
         abstract createInstance(host: ControllerHost): ControllerExtension;
     }
 }
+
+declare const host: API.ControllerHost;
+declare const loadAPI: typeof host.loadAPI;
+declare const load: typeof host.load;
+declare const println: typeof host.println;
+declare const errorln: typeof host.errorln;
+declare function dump(obj: any): void

@@ -2,18 +2,19 @@
   "name": "typed-bitwig-api",
   "version": "2.1.0",
   "repository": "taktiljs/typed-bitwig-api",
-  "description": "TypeScript definition file for the Bitwig Control Surface API.",
+  "description": "TypeScript definition file for the Bitwig Studio Control Surface Scripting API.",
   "types": "bitwig-api.d.ts",
   "scripts": {
-    "build": "jsdoc -d ./ -t ./ js-stubs && tsfmt -r bitwig-api.d.ts && prettier --parser typescript --print-width 100 --tab-width 4 --single-quote --trailing-comma=es5 --write bitwig-api.d.ts",
+    "build": "node ./build.js",
     "version": "npm run build && git add bitwig-api.d.ts"
   },
   "author": "Joseph Larson",
   "license": "BSD-3-Clause",
   "devDependencies": {
-    "fs-extra": "^4.0.0",
     "download": "^6.2.5",
-    "prettier": "1.5.3"
+    "fs-extra": "^4.0.0",
+    "prettier": "1.5.3",
+    "typescript": "^2.4.2"
   },
   "dependencies": {}
 }

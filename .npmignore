@@ -1,4 +1,6 @@
-node_modules
-publish.js
-js-stubs
 .vscode
+/interfaces
+/jsweet-project
+node_modules
+/API_VERSION
+/build.js
