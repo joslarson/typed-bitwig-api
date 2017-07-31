@@ -91,7 +91,7 @@ declare namespace API {
     }
 
     interface BooleanValueChangedCallback extends ValueChangedCallback {
-        valueChanged(newValue: boolean): any;
+        (newValue: boolean): any;
     }
 
     interface Callback {}
@@ -112,41 +112,41 @@ declare namespace API {
          * @param {number} playbackState
          * @param {boolean} isQueued
          */
-        playbackStateChanged(slotIndex: number, playbackState: number, isQueued: boolean): any;
+        (slotIndex: number, playbackState: number, isQueued: boolean): any;
     }
 
     interface ColorValueChangedCallback extends ValueChangedCallback {
-        valueChanged(red: number, green: number, blue: number): any;
+        (red: number, green: number, blue: number): any;
     }
 
     interface ConnectionEstablishedCallback extends Callback {
-        connectionEstablished(connection: RemoteConnection): any;
+        (connection: RemoteConnection): any;
     }
 
     interface DataReceivedCallback extends Callback {
-        dataReceived(data: number[]): any;
+        (data: number[]): any;
     }
 
     interface DirectParameterDisplayedValueChangedCallback extends Callback {
-        directParameterDisplayedValueChanged(id: string, value: string): any;
+        (id: string, value: string): any;
     }
 
     interface DirectParameterNameChangedCallback extends Callback {
-        directParameterNameChanged(id: string, name: string): any;
+        (id: string, name: string): any;
     }
 
     interface DirectParameterNormalizedValueChangedCallback extends Callback {
-        directParameterNormalizedValueChanged(id: string, normalizedValue: number): any;
+        (id: string, normalizedValue: number): any;
     }
 
     interface DoubleValueChangedCallback extends ValueChangedCallback {
-        valueChanged(newValue: number): any;
+        (newValue: number): any;
     }
 
     interface EnumValueChangedCallback extends ObjectValueChangedCallback<string> {}
 
     interface FloatValueChangedCallback extends Callback {
-        valueChanged(newValue: number): any;
+        (newValue: number): any;
     }
 
     interface IndexedBooleanValueChangedCallback extends IndexedValueChangedCallback {
@@ -161,7 +161,7 @@ declare namespace API {
          * @param {number} index
          * @param {boolean} newValue
          */
-        valueChanged(index: number, newValue: boolean): any;
+        (index: number, newValue: boolean): any;
     }
 
     interface IndexedColorValueChangedCallback extends IndexedValueChangedCallback {
@@ -178,7 +178,7 @@ declare namespace API {
          * @param {number} green
          * @param {number} blue
          */
-        valueChanged(index: number, red: number, green: number, blue: number): any;
+        (index: number, red: number, green: number, blue: number): any;
     }
 
     interface IndexedStringValueChangedCallback extends IndexedValueChangedCallback {
@@ -193,21 +193,21 @@ declare namespace API {
          * @param {number} index
          * @param {string} newValue
          */
-        valueChanged(index: number, newValue: string): any;
+        (index: number, newValue: string): any;
     }
 
     interface IndexedValueChangedCallback extends Callback {}
 
     interface IntegerValueChangedCallback extends ValueChangedCallback {
-        valueChanged(newValue: number): any;
+        (newValue: number): any;
     }
 
     interface NoArgsCallback extends Callback {
-        call(): any;
+        (): any;
     }
 
     interface NotePlaybackCallback extends Callback {
-        notePlaybackEventOccurred(isNoteOn: boolean, key: number, velocity: number): any;
+        (isNoteOn: boolean, key: number, velocity: number): any;
     }
 
     interface ObjectValueChangedCallback<ValueType> extends ValueChangedCallback {
@@ -226,7 +226,7 @@ declare namespace API {
          * @param {number} data1
          * @param {number} data2
          */
-        midiReceived(statusByte?: any, data1?: any, data2?: any): any;
+        (statusByte?: any, data1?: any, data2?: any): any;
     }
 
     interface ShortMidiMessageReceivedCallback extends ShortMidiDataReceivedCallback {
@@ -236,7 +236,7 @@ declare namespace API {
          * @param {number} data1
          * @param {number} data2
          */
-        midiReceived(statusByte?: any, data1?: any, data2?: any): any;
+        (statusByte?: any, data1?: any, data2?: any): any;
     }
 
     interface StepDataChangedCallback extends Callback {
@@ -248,7 +248,7 @@ declare namespace API {
          * @param {number} y
          * @param {number} state
          */
-        stepStateChanged(x: number, y: number, state: number): any;
+        (x: number, y: number, state: number): any;
     }
 
     interface StringArrayValueChangedCallback extends ObjectValueChangedCallback<string[]> {}
@@ -260,7 +260,7 @@ declare namespace API {
          * @param {string} data
          * The data encoded as a hex string
          */
-        sysexDataReceived(data: string): any;
+        (data: string): any;
     }
 
     interface ValueChangedCallback extends Callback {}

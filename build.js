@@ -19,6 +19,27 @@ function downloadApiSource(version) {
     );
 }
 
+function fixCallbacks(dtsString) {
+    const callbackStart = /interface [A-Za-z]*?Callback (?:extends [A-Za-z]+(?:<[a-zA-Z\[\]]*>)? ){$/;
+    const methodSigniture = /^        [a-z][a-zA-z]+(\(.+;)/;
+
+    let isCallback = false;
+
+    return dtsString
+        .split('\n')
+        .map(line => {
+            if (!isCallback && line.match(callbackStart)) isCallback = true;
+            if (isCallback && line === '    }') isCallback = false;
+            if (isCallback) {
+                if (line.match(methodSigniture)) {
+                    line = line.replace(methodSigniture, (match, p1) => `        ${p1}`);
+                }
+            }
+            return line;
+        })
+        .join('\n');
+}
+
 function buildTypesDefinition() {
     // replace API Java source files
     fs.removeSync(path.join('jsweet_project', 'src', 'main', 'java', 'com'));
@@ -40,6 +61,9 @@ function buildTypesDefinition() {
         .replace(/declare namespace API \{/g, '')
         .replace(/\n}/gm, '')
         .trim();
+
+    // fix callback signitures to be callable
+    types = fixCallbacks(types);
 
     types = `\
 // Type definitions for Bitwig Studio ${pkg.version
