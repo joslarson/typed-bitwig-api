@@ -6,6 +6,7 @@
   "types": "bitwig-api.d.ts",
   "scripts": {
     "build": "node ./build.js",
+    "transform": "node ./build.js -t",
     "version": "npm run build && git add bitwig-api.d.ts"
   },
   "author": "Joseph Larson",

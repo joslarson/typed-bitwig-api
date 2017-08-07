@@ -8,8 +8,7 @@ const pkg = require('./package.json');
 const tspkg = require('typescript/package.json');
 
 const API_VERSION = 3;
-
-// fs.removeSync('java_source');
+const DTS_SRC = path.join('jsweet_project', 'target', 'dts', 'bundle.d.ts');
 
 function downloadApiSource(version) {
     return download(
@@ -17,6 +16,21 @@ function downloadApiSource(version) {
         'java_source',
         { extract: true }
     );
+}
+
+function buildJsweet() {
+    // replace API Java source files
+    fs.removeSync(path.join('jsweet_project', 'src', 'main', 'java', 'com'));
+    fs.copySync(path.join('java_source'), path.join('jsweet_project', 'src', 'main', 'java'));
+
+    // rebuild d.ts file
+    process.chdir('jsweet_project');
+    spawn(
+        'mvn',
+        ['generate-sources']
+        // { stdio: 'inherit' }
+    );
+    process.chdir('../');
 }
 
 function fixCallbacks(dtsString) {
@@ -63,22 +77,9 @@ function fixValueTypes(dtsString) {
         .join('\n');
 }
 
-function buildTypesDefinition() {
-    // // replace API Java source files
-    // fs.removeSync(path.join('jsweet_project', 'src', 'main', 'java', 'com'));
-    // fs.copySync(path.join('java_source'), path.join('jsweet_project', 'src', 'main', 'java'));
-
-    // // rebuild d.ts file
-    // process.chdir('jsweet_project');
-    // spawn(
-    //     'mvn',
-    //     ['generate-sources']
-    //     // { stdio: 'inherit' }
-    // );
-    // process.chdir('../');
-
+function transformJsweetOutput(input) {
     // cleanup uneeded namespacing
-    let types = String(fs.readFileSync(path.join('jsweet_project', 'target', 'dts', 'bundle.d.ts')))
+    let result = input
         .replace(/com\.bitwig\.extension[a-z\.]*\.([A-Z])/g, (match, p1) => p1)
         .replace(/com\.bitwig\.extension[a-z\.]*/g, 'API')
         .replace(/declare namespace API \{/g, '')
@@ -86,11 +87,12 @@ function buildTypesDefinition() {
         .trim();
 
     // fix callback signitures to be callable
-    types = fixCallbacks(types);
+    result = fixCallbacks(result);
 
-    types = fixValueTypes(types);
+    // fix value observer methods
+    result = fixValueTypes(result);
 
-    types = `\
+    result = `\
 // Type definitions for Bitwig Studio ${pkg.version
         .split('.')
         .splice(0, 2)
@@ -100,7 +102,7 @@ function buildTypesDefinition() {
 // TypeScript Version: ${tspkg.version}
 
 declare namespace API {
-    ${types}
+    ${result}
 }
 
 declare const host: API.ControllerHost;
@@ -112,7 +114,7 @@ declare function dump(obj: any): void;
 `;
 
     // format using prettier
-    types = prettier.format(types, {
+    result = prettier.format(result, {
         parser: 'typescript',
         printWidth: 100,
         tabWidth: 4,
@@ -120,26 +122,39 @@ declare function dump(obj: any): void;
         trailingComma: 'es5',
     });
 
-    // write the modified types to the output file
-    fs.writeFileSync('bitwig-api.d.ts', types);
+    return result;
 }
 
-// downloadApiSource(API_VERSION + 1)
-//     .then(() => {
-//         const buildFileData = String(fs.readFileSync('build.js')).replace(
-//             `API_VERSION = ${API_VERSION}`,
-//             `API_VERSION = ${API_VERSION + 1}`
-//         );
-//         fs.writeFileSync('build.js', buildFileData);
-//     })
-//     .catch(() =>
-//         downloadApiSource(API_VERSION).then(() => {
-//             console.log('API_VERSION', API_VERSION);
-//         })
-//     )
-//     .then(() => {
-//         buildTypesDefinition();
-//         console.log('done.');
-//     });
+function build(fullBuild = true) {
+    if (fullBuild) {
+        console.log('full build...');
+        fs.removeSync('java_source');
 
-buildTypesDefinition();
+        downloadApiSource(API_VERSION + 1)
+            .then(() => {
+                const buildFileData = String(fs.readFileSync('build.js')).replace(
+                    `API_VERSION = ${API_VERSION}`,
+                    `API_VERSION = ${API_VERSION + 1}`
+                );
+                fs.writeFileSync('build.js', buildFileData);
+            })
+            .catch(() =>
+                downloadApiSource(API_VERSION).then(() => {
+                    console.log('API_VERSION', API_VERSION);
+                })
+            )
+            .then(() => {
+                buildJsweet();
+                const result = transformJsweetOutput(String(fs.readFileSync(DTS_SRC)));
+                fs.writeFileSync('bitwig-api.d.ts', result);
+                console.log('done.');
+            });
+    } else {
+        console.log('minimal build...');
+        const result = transformJsweetOutput(String(fs.readFileSync(DTS_SRC)));
+        fs.writeFileSync('bitwig-api.d.ts', result);
+        console.log('done.');
+    }
+}
+
+build(process.argv.slice(2).indexOf('-t') === -1);
