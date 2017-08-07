@@ -211,7 +211,7 @@ declare namespace API {
     }
 
     interface ObjectValueChangedCallback<ValueType> extends ValueChangedCallback {
-        valueChanged(newValue: ValueType): any;
+        (newValue: ValueType): any;
     }
 
     interface ShortMidiDataReceivedCallback extends Callback {

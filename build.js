@@ -34,7 +34,7 @@ function buildJsweet() {
 }
 
 function fixCallbacks(dtsString) {
-    const callbackStart = /interface [A-Za-z]*?Callback (?:extends [A-Za-z]+(?:<[a-zA-Z\[\]]*>)? ){$/;
+    const callbackStart = /interface [A-Za-z]*?Callback(?:<[a-zA-Z\[\]]*>)? (?:extends [A-Za-z]+(?:<[a-zA-Z\[\]]*>)? ){$/;
     const methodSigniture = /^        [a-z][a-zA-z]+(\(.+;)/;
 
     let isCallback = false;
