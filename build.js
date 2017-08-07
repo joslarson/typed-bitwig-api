@@ -9,7 +9,7 @@ const tspkg = require('typescript/package.json');
 
 const API_VERSION = 3;
 
-fs.removeSync('java_source');
+// fs.removeSync('java_source');
 
 function downloadApiSource(version) {
     return download(
@@ -40,19 +40,42 @@ function fixCallbacks(dtsString) {
         .join('\n');
 }
 
-function buildTypesDefinition() {
-    // replace API Java source files
-    fs.removeSync(path.join('jsweet_project', 'src', 'main', 'java', 'com'));
-    fs.copySync(path.join('java_source'), path.join('jsweet_project', 'src', 'main', 'java'));
+function fixValueTypes(dtsString) {
+    const valueTypeStart = /^    interface.+(?:extends )?Value\<([A-Z][a-zA-Z]+)/;
 
-    // rebuild d.ts file
-    process.chdir('jsweet_project');
-    spawn(
-        'mvn',
-        ['generate-sources']
-        // { stdio: 'inherit' }
-    );
-    process.chdir('../');
+    let callbackType,
+        isValueInterface = false;
+
+    return dtsString
+        .split('\n')
+        .map(line => {
+            const matches = valueTypeStart.exec(line);
+            if (!isValueInterface && matches) {
+                isValueInterface = true;
+                callbackType = matches[1];
+            }
+            if (isValueInterface && line === '    }') isValueInterface = false;
+            if (isValueInterface && line.indexOf('callback?: any') > -1) {
+                line = line.replace('callback?: any', `callback: ${callbackType}`);
+            }
+            return line;
+        })
+        .join('\n');
+}
+
+function buildTypesDefinition() {
+    // // replace API Java source files
+    // fs.removeSync(path.join('jsweet_project', 'src', 'main', 'java', 'com'));
+    // fs.copySync(path.join('java_source'), path.join('jsweet_project', 'src', 'main', 'java'));
+
+    // // rebuild d.ts file
+    // process.chdir('jsweet_project');
+    // spawn(
+    //     'mvn',
+    //     ['generate-sources']
+    //     // { stdio: 'inherit' }
+    // );
+    // process.chdir('../');
 
     // cleanup uneeded namespacing
     let types = String(fs.readFileSync(path.join('jsweet_project', 'target', 'dts', 'bundle.d.ts')))
@@ -64,6 +87,8 @@ function buildTypesDefinition() {
 
     // fix callback signitures to be callable
     types = fixCallbacks(types);
+
+    types = fixValueTypes(types);
 
     types = `\
 // Type definitions for Bitwig Studio ${pkg.version
@@ -99,20 +124,22 @@ declare function dump(obj: any): void;
     fs.writeFileSync('bitwig-api.d.ts', types);
 }
 
-downloadApiSource(API_VERSION + 1)
-    .then(() => {
-        const buildFileData = String(fs.readFileSync('build.js')).replace(
-            `API_VERSION = ${API_VERSION}`,
-            `API_VERSION = ${API_VERSION + 1}`
-        );
-        fs.writeFileSync('build.js', buildFileData);
-    })
-    .catch(() =>
-        downloadApiSource(API_VERSION).then(() => {
-            console.log('API_VERSION', API_VERSION);
-        })
-    )
-    .then(() => {
-        buildTypesDefinition();
-        console.log('done.');
-    });
+// downloadApiSource(API_VERSION + 1)
+//     .then(() => {
+//         const buildFileData = String(fs.readFileSync('build.js')).replace(
+//             `API_VERSION = ${API_VERSION}`,
+//             `API_VERSION = ${API_VERSION + 1}`
+//         );
+//         fs.writeFileSync('build.js', buildFileData);
+//     })
+//     .catch(() =>
+//         downloadApiSource(API_VERSION).then(() => {
+//             console.log('API_VERSION', API_VERSION);
+//         })
+//     )
+//     .then(() => {
+//         buildTypesDefinition();
+//         console.log('done.');
+//     });
+
+buildTypesDefinition();

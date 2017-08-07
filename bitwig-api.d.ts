@@ -5264,7 +5264,7 @@ declare namespace API {
          * The value that the callback will be notified with if this value is not currently assigned to
          * anything.
          */
-        addValueObserver(callback?: any, valueWhenUnassigned?: any): any;
+        addValueObserver(callback: IntegerValueChangedCallback, valueWhenUnassigned?: any): any;
     }
 
     /**
@@ -6572,7 +6572,7 @@ declare namespace API {
          * @return {*}
          */
         displayedValue(): StringValue;
-        addValueObserver(callback?: any, valueWhenUnassigned?: any): any;
+        addValueObserver(callback: DoubleValueChangedCallback, valueWhenUnassigned?: any): any;
         /**
          * Add an observer which receives the internal raw of the parameter as floating point.
          *
@@ -8712,7 +8712,7 @@ declare namespace API {
          * @since API version 2
          */
         markInterested(): any;
-        addValueObserver(callback?: any, valueWhenUnassigned?: any): any;
+        addValueObserver(callback: ObserverType, valueWhenUnassigned?: any): any;
     }
 
     class AutoDetectionMidiPortNames {
