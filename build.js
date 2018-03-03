@@ -7,7 +7,7 @@ const prettier = require('prettier');
 const pkg = require('./package.json');
 const tspkg = require('typescript/package.json');
 
-const API_VERSION = 5;
+const API_VERSION = 6;
 const DTS_SRC = path.join('jsweet_project', 'target', 'dts', 'bundle.d.ts');
 
 function downloadApiSource(version) {

@@ -1,4 +1,4 @@
-// Type definitions for Bitwig Studio's Control Surface API v5
+// Type definitions for Bitwig Studio's Control Surface API v6
 // Project: https://bitwig.com
 // Definitions by: Joseph Larson <https://github.com/joslarson/>
 // TypeScript Version: 2.7.2
@@ -159,12 +159,18 @@ declare namespace API {
     /**
      * This interface lets you send OscMessage through an connection which can be via Tcp, Udp, or whatever.
      *
+     * OscPackets are sent when all the startBundle() have a matching endBundle().
+     * If you call sendMessage() with startBundle() before, then the message will be sent directly.
+     *
      * Our maximum packet size is 64K.
      *
      * @since API version 5
      * @class
      */
     interface OscConnection {
+        /**
+         * Starts an OscBundle.
+         */
         startBundle(): any;
         /**
          * Supported object types:
@@ -180,11 +186,15 @@ declare namespace API {
          * @param {Array} args
          */
         sendMessage(address: string, ...args: any[]): any;
+        /**
+         * Finishes the previous bundle, and if it was not inside an other bundle, it will send the message
+         * directly.
+         */
         endBundle(): any;
     }
 
     class OscInvalidArgumentTypeException extends Error {
-        constructor(type?: any);
+        constructor(type?: any, method?: any);
     }
 
     class OscIOException {
@@ -245,11 +255,12 @@ declare namespace API {
         /**
          * Tries to connect to an OscServer.
          *
+         * @param {*} addressSpace can be null
+         *
          * @return {*} a new OscConnection
          * @since API version 5
          * @param {string} host
          * @param {number} port
-         * @param {*} addressSpace
          */
         connectToUdpServer(
             host: string,
@@ -1510,6 +1521,7 @@ declare namespace API {
          * @param {*} callback
          * a callback function that receives a single boolean parameter
          * @since API version 1
+         * @deprecated Use {@link #exists()} instead.
          */
         addExistsObserver(callback: BooleanValueChangedCallback): any;
         /**
@@ -2089,6 +2101,54 @@ declare namespace API {
     }
 
     /**
+     * This interface represents a chain selector device which can be:
+     * - instrument selector
+     * - effect selector
+     *
+     * @since API version 6
+     * @class
+     */
+    interface ChainSelector extends ObjectProxy, Cursor {
+        /**
+         * The index of the active chain in the chain selector.
+         * In case the chain selector has no chains or the value is not connected to the chain selector,
+         * then the value will be 0.
+         *
+         * @since API version 6
+         * @return {*}
+         */
+        activeChainIndex(): SettableIntegerValue;
+        /**
+         * The number of chains in the chain selector.
+         *
+         * @since API version 6
+         * @return {*}
+         */
+        chainCount(): IntegerValue;
+        /**
+         * The active device layer.
+         *
+         * @since API version 6
+         * @return {*}
+         */
+        activeChain(): DeviceLayer;
+        /**
+         * Cycle to the next chain.
+         * If the current active chain is the last one, then moves to the first one.
+         *
+         * @since API version 6
+         */
+        cycleNext(): any;
+        /**
+         * Cycle to the previous chain.
+         * If the current active chain the first one, then moves to the last one.
+         *
+         * @since API version 6
+         */
+        cyclePrevious(): any;
+    }
+
+    /**
      * This interface defines access to the common attributes and operations of channels, such as tracks or nested
      * device channels.
      *
@@ -2291,6 +2351,7 @@ declare namespace API {
          * channels. Must be in the range [0..sizeOfBank-1].
          * @return {*} the channel object
          * @since API version 1
+         * @deprecated Use {@link #getItemAt(int)} instead.
          */
         getChannel(indexInBank: number): Channel;
         /**
@@ -2307,6 +2368,7 @@ declare namespace API {
          * show channel [9..16].
          *
          * @since API version 1
+         * @deprecated {@link #scrollPageBackwards()}
          */
         scrollChannelsPageUp(): any;
         /**
@@ -2315,6 +2377,7 @@ declare namespace API {
          * show channel [1..8].
          *
          * @since API version 1
+         * @deprecated {@link #scrollPageForwards()}
          */
         scrollChannelsPageDown(): any;
         /**
@@ -2322,6 +2385,7 @@ declare namespace API {
          * default one channel).
          *
          * @since API version 1
+         * @deprecated {@link #scrollBackwards()}
          */
         scrollChannelsUp(): any;
         /**
@@ -2329,6 +2393,7 @@ declare namespace API {
          * default one channel).
          *
          * @since API version 1
+         * @deprecated {@link #scrollForwards()}
          */
         scrollChannelsDown(): any;
         /**
@@ -2339,6 +2404,7 @@ declare namespace API {
          * bank). The position is typically directly related to the layout of the channel list in Bitwig
          * Studio, starting with zero in case of the first channel.
          * @since API version 1
+         * @deprecated {@link #scrollPosition()}
          */
         scrollToChannel(position: number): any;
         /**
@@ -2346,6 +2412,7 @@ declare namespace API {
          * first channel within the underlying list of channels, that is shown as channel zero within the bank.
          *
          * @since API version 2
+         * @deprecated {@link #scrollPosition()}
          * @return {*}
          */
         channelScrollPosition(): IntegerValue;
@@ -4025,7 +4092,7 @@ declare namespace API {
         hasPrevious(): BooleanValue;
         /**
          * Registers a function with bool argument that gets called when the previous item gains or remains
-         * selectability.
+         * selectable.
          *
          * @since API version 1
          * @deprecated Use hasNext() instead.
@@ -4034,7 +4101,7 @@ declare namespace API {
         addCanSelectPreviousObserver(callback: BooleanValueChangedCallback): any;
         /**
          * Registers a function with bool argument that gets called when the next item gains or remains
-         * selectability.
+         * selectable.
          *
          * @since API version 1
          * @param {*} callback
@@ -4868,6 +4935,7 @@ declare namespace API {
          * @param {*} callback
          * a callback function that receives a single page index parameter (integer)
          * @since API version 1
+         * @deprecated Use {@link #createCursorRemoteControlsPage(int)} instead.
          */
         addSelectedPageObserver(
             valueWhenUnassigned: number,
@@ -4884,6 +4952,7 @@ declare namespace API {
          * @param {*} callback
          * a callback function that receives a single name parameter (string)
          * @since API version 1
+         * @deprecated Use {@link #createCursorRemoteControlsPage(int)} instead.
          */
         addActiveModulationSourceObserver(
             len: number,
@@ -4897,6 +4966,7 @@ declare namespace API {
          * a callback function that receives a single string array parameter containing the names of the
          * parameter pages
          * @since API version 1
+         * @deprecated Use {@link #createCursorRemoteControlsPage(int)} instead.
          */
         addPageNamesObserver(callback: StringArrayValueChangedCallback): any;
         /**
@@ -5041,6 +5111,12 @@ declare namespace API {
         /**
          * Create a bank for navigating the nested layers of the device using a fixed-size window.
          *
+         * This bank will work over the following devices:
+         * - Instrument Layer
+         * - Effect Layer
+         * - Instrument Selector
+         * - Effect Selector
+         *
          * @param {number} numChannels
          * the number of channels that the device layer bank should be configured with
          * @return {*} a device layer bank object configured with the desired number of channels
@@ -5058,12 +5134,26 @@ declare namespace API {
         createDrumPadBank(numPads: number): DrumPadBank;
         /**
          * Returns a device layer instance that can be used to navigate the layers or drum pads of the device, in
-         * case it has any.
+         * case it has any
+         *
+         * This is the selected layer from the user interface.
          *
          * @return {*} a cursor device layer instance
          * @since API version 1
          */
         createCursorLayer(): CursorDeviceLayer;
+        /**
+         * Creates a ChainSelector object which will give you control over the current device if it is
+         * an Instrument Selector or an Effect Selector.
+         *
+         * To check if the device is currently a ChainSelector, use {@link ChainSelector.exists()}.
+         *
+         * If you want to have access to all the chains, use {@link #createLayerBank(int)}.
+         *
+         * @return {*} a chain selector instance
+         * @since API version 6
+         */
+        createChainSelector(): ChainSelector;
         /**
          * Adds an observer on a list of all parameters for the device.
          *
@@ -5291,6 +5381,7 @@ declare namespace API {
          * @param {*} callback
          * a callback function that takes a single boolean parameter
          * @since API version 1
+         * @deprecated Use {@link #canScrollForwards()} instead.
          */
         addCanScrollDownObserver(callback: BooleanValueChangedCallback): any;
         /**
@@ -5476,6 +5567,7 @@ declare namespace API {
          * shown in Bitwig Studio layer devices. Must be in the range [0..sizeOfBank-1].
          * @return {*} the device layer object
          * @since API version 1
+         * @deprecated Use {@link #getItemAt(int)} instead.
          */
         getChannel(indexInBank: number): DeviceLayer;
     }
@@ -8444,6 +8536,7 @@ declare namespace API {
          * Must be in the range [0..sizeOfBank-1].
          * @return {*} the requested track object
          * @since API version 1
+         * @deprecated Use {@link #getItemAt(int)} instead.
          */
         getChannel(indexInBank: number): Track;
         /**
