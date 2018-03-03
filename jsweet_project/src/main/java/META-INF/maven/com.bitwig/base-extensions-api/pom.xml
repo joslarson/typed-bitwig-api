@@ -18,10 +18,6 @@
 		<externalDoxDir>${basedir}/target/api-docs/external</externalDoxDir>
 	</properties>
 
-	<dependencies>
-		
-	</dependencies>
-
 	<build>
 		<plugins>
 			<plugin>

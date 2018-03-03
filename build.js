@@ -7,11 +7,10 @@ const prettier = require('prettier');
 const pkg = require('./package.json');
 const tspkg = require('typescript/package.json');
 
-const API_VERSION = 2;
+const API_VERSION = 3;
 const DTS_SRC = path.join('jsweet_project', 'target', 'dts', 'bundle.d.ts');
 
 function downloadApiSource(version) {
-    console.log(version);
     return download(
         `https://maven.bitwig.com/com/bitwig/extension-api/${version}/extension-api-${version}-sources.jar`,
         'java_source',
