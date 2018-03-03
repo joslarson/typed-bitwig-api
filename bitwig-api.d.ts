@@ -1,9 +1,48 @@
-// Type definitions for Bitwig Studio Control Surface Scripting API v3
+// Type definitions for Bitwig Studio's Control Surface API v5
 // Project: https://bitwig.com
 // Definitions by: Joseph Larson <https://github.com/joslarson/>
 // TypeScript Version: 2.7.2
 
 declare namespace API {
+    /**
+     * This class represents an RGBA color with each component being stored as double.
+     *
+     * @since API version 5
+     * @class
+     */
+    class Color {
+        constructor(red: number, green: number, blue: number, alpha: number);
+        static fromRGB(red: number, green: number, blue: number): Color;
+        static fromRGBA(red: number, green: number, blue: number, alpha: number): Color;
+        static fromRGB255(red: number, green: number, blue: number): Color;
+        static fromRGBA255(red: number, green: number, blue: number, alpha: number): Color;
+        static fromHex(hex: string): Color;
+        /**
+         * Mixes two colors.
+         * @since API version 4
+         * @param {Color} c1
+         * @param {Color} c2
+         * @param {number} blend
+         * @return {Color}
+         */
+        static mix(c1: Color, c2: Color, blend: number): Color;
+        static nullColor(): Color;
+        static blackColor(): Color;
+        static whiteColor(): Color;
+        getRed(): number;
+        getGreen(): number;
+        getBlue(): number;
+        getAlpha(): number;
+        getRed255(): number;
+        getGreen255(): number;
+        getBlue255(): number;
+        getAlpha255(): number;
+        mRed: number;
+        mGreen: number;
+        mBlue: number;
+        mAlpha: number;
+    }
+
     /**
      * Defines the interface through which an extension can talk to the host application.
      * @class
@@ -49,6 +88,189 @@ declare namespace API {
          * @param {string} address
          */
         setErrorReportingEMail(address: string): any;
+        /**
+         * Gets the OpenSoundControl module.
+         * @since API version 5
+         * @return {*}
+         */
+        getOscModule(): OscModule;
+    }
+
+    /**
+     * An OSC address space.
+     *
+     * It contains the root OscContainer.
+     *
+     * @since API version 5
+     * @class
+     */
+    interface OscAddressSpace {
+        /**
+         * Register all the methods annotated with @OscMethod from object.
+         * Also if a method is annotated with @OscNode, this method will be called and the returned object's method
+         * will be registered.
+         * @param {string} addressPrefix
+         * @param {*} object
+         */
+        registerObjectMethods(addressPrefix: string, object: any): any;
+        /**
+         * Low level way to register an Osc Method.
+         * @param {string} address The address to register the method at
+         * @param {string} typeTagPattern The globing pattern used to match the type tag. Pass "*" to match anything.
+         * @param {string} desc The method description.
+         * @param {*} callback Then call handler.
+         */
+        registerMethod(
+            address: string,
+            typeTagPattern: string,
+            desc: string,
+            callback: OscMethodCallback
+        ): any;
+        /**
+         * This method will be called if no registered OscMethod could handle incoming OscPacket.
+         * @param {*} callback
+         */
+        registerDefaultMethod(callback: OscMethodCallback): any;
+        /**
+         * Should the address spaces log the messages it dispatches?
+         * Default is false.
+         * @param {boolean} shouldLogMessages
+         */
+        setShouldLogMessages(shouldLogMessages: boolean): any;
+        /**
+         * This gives a display name for this address space.
+         * It is useful if you have multiple address space to identify them when we generate the documentation.
+         * @param {string} name
+         */
+        setName(name: string): any;
+    }
+
+    /**
+     * An OSC Bundle.
+     *
+     * @since API version 5
+     * @class
+     */
+    interface OscBundle extends OscPacket {
+        getNanoseconds(): number;
+        getPackets(): Array<OscPacket>;
+    }
+
+    /**
+     * This interface lets you send OscMessage through an connection which can be via Tcp, Udp, or whatever.
+     *
+     * Our maximum packet size is 64K.
+     *
+     * @since API version 5
+     * @class
+     */
+    interface OscConnection {
+        startBundle(): any;
+        /**
+         * Supported object types:
+         * - Integer for int32
+         * - Long for int64
+         * - Float for float
+         * - Double for double
+         * - null for nil
+         * - Boolean for true and false
+         * - String for string
+         * - byte[] for blob
+         * @param {string} address
+         * @param {Array} args
+         */
+        sendMessage(address: string, ...args: any[]): any;
+        endBundle(): any;
+    }
+
+    class OscInvalidArgumentTypeException extends Error {
+        constructor(type?: any);
+    }
+
+    class OscIOException {
+        constructor();
+    }
+
+    /**
+     * An OSC message.
+     *
+     * @since API version 5
+     * @class
+     */
+    interface OscMessage extends OscPacket {
+        getAddressPattern(): string;
+        getTypeTag(): string;
+        getArguments(): Array<any>;
+        getString(index: number): string;
+        getBlob(index: number): number[];
+        getInt(index: number): number;
+        getLong(index: number): number;
+        getFloat(index: number): number;
+        getDouble(index: number): number;
+        getBoolean(index: number): boolean;
+    }
+
+    interface OscMethodCallback {
+        handle(source: OscConnection, message: OscMessage): any;
+    }
+
+    /**
+     * Interface to create Osc related object.
+     *
+     * @since API version 5
+     * @class
+     */
+    interface OscModule {
+        /**
+         * Creates a new OscAddressSpace.
+         *
+         * In short the OscAddressSpace dispatches the incoming messages to services.
+         * An OscAddressSpace is an OscService.
+         *
+         * @since API version 5
+         * @return {*}
+         */
+        createAddressSpace(): OscAddressSpace;
+        /**
+         * Creates a new OSC Server.
+         *
+         * @param service Use createAddressSpace
+         *
+         * @return {void} a new OscServer
+         * @since API version 5
+         * @param {number} port
+         * @param {*} addressSpace
+         */
+        createUdpServer(port: number, addressSpace: OscAddressSpace): any;
+        /**
+         * Tries to connect to an OscServer.
+         *
+         * @return {*} a new OscConnection
+         * @since API version 5
+         * @param {string} host
+         * @param {number} port
+         * @param {*} addressSpace
+         */
+        connectToUdpServer(
+            host: string,
+            port: number,
+            addressSpace: OscAddressSpace
+        ): OscConnection;
+    }
+
+    /**
+     * Base class for OscPackets.
+     *
+     * @since API version 5
+     * @class
+     */
+    interface OscPacket {
+        /**
+         * If the message was part of a bundle, get a pointer back to it.
+         * If not, this methods returns null.
+         * @return {*}
+         */
+        getParentBundle(): OscBundle;
     }
 
     enum PlatformType {
@@ -90,6 +312,20 @@ declare namespace API {
         mData: number;
     }
 
+    class SysexBuilder {
+        static MAX_LENGTH: number;
+        static fromHex(hexString: string): SysexBuilder;
+        addByte(value: number): SysexBuilder;
+        addString(string: string, length: number): SysexBuilder;
+        add(bytes: number[]): SysexBuilder;
+        addHex(hex: string): SysexBuilder;
+        terminate(): number[];
+        array(): number[];
+        mData: number[];
+        mLength: number;
+        constructor();
+    }
+
     interface BooleanValueChangedCallback extends ValueChangedCallback {
         (newValue: boolean): any;
     }
@@ -116,6 +352,14 @@ declare namespace API {
     }
 
     interface ColorValueChangedCallback extends ValueChangedCallback {
+        /**
+         * As alpha component was introduced after this interface was released,
+         * the alpha component is not part of the parameter and would have to be
+         * checked manually.
+         * @param {number} red
+         * @param {number} green
+         * @param {number} blue
+         */
         (red: number, green: number, blue: number): any;
     }
 
@@ -887,6 +1131,15 @@ declare namespace API {
          * @since API version 1
          */
         areEffectTracksVisible(): SettableBooleanValue;
+        /**
+         * Returns an object that provides access to a bank of successive cue markers using a window configured with
+         * the given size, that can be scrolled over the list of markers.
+         *
+         * @param {number} size
+         * the number of simultaneously accessible items
+         * @return {*} the requested item bank object
+         */
+        createCueMarkerBank(size: number): CueMarkerBank;
         /**
          * Registers an observer that reports if playback-follow is enabled.
          *
@@ -1855,29 +2108,61 @@ declare namespace API {
          *
          * @return {*} an object that provides access to the channels volume control.
          * @since API version 1
+         * @deprecated Use {@link #volume()} instead.
          */
         getVolume(): Parameter;
+        /**
+         * Gets a representation of the channels volume control.
+         *
+         * @return {*} an object that provides access to the channels volume control.
+         * @since API version 5
+         */
+        volume(): Parameter;
         /**
          * Gets a representation of the channels pan control.
          *
          * @return {*} an object that provides access to the channels pan control.
          * @since API version 1
+         * @deprecated Use {@link #pan()} instead.
          */
         getPan(): Parameter;
+        /**
+         * Gets a representation of the channels pan control.
+         *
+         * @return {*} an object that provides access to the channels pan control.
+         * @since API version 5
+         */
+        pan(): Parameter;
         /**
          * Gets a representation of the channels mute control.
          *
          * @return {*} an object that provides access to the channels mute control.
          * @since API version 1
+         * @deprecated Use {@link #mute()} instead.
          */
         getMute(): SettableBooleanValue;
+        /**
+         * Gets a representation of the channels mute control.
+         *
+         * @return {*} an object that provides access to the channels mute control.
+         * @since API version 5
+         */
+        mute(): SettableBooleanValue;
+        /**
+         * Gets a representation of the channels solo control.
+         *
+         * @return {*} an object that provides access to the channels solo control.
+         * @since API version 1
+         * @deprecated Use {@link #solo()} instead.
+         */
+        getSolo(): SoloValue;
         /**
          * Gets a representation of the channels solo control.
          *
          * @return {*} an object that provides access to the channels solo control.
          * @since API version 1
          */
-        getSolo(): SoloValue;
+        solo(): SoloValue;
         /**
          * Registers an observer for the VU-meter of this track.
          *
@@ -2839,6 +3124,20 @@ declare namespace API {
          * @return {*}
          */
         sceneIndex(): IntegerValue;
+        /**
+         * Copies the current slot or scene into the dest slot or scene.
+         *
+         * @since API version 4
+         * @param {*} source
+         */
+        copyFrom(source: ClipLauncherSlotOrScene): any;
+        /**
+         * Moves the current slot or scene into the destination slot or scene.
+         *
+         * @since API version 4
+         * @param {*} dest
+         */
+        moveTo(dest: ClipLauncherSlotOrScene): any;
     }
 
     /**
@@ -2891,19 +3190,26 @@ declare namespace API {
          */
         red(): number;
         /**
-         * Gets the red component of the current value.
+         * Gets the green component of the current value.
          *
          * @since API version 2
          * @return {number}
          */
         green(): number;
         /**
-         * Gets the red component of the current value.
+         * Gets the blue component of the current value.
          *
          * @since API version 2
          * @return {number}
          */
         blue(): number;
+        /**
+         * Gets the alpha component of the current value.
+         *
+         * @since API version 5
+         * @return {number}
+         */
+        alpha(): number;
     }
 
     /**
@@ -2990,7 +3296,7 @@ declare namespace API {
          * For generating random UUID strings several free web tools are available.
          * @param {string} author
          * the name of the script author
-         * @ @since API version 1
+         * @since API version 1
          */
         defineController(vendor?: any, name?: any, version?: any, uuid?: any, author?: any): any;
         /**
@@ -3013,7 +3319,7 @@ declare namespace API {
          * @param {number} index
          * the index of the MIDI input port, must be valid.
          * @return {*} the requested MIDI input port
-         * @ @since API version 1
+         * @since API version 1
          */
         getMidiInPort(index: number): MidiIn;
         /**
@@ -3022,7 +3328,7 @@ declare namespace API {
          * @param {number} index
          * the index of the MIDI output port, must be valid.
          * @return {*} the requested MIDI output port
-         * @ @since API version 1
+         * @since API version 1
          */
         getMidiOutPort(index: number): MidiOut;
         /**
@@ -3064,7 +3370,7 @@ declare namespace API {
          * in Bitwig Studio.
          *
          * @return {*} an object that provides access to custom controller preferences
-         * @ @since API version 1
+         * @since API version 1
          */
         getPreferences(): Preferences;
         /**
@@ -3072,7 +3378,7 @@ declare namespace API {
          * Studio.
          *
          * @return {*} an object that provides access to custom document settings
-         * @ @since API version 1
+         * @since API version 1
          */
         getDocumentState(): DocumentState;
         /**
@@ -3099,7 +3405,7 @@ declare namespace API {
          * desired.
          *
          * @return {*} an object that represents the `Transport` section in Bitwig Studio.
-         * @ @since API version 1
+         * @since API version 1
          */
         createTransport(): Transport;
         /**
@@ -3107,7 +3413,7 @@ declare namespace API {
          * should be called once during initialization of the script if groove control is desired.
          *
          * @return {*} an object that represents the `Groove` section in Bitwig Studio.
-         * @ @since API version 1
+         * @since API version 1
          */
         createGroove(): Groove;
         /**
@@ -3116,7 +3422,7 @@ declare namespace API {
          * document.
          *
          * @return {*} an application object.
-         * @ @since API version 1
+         * @since API version 1
          */
         createApplication(): Application;
         /**
@@ -3126,7 +3432,7 @@ declare namespace API {
          * the index of the window where the arranger panel is shown, or -1 in case the first arranger
          * panel found on any window should be taken
          * @return {*} an arranger object
-         * @ @since API version 1
+         * @since API version 1
          */
         createArranger(window?: any): any;
         /**
@@ -3141,7 +3447,7 @@ declare namespace API {
          * the index of the window where the mixer panel is shown, or -1 in case the first mixer panel
          * found on any window should be taken
          * @return {*} a `Mixer` object
-         * @ @since API version 1
+         * @since API version 1
          */
         createMixer(panelLayout?: any, window?: any): any;
         /**
@@ -3294,6 +3600,7 @@ declare namespace API {
          * @param {number} numSends
          * the number of sends that are simultaneously accessible in nested channels.
          * @return {*} an object representing the currently selected device.
+         * @deprecated Use cursorTrack.createCursorDevice().
          * @see Track#createCursorDevice()
          * @see Track#createCursorDevice(String)
          * @since API version 1
@@ -3317,7 +3624,7 @@ declare namespace API {
          * @param {number} gridHeight
          * the number of keys spanned by one page of the note content grid.
          * @return {*} an object representing the currently selected cursor clip
-         * @ @since API version 1
+         * @since API version 1
          */
         createLauncherCursorClip(gridWidth: number, gridHeight: number): Clip;
         /**
@@ -3329,7 +3636,7 @@ declare namespace API {
          * @param {number} gridHeight
          * the number of keys spanned by one page of the note content grid.
          * @return {*} an object representing the currently selected cursor clip
-         * @ @since API version 1
+         * @since API version 1
          */
         createArrangerCursorClip(gridWidth: number, gridHeight: number): Clip;
         /**
@@ -3340,7 +3647,7 @@ declare namespace API {
          * @param {number} numControllers
          * the number of controls that are available for free assignments
          * @return {*} An object that represents a set of custom user controls.
-         * @ @since API version 1
+         * @since API version 1
          */
         createUserControls(numControllers: number): UserControlBank;
         /**
@@ -3353,7 +3660,7 @@ declare namespace API {
          * that array of arguments that gets passed into the callback function, may be `null`
          * @param {number} delay
          * the duration after which the callback function will be called in milliseconds
-         * @ @deprecated
+         * @deprecated
          * @since API version 1
          */
         scheduleTask(callback?: any, args?: any, delay?: any): any;
@@ -3400,7 +3707,7 @@ declare namespace API {
          * the port that should be used for the connection. If the port is already in use, then another
          * port will be used. Check {@link RemoteSocket#getPort()} on the returned object to be sure.
          * @return {*} the object that represents the socket
-         * @ @since API version 1
+         * @since API version 1
          */
         createRemoteConnection(name: string, defaultPort: number): RemoteSocket;
         /**
@@ -3413,7 +3720,7 @@ declare namespace API {
          * @param {*} callback
          * the callback function that gets called when the connection gets established. A single
          * {@link RemoteConnection} parameter is passed into the callback function.
-         * @ @since API version 1
+         * @since API version 1
          */
         connectToRemoteHost(
             host: string,
@@ -3430,7 +3737,7 @@ declare namespace API {
          * @param {Array} data
          * the data to be send. When creating a numeric byte array in JavaScript, the byte values must be
          * signed (in the range -128..127).
-         * @ @since API version 1
+         * @since API version 1
          */
         sendDatagramPacket(host: string, port: number, data: number[]): any;
         /**
@@ -3445,7 +3752,7 @@ declare namespace API {
          * parameter that contains the data byte array.
          *
          * @return {boolean} {@true} if was possible to bind the port, false otherwise
-         * @ @since API version 1
+         * @since API version 1
          */
         addDatagramPacketObserver(
             name: string,
@@ -3614,6 +3921,57 @@ declare namespace API {
             subdivisionLen: number,
             ticksLen: number
         ): BeatTimeFormatter;
+    }
+
+    /**
+     * This interface defines access to the common attributes and operations of cue markers.
+     *
+     * @since API version 2
+     * @class
+     */
+    interface CueMarker extends ObjectProxy {
+        /**
+         * Launches playback at the marker position.
+         *
+         * @param {boolean} quantized Specified if the cue marker should be launched quantized or immediately
+         * @since API version 2
+         */
+        launch(quantized: boolean): any;
+        /**
+         * Gets a representation of the marker name.
+         *
+         * @since API version 2
+         * @return {*}
+         */
+        getName(): StringValue;
+        /**
+         * Gets a representation of the marker color.
+         *
+         * @since API version 2
+         * @return {*}
+         */
+        getColor(): ColorValue;
+    }
+
+    /**
+     * A cue marker bank provides access to a range of cue markers in Bitwig Studio.
+     * Instances are typically configured with a fixed number of markers and represent an excerpt
+     * of a larger list of markers. It basically acts like a window moving over the list of markers.
+     *
+     * @since API version 2
+     * @class
+     */
+    interface CueMarkerBank extends Bank<CueMarker> {
+        /**
+         * Scrolls the cue marker bank window so that the marker at the given position becomes visible.
+         *
+         * @param {number} position
+         * the index of the marker within the underlying full list of markers (not the index within the
+         * bank). The position is typically directly related to the layout of the marker list in Bitwig
+         * Studio, starting with zero in case of the first marker.
+         * @since API version 2
+         */
+        scrollToMarker(position: number): any;
     }
 
     /**
@@ -3828,8 +4186,17 @@ declare namespace API {
          *
          * @return {*} the track or cursor track object that was used for creation of this cursor device.
          * @since API version 1
+         * @deprecated Use {@link #channel()} instead.
          */
         getChannel(): Channel;
+        /**
+         * Returns the channel that this cursor device was created on. Currently this will always be a track or
+         * cursor track instance.
+         *
+         * @return {*} the track or cursor track object that was used for creation of this cursor device.
+         * @since API version 5
+         */
+        channel(): Channel;
         /**
          * Selects the parent device if there is any.
          *
@@ -3910,11 +4277,48 @@ declare namespace API {
         selectLastInLayer(name?: any): any;
     }
 
+    /**
+     * Mode that defines how a {@link CursorDevice} follows a device within the {@link CursorTrack} it is created
+     * for by default. The user can still override this on a track by track basis but this defines a default
+     * follow mode when the user has not done this.
+     * @enum
+     * @property {CursorDeviceFollowMode} FOLLOW_SELECTION
+     * Follows the device selection made by the user in the track.
+     * @property {CursorDeviceFollowMode} FIRST_DEVICE
+     * Selects the first device in the track if there is one.
+     * @property {CursorDeviceFollowMode} FIRST_INSTRUMENT
+     * Selects the first instrument in the track if there is one.
+     * @property {CursorDeviceFollowMode} FIRST_AUDIO_EFFECT
+     * Selects the first audio effect in the track if there is one.
+     * @property {CursorDeviceFollowMode} FIRST_INSTRUMENT_OR_DEVICE
+     * Selects the first instrument or if there is no instrument the first device.
+     *
+     * @since API version 3
+     * @class
+     */
     enum CursorDeviceFollowMode {
+        /**
+         * Follows the device selection made by the user in the track.
+         */
         FOLLOW_SELECTION = 0,
+        /**
+         * Selects the first device in the track if there is one.
+         */
         FIRST_DEVICE = 1,
+        /**
+         * Selects the first instrument in the track if there is one.
+         */
         FIRST_INSTRUMENT = 2,
+        /**
+         * Selects the first audio effect in the track if there is one.
+         */
         FIRST_AUDIO_EFFECT = 3,
+        /**
+         * Selects the first instrument or if there is no instrument the first device.
+         *
+         * @since API version 3
+         */
+        FIRST_INSTRUMENT_OR_DEVICE = 4,
     }
 
     /**
@@ -4081,8 +4485,17 @@ declare namespace API {
          *
          * @return {*} the requested device chain object
          * @since API version 1
+         * @deprecated Use {@link #deviceChain()} instead.
          */
         getDeviceChain(): DeviceChain;
+        /**
+         * Returns a representation of the device chain that contains this device. Possible device chain instances
+         * are tracks, device layers, drums pads, or FX slots.
+         *
+         * @return {*} the requested device chain object
+         * @since API version 5
+         */
+        deviceChain(): DeviceChain;
         /**
          * Value that reports the position of the device within the parent device chain.
          *
@@ -4571,8 +4984,8 @@ declare namespace API {
          */
         addIsEnabledObserver(callback: BooleanValueChangedCallback): any;
         /**
-         * Indicates if the device has nested device chains in FX slots. Use {@link #addSlotsObserver(Callable)
-         * addSlotsObserver(Callable)} to get a list of available slot names, and navigate to devices in those
+         * Indicates if the device has nested device chain slots. Use {@link #slotNames()}
+         * to get a list of available slot names, and navigate to devices in those
          * slots using the {@link CursorDevice} interface.
          *
          * @return {*} a value object that indicates if the device has nested device chains in FX slots.
@@ -6087,7 +6500,6 @@ declare namespace API {
         /**
          * The name of the parameter.
          * @since API version 2
-         *
          * @return {*}
          */
         name(): StringValue;
@@ -6657,6 +7069,7 @@ declare namespace API {
          * @return {*}
          */
         getParameter(indexInBank: number): RemoteControl;
+        getName(): StringValue;
     }
 
     /**
@@ -6876,7 +7289,7 @@ declare namespace API {
          * @param {*} callback
          * a callback function that receives a single integer parameter
          * @since API version 1
-         * @deprecated Use {@link #sceneCount()} instead.
+         * @deprecated Use {@link #itemCount()} instead.
          */
         addSceneCountObserver(callback: IntegerValueChangedCallback): any;
         /**
@@ -6926,11 +7339,10 @@ declare namespace API {
         /**
          * Scrolls by a number of pages.
          *
-         * @param amount
+         * @param {number} amount
          * The number of pages to scroll by (positive is forwards and negative is backwards).
-         * @param {number} pages
          */
-        scrollByPages(pages: number): any;
+        scrollByPages(amount: number): any;
         /**
          * Scrolls forwards by one page.
          *
@@ -7012,12 +7424,13 @@ declare namespace API {
         /**
          * Sets the internal value.
          *
-         * @since API version 2
+         * @since API version 5
          * @param {number} red
          * @param {number} green
          * @param {number} blue
+         * @param {number} alpha
          */
-        set(red: number, green: number, blue: number): any;
+        set(red?: any, green?: any, blue?: any, alpha?: any): any;
     }
 
     interface SettableDoubleValue extends DoubleValue {
@@ -7090,6 +7503,17 @@ declare namespace API {
      * @class
      */
     interface SettableRangedValue extends RangedValue {
+        /**
+         * Sets the value in an absolute fashion as a value between 0 .. 1 where 0 represents the minimum value and
+         * 1 the maximum. The value change is applied immediately and does not care about what take over mode the
+         * user has selected. This is useful if the value does not need take over (e.g. a motorized slider).
+         *
+         * @param {number} value
+         * absolute value [0 .. 1]
+         *
+         * @since API version 4
+         */
+        setImmediately(value: number): any;
         /**
          * Sets the value in an absolute fashion. The value will be scaled according to the given resolution.
          *
@@ -7306,6 +7730,19 @@ declare namespace API {
             numChars: number,
             initialText: string
         ): SettableStringValue;
+        /**
+         * Returns a color setting that is shown in the Bitwig Studio user interface.
+         *
+         * @param {string} label
+         * the name of the setting, must not be `null`
+         * @param {string} category
+         * the name of the category, may not be `null`
+         * @param {Color} initialColor
+         * the initial color value of the setting
+         * @return {*} the object that encapsulates the requested string setting
+         * @since API version 5
+         */
+        getColorSetting(label: string, category: string, initialColor: Color): SettableColorValue;
     }
 
     /**
@@ -7365,15 +7802,31 @@ declare namespace API {
          *
          * @return {*} a boolean value object
          * @since API version 1
+         * @deprecated Use {@link #hasNoteInputSelected()} instead.
          */
         getHasNoteInputSelected(): SettableBooleanValue;
+        /**
+         * Returns an object that indicates if the source selector has note inputs enabled.
+         *
+         * @return {*} a boolean value object
+         * @since API version 5
+         */
+        hasNoteInputSelected(): SettableBooleanValue;
         /**
          * Returns an object that indicates if the source selector has audio inputs enabled.
          *
          * @return {*} a boolean value object
          * @since API version 1
+         * @deprecated Use {@link #hasAudioInputSelected()} instead.
          */
         getHasAudioInputSelected(): SettableBooleanValue;
+        /**
+         * Returns an object that indicates if the source selector has audio inputs enabled.
+         *
+         * @return {*} a boolean value object
+         * @since API version 5
+         */
+        hasAudioInputSelected(): SettableBooleanValue;
     }
 
     /**
@@ -7466,22 +7919,46 @@ declare namespace API {
          *
          * @return {*} an integer value object that represents the time signature numerator.
          * @since API version 1
+         * @deprecated Use {@link #numerator()} instead.
          */
         getNumerator(): SettableIntegerValue;
+        /**
+         * Returns an object that provides access to the time signature numerator.
+         *
+         * @return {*} an integer value object that represents the time signature numerator.
+         * @since API version 5
+         */
+        numerator(): SettableIntegerValue;
         /**
          * Returns an object that provides access to the time signature denominator.
          *
          * @return {*} an integer value object that represents the time signature denominator.
          * @since API version 1
+         * @deprecated Use {@link #denominator()} instead.
          */
         getDenominator(): SettableIntegerValue;
+        /**
+         * Returns an object that provides access to the time signature denominator.
+         *
+         * @return {*} an integer value object that represents the time signature denominator.
+         * @since API version 5
+         */
+        denominator(): SettableIntegerValue;
         /**
          * Returns an object that provides access to the time signature tick subdivisions.
          *
          * @return {*} an integer value object that represents the time signature ticks.
          * @since API version 1
+         * @deprecated Use {@link #ticks()} instead.
          */
         getTicks(): SettableIntegerValue;
+        /**
+         * Returns an object that provides access to the time signature tick subdivisions.
+         *
+         * @return {*} an integer value object that represents the time signature ticks.
+         * @since API version 5
+         */
+        ticks(): SettableIntegerValue;
     }
 
     /**
@@ -7542,29 +8019,61 @@ declare namespace API {
          *
          * @return {*} a boolean value object
          * @since API version 1
+         * @deprecated Use {@link #arm()} instead.
          */
         getArm(): SettableBooleanValue;
+        /**
+         * Returns an object that provides access to the arm state of the track.
+         *
+         * @return {*} a boolean value object
+         * @since API version 5
+         */
+        arm(): SettableBooleanValue;
         /**
          * Returns an object that provides access to the monitoring state of the track.
          *
          * @return {*} a boolean value object
          * @since API version 1
+         * @deprecated Use {@link #monitor()} instead.
          */
         getMonitor(): SettableBooleanValue;
+        /**
+         * Returns an object that provides access to the monitoring state of the track.
+         *
+         * @return {*} a boolean value object
+         * @since API version 5
+         */
+        monitor(): SettableBooleanValue;
         /**
          * Returns an object that provides access to the auto-monitoring state of the track.
          *
          * @return {*} a boolean value object
          * @since API version 1
+         * @deprecated Use {@link #autoMonitor()} instead.
          */
         getAutoMonitor(): SettableBooleanValue;
+        /**
+         * Returns an object that provides access to the auto-monitoring state of the track.
+         *
+         * @return {*} a boolean value object
+         * @since API version 5
+         */
+        autoMonitor(): SettableBooleanValue;
         /**
          * Returns an object that provides access to the cross-fade mode of the track.
          *
          * @return {*} an enum value object that has three possible states: "A", "B", or "AB"
          * @since API version 1
+         * @deprecated Use {@link #crossFadeMode()} instead.
          */
         getCrossFadeMode(): SettableEnumValue;
+        /**
+         * Returns an object that provides access to the cross-fade mode of the track.
+         *
+         * @return {*} an enum value object that has three possible states: "A", "B", or "AB"
+         * @since API version 5
+         */
+        crossFadeMode(): SettableEnumValue;
         /**
          * Value that reports if this track is currently stopped. When a track is stopped it is not playing content
          * from the arranger or clip launcher.
@@ -7606,8 +8115,17 @@ declare namespace API {
          *
          * @return {*} a source selector object
          * @since API version 1
+         * @deprecated Use {@link #sourceSelector()} instead.
          */
         getSourceSelector(): SourceSelector;
+        /**
+         * Returns the source selector for the track, which is shown in the IO section of the track in Bitwig
+         * Studio and lists either note or audio sources or both depending on the track type.
+         *
+         * @return {*} a source selector object
+         * @since API version 5
+         */
+        sourceSelector(): SourceSelector;
         /**
          * Stops playback of the track.
          *
@@ -7730,15 +8248,31 @@ declare namespace API {
          *
          * @return {*} a boolean value object
          * @since API version 1
+         * @deprecated Use {@link #canHoldNoteData()} instead.
          */
         getCanHoldNoteData(): SettableBooleanValue;
+        /**
+         * Returns an object that indicates if the track may contain notes.
+         *
+         * @return {*} a boolean value object
+         * @since API version 5
+         */
+        canHoldNoteData(): SettableBooleanValue;
         /**
          * Returns an object that indicates if the track may contain audio events.
          *
          * @return {*} a boolean value object
          * @since API version 1
+         * @deprecated Use {@link #canHoldAudioData()} instead.
          */
         getCanHoldAudioData(): SettableBooleanValue;
+        /**
+         * Returns an object that indicates if the track may contain audio events.
+         *
+         * @return {*} a boolean value object
+         * @since API version 5
+         */
+        canHoldAudioData(): SettableBooleanValue;
         createCursorDevice(id?: any, name?: any, numSends?: any, followMode?: any): any;
         /**
          * Gets the channels primary device.
@@ -7948,7 +8482,7 @@ declare namespace API {
             valueWhenUnassigned: number
         ): any;
         /**
-         * {@link SceneBank} that represents a view on the screnes in this {@link TrackBank}.
+         * {@link SceneBank} that represents a view on the scenes in this {@link TrackBank}.
          *
          * @since API version 2
          * @return {*}
@@ -7971,12 +8505,14 @@ declare namespace API {
          * Scrolls the scenes one step up.
          *
          * @since API version 1
+         * @deprecated Use {@link #sceneBank()} instead.
          */
         scrollScenesUp(): any;
         /**
          * Scrolls the scenes one step down.
          *
          * @since API version 1
+         * @deprecated Use {@link #sceneBank()} instead.
          */
         scrollScenesDown(): any;
         /**
@@ -7985,6 +8521,7 @@ declare namespace API {
          * @param {number} position
          * the position of the scene within the underlying full list of scenes
          * @since API version 1
+         * @deprecated Use {@link #sceneBank()} instead.
          */
         scrollToScene(position: number): any;
         /**
@@ -7996,6 +8533,7 @@ declare namespace API {
          * the default value that gets reports when the track bank is not yet connected to a Bitwig
          * Studio document
          * @since API version 1
+         * @deprecated Use {@link #sceneBank()} instead.
          */
         addSceneScrollPositionObserver(
             callback: IntegerValueChangedCallback,
@@ -8627,16 +9165,34 @@ declare namespace API {
          *
          * @see Track#getCrossFadeMode()
          * @since API version 1
+         * @deprecated Use {@link #crossfade()} instead.
          * @return {*}
          */
         getCrossfade(): Parameter;
+        /**
+         * Returns an object that provides access to the cross-fader, used for mixing between A/B-channels as
+         * specified on the Bitwig Studio tracks.
+         *
+         * @see Track#getCrossFadeMode()
+         * @since API version 5
+         * @return {*}
+         */
+        crossfade(): Parameter;
         /**
          * Returns an object that provides access to the transport time signature.
          *
          * @return {*} the time signature value object that represents the transport time signature.
          * @since API version 1
+         * @deprecated Use {@link #timeSignature()} instead.
          */
         getTimeSignature(): TimeSignatureValue;
+        /**
+         * Returns an object that provides access to the transport time signature.
+         *
+         * @return {*} the time signature value object that represents the transport time signature.
+         * @since API version 5
+         */
+        timeSignature(): TimeSignatureValue;
         /**
          * Value that reports the current clip launcher post recording action. Possible values are `"off"`,
          * `"play_recorded"`, `"record_next_free_slot"`, `"stop"`, `"return_to_arrangement"`,
@@ -8793,6 +9349,10 @@ declare namespace API {
          * @return {string}
          */
         toString(): string;
+    }
+
+    class OscPacketSizeExceededException extends OscIOException {
+        constructor();
     }
 
     /**

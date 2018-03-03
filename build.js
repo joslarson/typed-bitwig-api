@@ -7,7 +7,7 @@ const prettier = require('prettier');
 const pkg = require('./package.json');
 const tspkg = require('typescript/package.json');
 
-const API_VERSION = 3;
+const API_VERSION = 5;
 const DTS_SRC = path.join('jsweet_project', 'target', 'dts', 'bundle.d.ts');
 
 function downloadApiSource(version) {
@@ -93,7 +93,7 @@ function transformJsweetOutput(input) {
     result = fixValueTypes(result);
 
     result = `\
-// Type definitions for Bitwig Studio Control Surface Scripting API v${API_VERSION}
+// Type definitions for Bitwig Studio's Control Surface API v${API_VERSION}
 // Project: https://bitwig.com
 // Definitions by: Joseph Larson <https://github.com/joslarson/>
 // TypeScript Version: ${tspkg.version}
