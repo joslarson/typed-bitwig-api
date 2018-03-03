@@ -7,10 +7,11 @@ const prettier = require('prettier');
 const pkg = require('./package.json');
 const tspkg = require('typescript/package.json');
 
-const API_VERSION = 3;
+const API_VERSION = 2;
 const DTS_SRC = path.join('jsweet_project', 'target', 'dts', 'bundle.d.ts');
 
 function downloadApiSource(version) {
+    console.log(version);
     return download(
         `https://maven.bitwig.com/com/bitwig/extension-api/${version}/extension-api-${version}-sources.jar`,
         'java_source',
@@ -93,10 +94,7 @@ function transformJsweetOutput(input) {
     result = fixValueTypes(result);
 
     result = `\
-// Type definitions for Bitwig Studio ${pkg.version
-        .split('.')
-        .splice(0, 2)
-        .join('.')} Control Surface Scripting API 
+// Type definitions for Bitwig Studio Control Surface Scripting API v${API_VERSION}
 // Project: https://bitwig.com
 // Definitions by: Joseph Larson <https://github.com/joslarson/>
 // TypeScript Version: ${tspkg.version}
@@ -125,30 +123,25 @@ declare function dump(obj: any): void;
     return result;
 }
 
-function build(fullBuild = true) {
+async function build(fullBuild = true) {
     if (fullBuild) {
         console.log('full build...');
+
         fs.removeSync('java_source');
 
-        downloadApiSource(API_VERSION + 1)
-            .then(() => {
-                const buildFileData = String(fs.readFileSync('build.js')).replace(
-                    `API_VERSION = ${API_VERSION}`,
-                    `API_VERSION = ${API_VERSION + 1}`
-                );
-                fs.writeFileSync('build.js', buildFileData);
-            })
-            .catch(() =>
-                downloadApiSource(API_VERSION).then(() => {
-                    console.log('API_VERSION', API_VERSION);
-                })
-            )
-            .then(() => {
-                buildJsweet();
-                const result = transformJsweetOutput(String(fs.readFileSync(DTS_SRC)));
-                fs.writeFileSync('bitwig-api.d.ts', result);
-                console.log('done.');
-            });
+        try {
+            await downloadApiSource(API_VERSION);
+            fs.removeSync('java_source/com/bitwig/flt');
+        } catch (e) {
+            console.error(`Error: Unable to fetch API v${API_VERSION} source files.`);
+            return;
+        }
+
+        buildJsweet();
+
+        const result = transformJsweetOutput(String(fs.readFileSync(DTS_SRC)));
+        fs.writeFileSync('bitwig-api.d.ts', result);
+        console.log('done.');
     } else {
         console.log('minimal build...');
         const result = transformJsweetOutput(String(fs.readFileSync(DTS_SRC)));

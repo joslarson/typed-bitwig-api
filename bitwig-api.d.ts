@@ -1,7 +1,7 @@
-// Type definitions for Bitwig Studio 2.1 Control Surface Scripting API
+// Type definitions for Bitwig Studio Control Surface Scripting API v2
 // Project: https://bitwig.com
 // Definitions by: Joseph Larson <https://github.com/joslarson/>
-// TypeScript Version: 2.4.2
+// TypeScript Version: 2.7.2
 
 declare namespace API {
     /**
@@ -1526,7 +1526,6 @@ declare namespace API {
          *
          * @return {number} the size of the filter column.
          * @since API version 1
-         * @deprecated Use {@link #getSizeOfBank()} instead.
          */
         getSize(): number;
         /**
@@ -1536,21 +1535,18 @@ declare namespace API {
          * the item index, must be in the range `[0..getSize-1]`
          * @return {*} the requested item object
          * @since API version 1
-         * @deprecated Use {@link #getItemAt(int)} instead.
          */
         getItem(index: number): BrowserItem;
         /**
          * Scrolls the filter column entries one item up.
          *
          * @since API version 1
-         * @deprecated Use {@link #scrollBackwards()} instead.
          */
         scrollUp(): any;
         /**
          * Scrolls the filter column entries one item down.
          *
          * @since API version 1
-         * @deprecated Use {@link #scrollForwards()} instead.
          */
         scrollDown(): any;
         /**
@@ -1559,7 +1555,6 @@ declare namespace API {
          * show items [9..16].
          *
          * @since API version 1
-         * @deprecated Use {@link #scrollPageBackwards()} instead.
          */
         scrollPageUp(): any;
         /**
@@ -1568,7 +1563,6 @@ declare namespace API {
          * show items [1..8].
          *
          * @since API version 1
-         * @deprecated Use {@link #scrollPageForwards()} instead.
          */
         scrollPageDown(): any;
         /**
@@ -1579,7 +1573,6 @@ declare namespace API {
          * a callback function that receives a single integer number parameter. The parameter reflects
          * the scroll position, or `-1` in case the column has no content.
          * @since API version 1
-         * @deprecated Use {@link #scrollPosition()} instead.
          */
         addScrollPositionObserver(callback: IntegerValueChangedCallback): any;
         /**
@@ -1588,7 +1581,6 @@ declare namespace API {
          * @param {*} callback
          * a callback function that receives a single boolean parameter
          * @since API version 1
-         * @deprecated Use {@link #canScrollBackwards()} instead.
          */
         addCanScrollUpObserver(callback: BooleanValueChangedCallback): any;
         /**
@@ -1597,7 +1589,6 @@ declare namespace API {
          * @param {*} callback
          * a callback function that receives a single boolean parameter
          * @since API version 1
-         * @deprecated Use {@link #canScrollForwards()} instead.
          */
         addCanScrollDownObserver(callback: BooleanValueChangedCallback): any;
     }
@@ -2927,30 +2918,9 @@ declare namespace API {
      * @class
      */
     interface ControllerHost extends Host {
-        /**
-         * Loads the supplied API version into the calling script. This is only intended to be called from a controller
-         * script. It cannot be called from a Java controller extension.
-         * @param {number} version
-         */
         loadAPI(version: number): any;
-        /**
-         * Determines whether the calling script should fail if it calls a deprecated method based on the API version
-         * that it requested.
-         * @return {boolean}
-         */
         shouldFailOnDeprecatedUse(): boolean;
-        /**
-         * Sets whether the calling script should fail if it calls a deprecated method based on the API version
-         * that it requested. This is only intended to be called from a controller
-         * script. It cannot be called from a Java controller extension.
-         * @param {boolean} value
-         */
         setShouldFailOnDeprecatedUse(value: boolean): any;
-        /**
-         * Loads the script defined by the supplied path. This is only intended to be called from a controller
-         * script. It cannot be called from a Java controller extension.
-         * @param {string} path
-         */
         load(path: string): any;
         /**
          * Indicates if the host platform is Windows.
@@ -4136,7 +4106,7 @@ declare namespace API {
          *
          * @return {*} a boolean value object that represents visibility of the parameter page mapping editor.
          *
-         * @deprecated Use {@link #isRemoteControlsSectionVisible()} instead
+         * @deprecated Use #getAreRemoteControlsVisible() instead
          * @since API version 1
          */
         isParameterPageSectionVisible(): SettableBooleanValue;
@@ -5352,9 +5322,6 @@ declare namespace API {
          * a filter string formatted as hexadecimal value with `?` as wildcard. For example `80????`
          * would match note-off on channel 1 (0). When this parameter is {@null}, a standard filter will
          * be used to forward note-related messages on channel 1 (0).
-         *
-         * If multiple note input match the same MIDI event then they'll all receive the MIDI event, and
-         * if one of them does not consume events then the events wont' be consumed.
          * @return {*} the object representing the requested note input
          * @since API version 1
          */
@@ -6039,10 +6006,9 @@ declare namespace API {
     }
 
     /**
-     * Interface for an object that acts as a proxy for the actual object in Bitwig Studio (for example a track, a
-     * device etc).
-     *
+     * Interface for an object that acts as a proxy for the actual object in Bitwig Studio (for example a track, a device etc).
      * @since API version 2
+     *
      * @class
      */
     interface ObjectProxy extends Subscribable {
@@ -6051,15 +6017,6 @@ declare namespace API {
          * @return {*}
          */
         exists(): BooleanValue;
-        /**
-         * Creates a {@link BooleanValue} that determines this proxy is considered equal to another proxy. For this
-         * to be the case both proxies need to be proxying the same target object.
-         *
-         * @since API version 3
-         * @param {*} other
-         * @return {*}
-         */
-        createEqualsValue(other: ObjectProxy): BooleanValue;
     }
 
     /**
@@ -8771,8 +8728,7 @@ declare namespace API {
         abstract getRequiredAPIVersion(): number;
         /**
          * Gets a path within the extension's jar file where documentation for this extension can be found or null
-         * if there is none. At the moment this file needs to be a PDF file but other file formats maybe supported
-         * in the future.
+         * if there is none.
          * @return {string}
          */
         getHelpFilePath(): string;
@@ -8889,4 +8845,4 @@ declare const loadAPI: typeof host.loadAPI;
 declare const load: typeof host.load;
 declare const println: typeof host.println;
 declare const errorln: typeof host.errorln;
-declare function dump(obj: any): void
+declare function dump(obj: any): void;
