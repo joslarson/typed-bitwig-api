@@ -1,5 +1,5 @@
-.vscode
+/.vscode
 /java_source
 /src
-/build.js
+/tsconfig.json
 .DS_Store
