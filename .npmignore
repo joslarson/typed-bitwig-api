@@ -1,5 +1,5 @@
 .vscode
 /java_source
-/jsweet_project
-node_modules
+/src
 /build.js
+.DS_Store

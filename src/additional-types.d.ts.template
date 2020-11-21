@@ -1,0 +1,53 @@
+declare namespace java {
+  namespace nio {
+    type ByteBuffer = any;
+  }
+  namespace util {
+    type List<T> = Array<T>;
+    type UUID = string;
+
+    namespace func {
+      type BooleanSupplier = {
+        getAsBoolean(): boolean;
+      };
+      type Consumer<T = any> = {
+        accept(t: T): void;
+        andThen(after: Consumer<T>): Consumer<T>;
+      };
+      type Supplier<T = any> = {
+        get(): T;
+      };
+      type DoubleConsumer = {
+        accept(double: number): void;
+        andThen(after: DoubleConsumer): DoubleConsumer;
+      };
+      type DoubleSupplier = {
+        getAsDouble(): number;
+      };
+      type IntConsumer = {
+        accept(int: number): void;
+        andThen(after: IntConsumer): IntConsumer;
+      };
+      type IntSupplier = {
+        getAsInt(): number;
+      };
+      interface Function<T = any, R = any> {
+        andThen(after: Function): Function<T>;
+        apply(t: T): R;
+        compose(before: Function): Function<any, R>;
+      }
+      type IntFunction<R = any> = {
+        apply(value: number): R;
+      };
+    }
+  }
+}
+
+import API = com.bitwig.extension.controller.api;
+
+declare const host: API.ControllerHost;
+declare const loadAPI: typeof host.loadAPI;
+declare const load: typeof host.load;
+declare const println: typeof host.println;
+declare const errorln: typeof host.errorln;
+declare function dump(obj: any): void;

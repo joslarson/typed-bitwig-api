@@ -1,0 +1,20 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Launch Program",
+      "runtimeArgs": [
+        "-r",
+        "ts-node/register"
+      ],
+      "args": [
+        "${workspaceFolder}/src/build.ts"
+      ],
+      "resolveSourceMapLocations": [
+        "${workspaceFolder}/src/**"
+      ],
+    }
+  ]
+}

@@ -1,5 +1,4 @@
-node_modules
+/java_source
+/node_modules
+/dist
 .DS_Store
-js-stubs
-.vscode
-java_source
