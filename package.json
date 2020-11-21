@@ -1,6 +1,6 @@
 {
   "name": "typed-bitwig-api",
-  "version": "11.0.0",
+  "version": "12.0.0-rc.0",
   "repository": "taktiljs/typed-bitwig-api",
   "description": "TypeScript definition file for the Bitwig Studio Control Surface Scripting API.",
   "types": "bitwig-api.d.ts",
