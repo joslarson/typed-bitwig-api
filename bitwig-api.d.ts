@@ -1,6 +1,6 @@
 // Type definitions for Bitwig Studio Control Surface Scripting API v12
 // Project: https://bitwig.com
-// Definitions by: Joseph Larson <https://github.com/joslarson/>
+// Definitions by: Joseph Larson <https://github.com/joslarson>
 // TypeScript Version: 4.1.2
 
 declare namespace com.bitwig.extension {

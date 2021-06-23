@@ -5,7 +5,8 @@
   "description": "TypeScript definition file for the Bitwig Studio Control Surface Scripting API.",
   "types": "bitwig-api.d.ts",
   "scripts": {
-    "build": "node -r ts-node/register src/main.ts",
+    "build": "node -r ts-node/register src/main.ts && npm run check",
+    "check": "tsc --noEmit bitwig-api.d.ts",
     "version": "npm run build && git add bitwig-api.d.ts"
   },
   "author": "Joseph Larson",

@@ -17,6 +17,7 @@ export const typeOverrides: { [javaType: string]: string } = {
   Object: 'object',
   Runnable: '() => void',
   JSObject: '() => void',
+  Future: 'unknown',
 };
 
 export const ignoredImports = [

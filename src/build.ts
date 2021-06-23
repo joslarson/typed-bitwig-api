@@ -134,7 +134,7 @@ function bundleDeclarations(srcDir: string, outFile: string) {
     pkg.version.split('.')[0]
   }
 // Project: https://bitwig.com
-// Definitions by: Joseph Larson <https://github.com/joslarson/>
+// Definitions by: Joseph Larson <https://github.com/joslarson>
 // TypeScript Version: ${tspkg.version}\n\n`;
 
   result += namespaces

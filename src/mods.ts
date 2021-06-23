@@ -33,6 +33,11 @@ const mods: Mod[] = [
     search: /PANEL_LAYOUT_(.+): string;/gm,
     replace: "PANEL_$1_ARRANGE: '$1';",
   },
+  {
+    file: 'com/bitwig/extension/controller/api/Application.d.ts',
+    search: /static (\/\*\*)/gm,
+    replace: '$1',
+  },
 ];
 
 export const applyMods = () => {
