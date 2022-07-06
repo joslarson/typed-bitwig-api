@@ -18,9 +18,11 @@ export const typeOverrides: { [javaType: string]: string } = {
   Runnable: '() => void',
   JSObject: '() => void',
   Future: 'unknown',
+  StringBuilder: 'object',
 };
 
 export const ignoredImports = [
+  'java.util.Objects',
   'java.util.Collections',
   'java.util.ArrayList',
   'java.util.concurrent.Callable',
