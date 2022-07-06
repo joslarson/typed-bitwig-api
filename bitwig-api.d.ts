@@ -1,4 +1,4 @@
-// Type definitions for Bitwig Studio Control Surface Scripting API v14
+// Type definitions for Bitwig Studio Control Surface Scripting API v15
 // Project: https://bitwig.com
 // Definitions by: Joseph Larson <https://github.com/joslarson>
 // TypeScript Version: 4.1.2
@@ -369,7 +369,7 @@ declare namespace com.bitwig.extension.api.graphics {
 
   /**
    * Information about the dimensions of a font.
-   * @newSince API version 6
+   * @since API version 6
    */
   interface FontExtents {
     /**
@@ -413,7 +413,7 @@ declare namespace com.bitwig.extension.api.graphics {
   // source: com/bitwig/extension/api/graphics/FontFace.java
 
   /**
-   * @newSince API version 6
+   * @since API version 6
    */
   interface FontFace {
     /**
@@ -427,7 +427,7 @@ declare namespace com.bitwig.extension.api.graphics {
   /**
    * Configure the font rendering options.
    *
-   * @newSince API version 6
+   * @since API version 6
    */
   interface FontOptions {
     getAntialiasMode(): GraphicsOutput;
@@ -454,7 +454,7 @@ declare namespace com.bitwig.extension.api.graphics {
   /**
    * This class represents a linear gradient.
    * Add color stops between 0 and 1.
-   * @newSince API version 6
+   * @since API version 6
    */
   interface GradientPattern extends Pattern {
     addColorStop(offset: number, color: Color): void;
@@ -715,7 +715,7 @@ declare namespace com.bitwig.extension.api.graphics {
 
   /**
    * Represents an abstract image type.
-   * @newSince API version 6
+   * @since API version 6
    */
   interface Image {
     /** Returns the width */
@@ -731,7 +731,7 @@ declare namespace com.bitwig.extension.api.graphics {
    * This represent a 2D gradient.
    *
    * @link https://www.cairographics.org/manual/cairo-cairo-pattern-t.html#cairo-pattern-create-mesh
-   * @newSince API version 6
+   * @since API version 6
    */
   interface MeshPattern extends Pattern {
     beginPatch(): void;
@@ -770,7 +770,7 @@ declare namespace com.bitwig.extension.api.graphics {
   // source: com/bitwig/extension/api/graphics/Path.java
 
   /**
-   * @newSince API version 6
+   * @since API version 6
    */
   interface Path {}
 
@@ -779,7 +779,7 @@ declare namespace com.bitwig.extension.api.graphics {
   /**
    * Abstract class for patterns (gradient, mesh gradient, ...)
    *
-   * @newSince API version 6
+   * @since API version 6
    */
   interface Pattern {}
 
@@ -789,7 +789,7 @@ declare namespace com.bitwig.extension.api.graphics {
    * This class is a renderer.
    * The render method will be called by the Host with a provided GraphicsOutput context.
    *
-   * @newSince API version 6
+   * @since API version 6
    */
   interface Renderer {
     render(gc: GraphicsOutput): void;
@@ -798,7 +798,7 @@ declare namespace com.bitwig.extension.api.graphics {
   // source: com/bitwig/extension/api/graphics/TextExtents.java
 
   /**
-   * @newSince API version 6
+   * @since API version 6
    */
   interface TextExtents {
     /**
@@ -2145,6 +2145,13 @@ declare namespace com.bitwig.extension.controller.api {
     undoAction(): HardwareActionBindable;
 
     /**
+     * Value that reports if there is an action to undo.
+     *
+     * @since API version 15
+     */
+    canUndo(): BooleanValue;
+
+    /**
      * Sends a redo command to Bitwig Studio.
      *
      * @since API version 1
@@ -2152,6 +2159,13 @@ declare namespace com.bitwig.extension.controller.api {
     redo(): void;
 
     redoAction(): HardwareActionBindable;
+
+    /**
+     * Value that reports if there is an action to redo.
+     *
+     * @since API version 15
+     */
+    canRedo(): BooleanValue;
 
     /**
      * Switches the Bitwig Studio user interface to the panel layout with the given name. The list of available
@@ -2894,7 +2908,7 @@ declare namespace com.bitwig.extension.controller.api {
   /**
    * Callback that is notified when an asynchronous transfer has completed.
    *
-   * @newSince API version 7
+   * @since API version 7
    */
   interface AsyncTransferCompledCallback {
     /** Called upon completion of an asynchronous read. */
@@ -6671,7 +6685,7 @@ declare namespace com.bitwig.extension.controller.api {
     /**
      * It will delete multiple object within one undo step.
      *
-     * @newSince API version 10
+     * @since API version 10
      */
     deleteObjects(undoName: string, ...objects: DeleteableObject[]): void;
 
@@ -6774,7 +6788,7 @@ declare namespace com.bitwig.extension.controller.api {
    *
    * @since API version 2
    */
-  interface CueMarker extends ObjectProxy {
+  interface CueMarker extends ObjectProxy, DeleteableObject {
     /**
      * Launches playback at the marker position.
      *
@@ -6786,9 +6800,9 @@ declare namespace com.bitwig.extension.controller.api {
     /**
      * Gets a representation of the marker name.
      *
-     * @since API version 2
+     * @since API version 15
      */
-    getName(): StringValue;
+    name(): SettableStringValue;
 
     /**
      * Gets a representation of the marker color.
@@ -6803,6 +6817,14 @@ declare namespace com.bitwig.extension.controller.api {
      * @since API version 10
      */
     position(): SettableBeatTimeValue;
+
+    /**
+     * Gets a representation of the marker name.
+     *
+     * @since API version 2
+     * @deprecated Use {@link #name()} instead
+     */
+    getName(): StringValue;
   }
 
   // source: com/bitwig/extension/controller/api/CueMarkerBank.java
@@ -7443,6 +7465,8 @@ declare namespace com.bitwig.extension.controller.api {
      * @since API version 10
      */
     deleteObject(): void;
+
+    deleteObjectAction(): HardwareActionBindable;
   }
 
   // source: com/bitwig/extension/controller/api/DetailEditor.java
@@ -9455,6 +9479,10 @@ declare namespace com.bitwig.extension.controller.api {
 
     getLabelBlinkOffColor(): Color;
 
+    hashCode(): number;
+
+    equals(obj: object): boolean;
+
     mColor: Color;
 
     mOnBlinkTime: number;
@@ -9571,6 +9599,19 @@ declare namespace com.bitwig.extension.controller.api {
     createHardwareSlider(id: string): HardwareSlider;
 
     /**
+     * Creates a {@link HardwareSlider} that represents a physical slider on a controller.
+     *
+     * @param id
+     *           A unique string that identifies this control.
+     *
+     * @param currentValue
+     *          The current position of the slider 0..1
+     *
+     * @since API version 15
+     */
+    createHardwareSlider(id: string, currentValue: number): HardwareSlider;
+
+    /**
      * Creates an {@link AbsoluteHardwareKnob} that represents a physical knob on a controller that can be used
      * to input an absolute value.
      *
@@ -9580,6 +9621,23 @@ declare namespace com.bitwig.extension.controller.api {
      * @since API version 10
      */
     createAbsoluteHardwareKnob(id: string): AbsoluteHardwareKnob;
+
+    /**
+     * Creates an {@link AbsoluteHardwareKnob} that represents a physical knob on a controller that can be used
+     * to input an absolute value.
+     *
+     * @param id
+     *           A unique string that identifies this control.
+     *
+     * @param currentValue
+     *          The current position of the knob 0..1
+     *
+     * @since API version 10
+     */
+    createAbsoluteHardwareKnob(
+      id: string,
+      currentValue: number
+    ): AbsoluteHardwareKnob;
 
     /**
      * Creates an {@link RelativeHardwareKnob} that represents a physical knob on a controller that can be used
@@ -9848,6 +9906,12 @@ declare namespace com.bitwig.extension.controller.api {
 
     /** Starts browsing using the popup browser for something to insert at this insertion point. */
     browse(): void;
+
+    /**
+     *
+     * @since API version 15
+     */
+    browseAction(): HardwareActionBindable;
   }
 
   // source: com/bitwig/extension/controller/api/IntegerHardwareProperty.java
@@ -10955,8 +11019,8 @@ declare namespace com.bitwig.extension.controller.api {
    */
   interface MultiStateHardwareLight extends HardwareLight {
     /**
-     * Value that represents the current state of this light as an integer. The interpretation of this value is
-     * entirely up to the implementation.
+     * Object that represents the current state of this light. The interpretation of this value is entirely up
+     * to the implementation.
      */
     state(): ObjectHardwareProperty<InternalHardwareLightState>;
 
@@ -10981,6 +11045,10 @@ declare namespace com.bitwig.extension.controller.api {
      */
     setColorSupplier(colorSupplier: Supplier<Color>): void;
 
+    /**
+     * Determines the best light state for the supplied color. For this to be used you must first call
+     * {@link #setColorToStateFunction(IntFunction)}.
+     */
     getBestLightStateForColor(color: Color): InternalHardwareLightState;
   }
 
@@ -11271,7 +11339,7 @@ declare namespace com.bitwig.extension.controller.api {
     /**
      * If there is a note started at this position, it will update the velocity of the note.
      * @param velocity between 0 and 1
-     * @newSince API version 10
+     * @since API version 10
      */
     setVelocity(velocity: number): void;
 
@@ -11955,6 +12023,13 @@ declare namespace com.bitwig.extension.controller.api {
      */
     setMidiIn(midiIn: MidiIn): void;
 
+    /**
+     * Sets the {@link NoteInput} that this keyboard should send notes to.
+     *
+     * @since API version 15
+     */
+    setNoteInput(noteInput: NoteInput): void;
+
     setChannel(channel: number): void;
 
     setIsVelocitySensitive(value: boolean): void;
@@ -12165,11 +12240,25 @@ declare namespace com.bitwig.extension.controller.api {
     selectNextFile(): void;
 
     /**
+     * Action that selects the next file
+     *
+     * @since API version 15
+     */
+    selectNextFileAction(): HardwareActionBindable;
+
+    /**
      * Selects the previous file.
      *
      * @since API version 2
      */
     selectPreviousFile(): void;
+
+    /**
+     * Action that selects the next file
+     *
+     * @since API version 15
+     */
+    selectPreviousFileAction(): HardwareActionBindable;
 
     /**
      * Selects the first file.
@@ -12622,8 +12711,7 @@ declare namespace com.bitwig.extension.controller.api {
   // source: com/bitwig/extension/controller/api/RelativeHardwareValueMatcher.java
 
   /**
-   * Defines a means of recognizing when a relative value is input by the user (for example, when moving a
-   * slider or turning a knob).
+   * Defines a means of recognizing when a relative value is input by the user (for example, when turning a continuous knob).
    *
    * For example, when a certain MIDI CC message happens.
    *
@@ -12705,7 +12793,7 @@ declare namespace com.bitwig.extension.controller.api {
   /**
    * Represents a remote control in Bitwig Studio.
    *
-   * @sice API version 2
+   * @since API version 2
    */
   interface RemoteControl extends Parameter {
     name(): SettableStringValue;
@@ -14397,6 +14485,13 @@ declare namespace com.bitwig.extension.controller.api {
     isGroup(): BooleanValue;
 
     /**
+     * Value that indicates if the group's child tracks are visible.
+     *
+     * @since API version 15
+     */
+    isGroupExpanded(): SettableBooleanValue;
+
+    /**
      * If the track is an effect track, returns an object that indicates if the effect track is configured
      * as pre-fader.
      *
@@ -14656,13 +14751,13 @@ declare namespace com.bitwig.extension.controller.api {
 
     /**
      * Routes the given noteInput directly to the track regardless of monitoring.
-     * @newSince API version 10
+     * @since API version 10
      */
     addNoteSource(noteInput: NoteInput): void;
 
     /**
      * Removes a routing operated by {@link #addNoteSource(NoteInput)}
-     * @newSince API version 10
+     * @since API version 10
      */
     removeNoteSource(noteInput: NoteInput): void;
 
@@ -15215,6 +15310,20 @@ declare namespace com.bitwig.extension.controller.api {
     isArrangerLoopEnabled(): SettableBooleanValue;
 
     /**
+     * Value that corresponds to the start time of the arranger loop
+     *
+     * @since API version 15
+     */
+    arrangerLoopStart(): SettableBeatTimeValue;
+
+    /**
+     * Value that corresponds to the duration of the arranger loop
+     *
+     * @since API version 15
+     */
+    arrangerLoopDuration(): SettableBeatTimeValue;
+
+    /**
      * Registers an observer that reports if arranger looping is enabled in Bitwig Studio.
      *
      * @param callback
@@ -15666,6 +15775,15 @@ declare namespace com.bitwig.extension.controller.api {
      * @since API version 1
      */
     getOutPosition(): SettableBeatTimeValue;
+
+    /**
+     * Adds a cue marker at the current position
+     *
+     * @since API version 15
+     */
+    addCueMarkerAtPlaybackPosition(): void;
+
+    addCueMarkerAtPlaybackPositionAction(): HardwareActionBindable;
 
     /**
      * Returns an object that provides access to the cross-fader, used for mixing between A/B-channels as
