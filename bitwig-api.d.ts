@@ -1,4 +1,4 @@
-// Type definitions for Bitwig Studio Control Surface Scripting API v12
+// Type definitions for Bitwig Studio Control Surface Scripting API v13
 // Project: https://bitwig.com
 // Definitions by: Joseph Larson <https://github.com/joslarson>
 // TypeScript Version: 4.1.2
@@ -62,6 +62,17 @@ declare namespace com.bitwig.extension {
      * "Documentation" within the extension's jar file.
      */
     getHelpFilePath(): string;
+
+    /**
+     * Gets a remote URI or a path within the extension's jar file where support files for this extension can
+     * be found or null if there is none. If the path is not a URI then it is assumed to be a path below the directory
+     * "Documentation" within the extension's jar file.
+     *
+     * Support files are for example a configuration file that one has use with a configuration software.
+     *
+     * @since API version 13
+     */
+    getSupportFolderPath(): string;
 
     /**
      * If true then this extension should fail when it calls a deprecated method in the API. This is useful
@@ -6166,7 +6177,7 @@ declare namespace com.bitwig.extension.controller.api {
      * @deprecated
      * @since API version 1
      */
-    scheduleTask(callback: () => void, args: object[], delay: number): void;
+    scheduleTask(callback: object, args: object[], delay: number): void;
 
     /**
      * Schedules the given callback function for execution after the given delay. For timer applications call
@@ -10414,7 +10425,7 @@ declare namespace com.bitwig.extension.controller.api {
      *           the data1 part of the MIDI message
      * @param data2
      *           the data2 part of the MIDI message
-     * @ @since API version 1
+     * @since API version 1
      */
     sendMidi(status: number, data1: number, data2: number): void;
 
@@ -10423,18 +10434,29 @@ declare namespace com.bitwig.extension.controller.api {
      *
      * @param hexString
      *           the sysex message formatted as hexadecimal value string
-     * @ @since API version 1
+     * @since API version 1
      */
     sendSysex(hexString: string): void;
 
     /**
      * Sends a MIDI SysEx message to the hardware device.
      *
-     * @param hexString
-     *           the sysex message formatted as hexadecimal value string
-     * @ @since API version 1
+     * @param data
+     *           the array of bytes to send
+     * @since API version 2
      */
     sendSysex(data: number): void;
+
+    /**
+     * Sends a MIDI SysEx message to the hardware device. This method is identical to {@link #sendSysex(byte[])}
+     * but exists so that Javascript controllers can explicitly call this method instead of relying on some
+     * intelligent overload resolution of the Javascript engine based on its loose type system.
+     *
+     * @param data
+     *           the array of bytes to send
+     * @since API version 2
+     */
+    sendSysexBytes(data: number): void;
 
     /**
      * Enables or disables sending MIDI beat clock messages to the hardware depending on the given parameter.
@@ -10443,7 +10465,7 @@ declare namespace com.bitwig.extension.controller.api {
      *
      * @param shouldSendClock
      *           `true` in case the hardware should receive MIDI clock messages, `false` otherwise
-     * @ @deprecated Users should enable the clock from the settings.
+     * @deprecated Users should enable the clock from the settings.
      * @since API version 1
      */
     setShouldSendMidiBeatClock(shouldSendClock: boolean): void;
@@ -12052,6 +12074,13 @@ declare namespace com.bitwig.extension.controller.api {
      * @since API version 1
      */
     getShownTopLevelTrackGroup(): Track;
+
+    /**
+     * Creates a new empty scene as the last scene in the project.
+     *
+     * @since API version 13
+     */
+    createScene(): void;
 
     /**
      * Creates a new scene (using an existing empty scene if possible) from the clips that are currently
