@@ -1,4 +1,4 @@
-// Type definitions for Bitwig Studio Control Surface Scripting API v16
+// Type definitions for Bitwig Studio Control Surface Scripting API v17
 // Project: https://bitwig.com
 // Definitions by: Joseph Larson <https://github.com/joslarson>
 // TypeScript Version: 4.1.2
@@ -5390,8 +5390,11 @@ declare namespace com.bitwig.extension.controller.api {
     /**
      * Launches with the given options:
      *
-     * @param quantization possible values are "default", "none", "8", "4", "2", "1", "1/2", "1/4", "1/8", "1/16"
-     * @param launchMode possible values are: "play_with_quantization", "continue_immediately", "continue_with_quantization"
+     * @param quantization
+     *           possible values are "default", "none", "8", "4", "2", "1", "1/2", "1/4", "1/8", "1/16"
+     * @param launchMode
+     *           possible values are: "play_with_quantization", "continue_immediately",
+     *           "continue_with_quantization"
      *
      * @since API version 16
      */
@@ -5405,8 +5408,11 @@ declare namespace com.bitwig.extension.controller.api {
     /**
      * Launches the last clip with the given options:
      *
-     * @param quantization possible values are "default", "none", "8", "4", "2", "1", "1/2", "1/4", "1/8", "1/16"
-     * @param launchMode possible values are: "play_with_quantization", "continue_immediately", "continue_with_quantization"
+     * @param quantization
+     *           possible values are "default", "none", "8", "4", "2", "1", "1/2", "1/4", "1/8", "1/16"
+     * @param launchMode
+     *           possible values are: "play_with_quantization", "continue_immediately",
+     *           "continue_with_quantization"
      *
      * @since API version 16
      */
@@ -5448,12 +5454,15 @@ declare namespace com.bitwig.extension.controller.api {
     color(): SettableColorValue;
 
     /**
-     * Specifies if the Bitwig Studio clip launcher should indicate which slots and scenes are part of the window. By
-     * default indications are disabled.
+     * Specifies if the Bitwig Studio clip launcher should indicate which slots and scenes are part of the
+     * window. By default indications are disabled.
      *
      * @param shouldIndicate
      *           `true` if visual indications should be enabled, `false` otherwise
      * @since API version 10
+     * @deprecated Clip launcher indication is now not per slot or scene but instead as a framed rectangle in
+     *             the user interface. Use {@link SceneBank#setIndication(boolean)} or
+     *             {@link TrackBank#setShouldShowClipLauncherFeedback()}
      */
     setIndication(shouldIndicate: boolean): void;
 
@@ -15105,6 +15114,13 @@ declare namespace com.bitwig.extension.controller.api {
      * @since API version 2
      */
     followCursorTrack(cursorTrack: CursorTrack): void;
+
+    /**
+     * Decides if Bitwig Studio's clip launcher should indicate the area being controlled by this controller or not.
+     *
+     * @since API versian 17
+     */
+    setShouldShowClipLauncherFeedback(value: boolean): void;
   }
 
   // source: com/bitwig/extension/controller/api/Transport.java
