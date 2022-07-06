@@ -1,4 +1,4 @@
-// Type definitions for Bitwig Studio Control Surface Scripting API v13
+// Type definitions for Bitwig Studio Control Surface Scripting API v14
 // Project: https://bitwig.com
 // Definitions by: Joseph Larson <https://github.com/joslarson>
 // TypeScript Version: 4.1.2
@@ -126,6 +126,10 @@ declare namespace com.bitwig.extension.api {
      * @since API version 4
      */
     static mix(c1: Color, c2: Color, blend: number): Color;
+
+    toHex(): string;
+
+    addHex2Number(sb: object, x: number): void;
 
     static nullColor(): Color;
 
@@ -2451,6 +2455,13 @@ declare namespace com.bitwig.extension.controller.api {
     zoomOutAction(): HardwareActionBindable;
 
     /**
+     * Same as zoomIn/zoomOut, but as a stepper
+     *
+     * @since API version 14
+     */
+    zoomLevel(): RelativeHardwarControlBindable;
+
+    /**
      * Adjusts the zoom level of the currently focused editor so that it matches the active selection.
      *
      * @since API version 1
@@ -2687,7 +2698,7 @@ declare namespace com.bitwig.extension.controller.api {
    *
    * @since API version 1
    */
-  interface Arranger {
+  interface Arranger extends TimelineEditor {
     /**
      * Gets an object that allows to enable/disable arranger playback follow. Observers can be registered on
      * the returned object for receiving notifications when the setting switches between on and off.
@@ -2765,6 +2776,56 @@ declare namespace com.bitwig.extension.controller.api {
      * @return the requested item bank object
      */
     createCueMarkerBank(size: number): CueMarkerBank;
+
+    /**
+     * Zooms in all arranger lanes, if it the arranger is visible.
+     *
+     * @since API version 14
+     */
+    zoomInLaneHeightsAllAction(): HardwareActionBindable;
+
+    zoomInLaneHeightsAll(): void;
+
+    /**
+     * Zooms out all arranger lanes, if it the arranger is visible.
+     *
+     * @since API version 14
+     */
+    zoomOutLaneHeightsAllAction(): HardwareActionBindable;
+
+    zoomOutLaneHeightsAll(): void;
+
+    /**
+     * Same as zoomInLaneHeightsAllAction/zoomOutLaneHeightsAllAction, but as a stepper
+     *
+     * @since API version 14
+     */
+    zoomLaneHeightsAllStepper(): RelativeHardwarControlBindable;
+
+    /**
+     * Zooms in selected arranger lanes, if it the arranger is visible.
+     *
+     * @since API version 14
+     */
+    zoomInLaneHeightsSelectedAction(): HardwareActionBindable;
+
+    zoomInLaneHeightsSelected(): void;
+
+    /**
+     * Zooms out selected arranger lanes, if it the arranger is visible.
+     *
+     * @since API version 14
+     */
+    zoomOutLaneHeightsSelectedAction(): HardwareActionBindable;
+
+    zoomOutLaneHeightsSelected(): void;
+
+    /**
+     * Same as zoomInLaneHeightsSelectedAction/zoomOutLaneHeightsSelectedAction, but as a stepper
+     *
+     * @since API version 14
+     */
+    zoomLaneHeightsSelectedStepper(): RelativeHardwarControlBindable;
 
     /**
      * Registers an observer that reports if playback-follow is enabled.
@@ -5878,6 +5939,27 @@ declare namespace com.bitwig.extension.controller.api {
     createMixer(panelLayout: string, window: number): Mixer;
 
     /**
+     * Returns an object which provides access to the `DetailEditor` panel of Bitwig Studio. Calling this function
+     * is equal to `createDetailEditor(-1)`.
+     *
+     * @return a detail editor object
+     * @see #createDetailEditor(int)
+     * @since API version 14
+     */
+    createDetailEditor(): DetailEditor;
+
+    /**
+     * Returns an object which provides access to the `DetailEditor` panel inside the specified window.
+     *
+     * @param window
+     *           the index of the window where the detail editor panel is shown, or -1 in case the first detail
+     *           editor panel found on any window should be taken
+     * @return a detail editor object
+     * @since API version 14
+     */
+    createDetailEditor(window: number): DetailEditor;
+
+    /**
      * Returns a track bank with the given number of tracks, sends and scenes.<br/>
      *
      * A track bank can be seen as a fixed-size window onto the list of tracks in the current document
@@ -7361,6 +7443,42 @@ declare namespace com.bitwig.extension.controller.api {
      * @since API version 10
      */
     deleteObject(): void;
+  }
+
+  // source: com/bitwig/extension/controller/api/DetailEditor.java
+
+  /**
+   * An interface representing various commands which can be performed on the Bitwig Studio detail editor.<br/>
+   *
+   * To receive an instance of the application interface call {@link ControllerHost#createDetailEditor}.
+   *
+   * @since API version 14
+   */
+  interface DetailEditor extends TimelineEditor {
+    /**
+     * Zooms in all detail editor lanes, if it the detail editor is visible.
+     *
+     * @since API version 14
+     */
+    zoomInLaneHeightsAction(): HardwareActionBindable;
+
+    zoomInLaneHeights(): void;
+
+    /**
+     * Zooms out all detail editor lanes, if it the detail editor is visible.
+     *
+     * @since API version 14
+     */
+    zoomOutLaneHeightsAction(): HardwareActionBindable;
+
+    zoomOutLaneHeights(): void;
+
+    /**
+     * Same as zoomInLaneHeightsAction/zoomOutLaneHeightsAction, but as a stepper
+     *
+     * @since API version 14
+     */
+    zoomLaneHeightsStepper(): RelativeHardwarControlBindable;
   }
 
   // source: com/bitwig/extension/controller/api/Device.java
@@ -10542,6 +10660,56 @@ declare namespace com.bitwig.extension.controller.api {
     isCrossFadeSectionVisible(): SettableBooleanValue;
 
     /**
+     * Zooms in all mixer tracks, if it the mixer is visible.
+     *
+     * @since API version 14
+     */
+    zoomInTrackWidthsAllAction(): HardwareActionBindable;
+
+    zoomInTrackWidthsAll(): void;
+
+    /**
+     * Zooms out all mixer tracks, if it the mixer is visible.
+     *
+     * @since API version 14
+     */
+    zoomOutTrackWidthsAllAction(): HardwareActionBindable;
+
+    zoomOutTrackWidthsAll(): void;
+
+    /**
+     * Same as zoomInTrackWidthsAllAction/zoomOutTrackWidthsAllAction, but as a stepper
+     *
+     * @since API version 14
+     */
+    zoomTrackWidthsAllStepper(): RelativeHardwarControlBindable;
+
+    /**
+     * Zooms in selected mixer tracks, if it the mixer is visible.
+     *
+     * @since API version 14
+     */
+    zoomInTrackWidthsSelectedAction(): HardwareActionBindable;
+
+    zoomInTrackWidthsSelected(): void;
+
+    /**
+     * Zooms out selected mixer tracks, if it the mixer is visible.
+     *
+     * @since API version 14
+     */
+    zoomOutTrackWidthsSelectedAction(): HardwareActionBindable;
+
+    zoomOutTrackWidthsSelected(): void;
+
+    /**
+     * Same as zoomInTrackWidthsSelectedAction/zoomOutTrackWidthsSelectedAction, but as a stepper
+     *
+     * @since API version 14
+     */
+    zoomTrackWidthsSelectedStepper(): RelativeHardwarControlBindable;
+
+    /**
      * Registers an observer that reports if the meter section is visible (callback argument is `true`) in the
      * mixer panel or not (callback argument is `false`).
      *
@@ -10989,86 +11157,6 @@ declare namespace com.bitwig.extension.controller.api {
     includeInAllInputs(): SettableBooleanValue;
   }
 
-  // source: com/bitwig/extension/controller/api/NoteLane.java
-
-  /**
-   * Instances of this interface are used to access the notes for a specific note key.
-   *
-   * @since API version 1
-   */
-  interface NoteLane {
-    /**
-     * Value which represents the id of this lane. is either the note pitch represented by this lane, or in
-     * case of audio a lane index (currently always 0 in that case).
-     *
-     * @since API version 2
-     */
-    noteLaneId(): IntegerValue;
-
-    /**
-     * Registers an observer for the note value, which is either the note pitch represented by this lane, or in
-     * case of audio a lane index (currently always 0 in that case).
-     *
-     * @since API version 1
-     * @deprecated Use {@link #noteLaneId()} instead.
-     */
-    addNoteValueObserver(callback: IntegerValueChangedCallback): void;
-
-    /**
-     * Value  that reports the name of the note lane. Typically the name of a note lane is
-     * either equal to the title of an associated drum pad, or reflects the pitch of the note, e.g. "C#3".
-     */
-    name(): StringValue;
-
-    /**
-     * Registers an observer that reports the name of the note lane. Typically the name of a note lane is
-     * either equal to the title of an associated drum pad, or reflects the pitch of the note, e.g. "C#3".
-     *
-     * @param numChars
-     *           the maximum number of characters used for the reported name
-     * @param textWhenUnassigned
-     *           the default name that gets reported when the lane is not yet associated with a note lane in
-     *           Bitwig Studio
-     * @param callback
-     *           a callback function that receives a single string argument
-     * @since API version 1
-     * @deprecated Use {@link #name()} instead.
-     */
-    addNameObserver(
-      numChars: number,
-      textWhenUnassigned: string,
-      callback: StringValueChangedCallback
-    ): void;
-
-    /**
-     * Value the color of the note lane. By default the reported color will be the
-     * track color, or in case an associated drum pad has a custom color it will be the color of that pad
-     */
-    color(): SettableColorValue;
-
-    /**
-     * Registers an observer that reports the color of the note lane. By default the reported color will be the
-     * track color, or in case an associated drum pad has a custom color it will be the color of that pad.
-     *
-     * @param callback
-     *           a callback function that receives three arguments which from an RGB color: 1. the red
-     *           dimension of the color value, 2. the green dimension of the color value, and 3. the blue
-     *           dimension of the color value
-     * @since API version 1
-     * @deprecated Use {@link #color()} instead.
-     */
-    addColorObserver(callback: ColorValueChangedCallback): void;
-
-    /**
-     * Plays a note with the key of the note lane and the provided velocity parameter.
-     *
-     * @param velocity
-     *           the velocity the note should be played with
-     * @since API version 1
-     */
-    play(velocity: number): void;
-  }
-
   // source: com/bitwig/extension/controller/api/NoteLatch.java
 
   /**
@@ -11118,6 +11206,22 @@ declare namespace com.bitwig.extension.controller.api {
      * @since API version 10
      */
     releaseNotes(): void;
+  }
+
+  // source: com/bitwig/extension/controller/api/NoteOccurrence.java
+
+  enum NoteOccurrence {
+    ALWAYS = 0,
+    FIRST = 1,
+    NOT_FIRST = 2,
+    PREV = 3,
+    NOT_PREV = 4,
+    PREV_CHANNEL = 5,
+    NOT_PREV_CHANNEL = 6,
+    PREV_KEY = 7,
+    NOT_PREV_KEY = 8,
+    FILL = 9,
+    NOT_FILL = 10,
   }
 
   // source: com/bitwig/extension/controller/api/NoteStep.java
@@ -11183,6 +11287,17 @@ declare namespace com.bitwig.extension.controller.api {
      * @since API version 10
      */
     setReleaseVelocity(velocity: number): void;
+
+    /**
+     * @since API version 14
+     */
+    velocitySpread(): number;
+
+    /**
+     * @since API version 14
+     * @param amount velocity spread amount in the range 0..1
+     */
+    setVelocitySpread(amount: number): void;
 
     /**
      * @return the duration of the step in beats
@@ -11267,6 +11382,143 @@ declare namespace com.bitwig.extension.controller.api {
      * @since API version 10
      */
     isIsSelected(): boolean;
+
+    /**
+     * Gets the note chance.
+     * @return the probability, 0..1
+     * @since API version 14
+     */
+    chance(): number;
+
+    /**
+     * Sets the note chance.
+     * @param chance 0..1
+     * @since API version 14
+     */
+    setChance(chance: number): void;
+
+    /**
+     * @since API version 14
+     */
+    isChanceEnabled(): boolean;
+
+    /**
+     * @since API version 14
+     */
+    setIsChanceEnabled(isEnabled: boolean): void;
+
+    /**
+     * @since API version 14
+     */
+    isOccurrenceEnabled(): boolean;
+
+    /**
+     * @since API version 14
+     */
+    setIsOccurrenceEnabled(isEnabled: boolean): void;
+
+    /**
+     * @since API version 14
+     */
+    occurrence(): NoteOccurrence;
+
+    /**
+     * @since API version 14
+     */
+    setOccurrence(condition: NoteOccurrence): void;
+
+    /**
+     * @since API version 14
+     */
+    isRecurrenceEnabled(): boolean;
+
+    /**
+     * @since API version 14
+     */
+    setIsRecurrenceEnabled(isEnabled: boolean): void;
+
+    /**
+     * @since API version 14
+     */
+    recurrenceLength(): number;
+
+    /**
+     * @since API version 14
+     */
+    recurrenceMask(): number;
+
+    /**
+     * @param length from 1 to 8
+     * @param mask bitfield, cycle N -> bit N; max 8 cycles
+     * @since API version 14
+     */
+    setRecurrence(length: number, mask: number): void;
+
+    /**
+     * @since API version 14
+     */
+    isRepeatEnabled(): boolean;
+
+    /**
+     * @since API version 14
+     */
+    setIsRepeatEnabled(isEnabled: boolean): void;
+
+    /**
+     * @since API version 14
+     */
+    repeatCount(): number;
+
+    /**
+     * @param count -127..127, positive values indicates a number of divisions, negative values a rate.
+     * @since API version 14
+     */
+    setRepeatCount(count: number): void;
+
+    /**
+     * @since API version 14
+     */
+    repeatCurve(): number;
+
+    /**
+     * @param curve -1..1
+     * @since API version 14
+     */
+    setRepeatCurve(curve: number): void;
+
+    /**
+     * @since API version 14
+     */
+    repeatVelocityEnd(): number;
+
+    /**
+     * @param velocityEnd -1..1, relative velocity amount applied to the note on velocity.
+     * @since API version 14
+     */
+    setRepeatVelocityEnd(velocityEnd: number): void;
+
+    /**
+     * @since API version 14
+     */
+    repeatVelocityCurve(): number;
+
+    /**
+     * @param curve -1..1
+     * @since API version 14
+     */
+    setRepeatVelocityCurve(curve: number): void;
+
+    /**
+     * @return true if the note is muted
+     * @since API version 14
+     */
+    isMuted(): boolean;
+
+    /**
+     * Mutes the note if values is true.
+     * @since API version 14
+     */
+    setIsMuted(value: boolean): void;
   }
 
   // source: com/bitwig/extension/controller/api/NotificationSettings.java
@@ -13679,6 +13931,72 @@ declare namespace com.bitwig.extension.controller.api {
     unsubscribe(): void;
   }
 
+  // source: com/bitwig/extension/controller/api/TimelineEditor.java
+
+  /**
+   * Shared functions between `Arranger` and `DetailEditor`
+   */
+  interface TimelineEditor {
+    /**
+     * Zooms in the timeline, if the timeline editor is visible.
+     *
+     * @since API version 14
+     */
+    zoomInAction(): HardwareActionBindable;
+
+    zoomIn(): void;
+
+    /**
+     * Zooms out the timeline, if the timeline editor is visible.
+     *
+     * @since API version 14
+     */
+    zoomOutAction(): HardwareActionBindable;
+
+    zoomOut(): void;
+
+    /**
+     * Smoothly adjusts the zoom level
+     */
+    zoomLevel(): RelativeHardwarControlBindable;
+
+    /**
+     * Adjusts the zoom level of the timeline so that all content becomes visible, if the timeline editor is visible.
+     *
+     * @since API version 14
+     */
+    zoomToFitAction(): HardwareActionBindable;
+
+    zoomToFit(): void;
+
+    /**
+     * Adjusts the zoom level of the timeline so that it matches the active selection, if the timeline editor is visible.
+     *
+     * @since API version 14
+     */
+    zoomToSelectionAction(): HardwareActionBindable;
+
+    zoomToSelection(): void;
+
+    /**
+     * Toggles the timeline between zoomToSelection and zoomToFit, if it is visible.
+     *
+     * @since API version 14
+     */
+    zoomToFitSelectionOrAllAction(): HardwareActionBindable;
+
+    zoomToFitSelectionOrAll(): void;
+
+    /**
+     * Toggles the timeline between zoomToSelection and the last śet zoom level, if it is visible.
+     *
+     * @since API version 14
+     */
+    zoomToFitSelectionOrPreviousAction(): HardwareActionBindable;
+
+    zoomToFitSelectionOrPrevious(): void;
+  }
+
   // source: com/bitwig/extension/controller/api/TimeSignatureValue.java
 
   /**
@@ -13851,6 +14169,14 @@ declare namespace com.bitwig.extension.controller.api {
     monitor(): SettableBooleanValue;
 
     /**
+     * Returns an object that provides a readout of the monitoring state of the track.
+     *
+     * @return a read-only boolean value object
+     * @since API version 14
+     */
+    isMonitoring(): BooleanValue;
+
+    /**
      * Returns an object that provides access to the auto-monitoring state of the track.
      *
      * @return a boolean value object
@@ -13866,6 +14192,14 @@ declare namespace com.bitwig.extension.controller.api {
      * @since API version 5
      */
     autoMonitor(): SettableBooleanValue;
+
+    /**
+     * Returns an object that provides access to the auto-monitoring mode of the track.
+     *
+     * @return a boolean value object
+     * @since API version 14
+     */
+    monitorMode(): SettableEnumValue;
 
     /**
      * Returns an object that provides access to the cross-fade mode of the track.
@@ -15420,6 +15754,13 @@ declare namespace com.bitwig.extension.controller.api {
      * @since API version 8
      */
     defaultLaunchQuantization(): SettableEnumValue;
+
+    /**
+     * Value that indicates if the project's fill mode is active or not.
+     *
+     * @since API version 14
+     */
+    isFillModeActive(): SettableBooleanValue;
   }
 
   // source: com/bitwig/extension/controller/api/UsbDevice.java
