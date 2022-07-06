@@ -1,4 +1,4 @@
-// Type definitions for Bitwig Studio Control Surface Scripting API v15
+// Type definitions for Bitwig Studio Control Surface Scripting API v16
 // Project: https://bitwig.com
 // Definitions by: Joseph Larson <https://github.com/joslarson>
 // TypeScript Version: 4.1.2
@@ -4735,6 +4735,33 @@ declare namespace com.bitwig.extension.controller.api {
     clearSteps(): void;
 
     /**
+     * @see #moveStep(int, int, int, int, int) channel will be 0.
+     * @since API version 16
+     */
+    moveStep(x: number, y: number, dx: number, dy: number): void;
+
+    /**
+     * Moves a note in the note grid cell specified by the given x and y arguments to the grid cell (x + dx, y + dy).
+     * @param channel MIDI channel, from 0 to 15.
+     * @param x
+     *           the x position within the note grid, defining the step/time of the target note
+     * @param y
+     *           the y position within the note grid, defining the key of the target note
+     * @param dx
+     *           the offset in x direction
+     * @param dy
+     *           the offset in y direction
+     * @since API version 16
+     */
+    moveStep(
+      channel: number,
+      x: number,
+      y: number,
+      dx: number,
+      dy: number
+    ): void;
+
+    /**
      * @see #selectStepContents(int, int, int, boolean) channel will be 0.
      * @since API version 1
      */
@@ -4942,8 +4969,7 @@ declare namespace com.bitwig.extension.controller.api {
     /**
      * Setting for the default launch quantization.
      *
-     * Possible values are `"default"`, `"none"`, `"8"`, `"4"`, `"2"`, `"1"`, `"1/2"`, `"1/4"`, `"1/8"`,
-     * `"1/16"`.
+     * Possible values are "default", "none", "8", "4", "2", "1", "1/2", "1/4", "1/8", "1/16"
      *
      * @since API version 8
      */
@@ -4988,6 +5014,16 @@ declare namespace com.bitwig.extension.controller.api {
      * @since API version 10
      */
     launch(): void;
+
+    /**
+     * Launches with the given options:
+     *
+     * @param quantization possible values are "default", "none", "8", "4", "2", "1", "1/2", "1/4", "1/8", "1/16"
+     * @param launchMode possible values are: "play_with_quantization", "continue_immediately", "continue_with_quantization"
+     *
+     * @since API version 16
+     */
+    launchWithOptions(quantization: string, launchMode: string): void;
 
     /**
      * Get the clip launcher slot containing the clip.
@@ -5350,6 +5386,36 @@ declare namespace com.bitwig.extension.controller.api {
     launch(): void;
 
     launchAction(): HardwareActionBindable;
+
+    /**
+     * Launches with the given options:
+     *
+     * @param quantization possible values are "default", "none", "8", "4", "2", "1", "1/2", "1/4", "1/8", "1/16"
+     * @param launchMode possible values are: "play_with_quantization", "continue_immediately", "continue_with_quantization"
+     *
+     * @since API version 16
+     */
+    launchWithOptions(quantization: string, launchMode: string): void;
+
+    launchWithOptionsAction(
+      quantization: string,
+      launchMode: string
+    ): HardwareActionBindable;
+
+    /**
+     * Launches the last clip with the given options:
+     *
+     * @param quantization possible values are "default", "none", "8", "4", "2", "1", "1/2", "1/4", "1/8", "1/16"
+     * @param launchMode possible values are: "play_with_quantization", "continue_immediately", "continue_with_quantization"
+     *
+     * @since API version 16
+     */
+    launchLastClipWithOptions(quantization: string, launchMode: string): void;
+
+    launchLastClipWithOptionsAction(
+      quantization: string,
+      launchMode: string
+    ): HardwareActionBindable;
 
     /**
      * Value that reports the position of the scene within the list of Bitwig Studio scenes.
@@ -7339,6 +7405,18 @@ declare namespace com.bitwig.extension.controller.api {
      * @since API version 7
      */
     pageCount(): IntegerValue;
+
+    /**
+     * Creates a new preset page.
+     *
+     * @since API version 16
+     */
+    createPresetPage(): void;
+
+    /**
+     * @see #createPresetPage()
+     */
+    createPresetPageAction(): HardwareActionBindable;
   }
 
   // source: com/bitwig/extension/controller/api/CursorTrack.java
@@ -12795,8 +12873,14 @@ declare namespace com.bitwig.extension.controller.api {
    *
    * @since API version 2
    */
-  interface RemoteControl extends Parameter {
+  interface RemoteControl extends Parameter, DeleteableObject {
     name(): SettableStringValue;
+
+    /**
+     * Returns an object indicating whether this remote control's mapping is being changed. An unmapped remote control
+     * slot can be mapped by setting this to true.
+     */
+    isBeingMapped(): SettableBooleanValue;
   }
 
   // source: com/bitwig/extension/controller/api/RemoteControlsPage.java
@@ -14792,6 +14876,21 @@ declare namespace com.bitwig.extension.controller.api {
      * @since API version 10
      */
     selectSlot(slotIndex: number): void;
+
+    /**
+     * Launches the last clip with the given options:
+     *
+     * @param quantization possible values are "default", "none", "8", "4", "2", "1", "1/2", "1/4", "1/8", "1/16"
+     * @param launchMode possible values are: "play_with_quantization", "continue_immediately", "continue_with_quantization"
+     *
+     * @since API version 16
+     */
+    launchLastClipWithOptions(quantization: string, launchMode: string): void;
+
+    launchLastClipWithOptionsAction(
+      quantization: string,
+      launchMode: string
+    ): HardwareActionBindable;
   }
 
   // source: com/bitwig/extension/controller/api/TrackBank.java
