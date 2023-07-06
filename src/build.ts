@@ -205,7 +205,7 @@ export async function build() {
   convertAll(SRC_DIR, DEST_DIR);
   applyMods();
   bundleDeclarations(DEST_DIR, path.join(__dirname, '..', 'bitwig-api.d.ts'));
-  fs.rmdirSync(DEST_DIR, { recursive: true });
+  fs.rmSync(DEST_DIR, { recursive: true });
 
   console.log('Bundled into bitwig-api.d.ts');
 }
