@@ -1,4 +1,4 @@
-// Type definitions for Bitwig Studio Control Surface Scripting API v17
+// Type definitions for Bitwig Studio Control Surface Scripting API v18
 // Project: https://bitwig.com
 // Definitions by: Joseph Larson <https://github.com/joslarson>
 // TypeScript Version: 4.1.2
@@ -229,7 +229,6 @@ declare namespace com.bitwig.extension.api {
      * Allocates some memory that will be automatically freed once the extension exits.
      *
      * @since API version 7
-     * @version Beta
      */
     allocateMemoryBlock(size: number): MemoryBlock;
 
@@ -238,7 +237,6 @@ declare namespace com.bitwig.extension.api {
      * guaranteed to be freed once this extension exits.
      *
      * @since API version 7
-     * @version Beta
      */
     createBitmap(width: number, height: number, format: BitmapFormat): Bitmap;
 
@@ -247,7 +245,6 @@ declare namespace com.bitwig.extension.api {
      * The memory used by this font is guaranteed to be freed once this extension exits.
      *
      * @since API version 7
-     * @version Beta
      */
     loadFontFace(path: string): FontFace;
 
@@ -257,7 +254,6 @@ declare namespace com.bitwig.extension.api {
      * The memory used by this object is guaranteed to be freed once this extension exits.
      *
      * @since API version 7
-     * @version Beta
      */
     createFontOptions(): FontOptions;
 
@@ -266,7 +262,6 @@ declare namespace com.bitwig.extension.api {
      * The memory used by this image is guaranteed to be freed once this extension exits.
      *
      * @since API version 7
-     * @version Beta
      */
     loadPNG(path: string): Image;
 
@@ -275,7 +270,6 @@ declare namespace com.bitwig.extension.api {
      * The memory used by this image is guaranteed to be freed once this extension exits.
      *
      * @since API version 7
-     * @version Beta
      */
     loadSVG(path: string, scale: number): Image;
   }
@@ -369,7 +363,6 @@ declare namespace com.bitwig.extension.api.graphics {
 
   /**
    * Information about the dimensions of a font.
-   * @since API version 6
    */
   interface FontExtents {
     /**
@@ -413,7 +406,7 @@ declare namespace com.bitwig.extension.api.graphics {
   // source: com/bitwig/extension/api/graphics/FontFace.java
 
   /**
-   * @since API version 6
+   * Represents a Font.
    */
   interface FontFace {
     /**
@@ -426,8 +419,6 @@ declare namespace com.bitwig.extension.api.graphics {
 
   /**
    * Configure the font rendering options.
-   *
-   * @since API version 6
    */
   interface FontOptions {
     getAntialiasMode(): GraphicsOutput;
@@ -454,7 +445,6 @@ declare namespace com.bitwig.extension.api.graphics {
   /**
    * This class represents a linear gradient.
    * Add color stops between 0 and 1.
-   * @since API version 6
    */
   interface GradientPattern extends Pattern {
     addColorStop(offset: number, color: Color): void;
@@ -558,8 +548,6 @@ declare namespace com.bitwig.extension.api.graphics {
   /**
    * Provides 2D vector drawing API very similar to cairo graphics.
    * Please read https://www.cairographics.org/manual/ to get a better idea of how this API works.
-   *
-   * @since API version 6
    */
   interface GraphicsOutput {
     ///////////
@@ -715,7 +703,6 @@ declare namespace com.bitwig.extension.api.graphics {
 
   /**
    * Represents an abstract image type.
-   * @since API version 6
    */
   interface Image {
     /** Returns the width */
@@ -731,7 +718,6 @@ declare namespace com.bitwig.extension.api.graphics {
    * This represent a 2D gradient.
    *
    * @link https://www.cairographics.org/manual/cairo-cairo-pattern-t.html#cairo-pattern-create-mesh
-   * @since API version 6
    */
   interface MeshPattern extends Pattern {
     beginPatch(): void;
@@ -770,7 +756,7 @@ declare namespace com.bitwig.extension.api.graphics {
   // source: com/bitwig/extension/api/graphics/Path.java
 
   /**
-   * @since API version 6
+   * Represents a Path
    */
   interface Path {}
 
@@ -778,8 +764,6 @@ declare namespace com.bitwig.extension.api.graphics {
 
   /**
    * Abstract class for patterns (gradient, mesh gradient, ...)
-   *
-   * @since API version 6
    */
   interface Pattern {}
 
@@ -788,8 +772,6 @@ declare namespace com.bitwig.extension.api.graphics {
   /**
    * This class is a renderer.
    * The render method will be called by the Host with a provided GraphicsOutput context.
-   *
-   * @since API version 6
    */
   interface Renderer {
     render(gc: GraphicsOutput): void;
@@ -798,7 +780,7 @@ declare namespace com.bitwig.extension.api.graphics {
   // source: com/bitwig/extension/api/graphics/TextExtents.java
 
   /**
-   * @since API version 6
+   * Represent the size required to display some text.
    */
   interface TextExtents {
     /**
@@ -1332,7 +1314,7 @@ declare namespace com.bitwig.extension.callback {
      * @param callback
      *           a callback function that receives three integer parameters: 1. the status byte 2. the data1
      *           value 2. the data2 value
-     * @ @since API version 1
+     * @since API version 1
      */
     (statusByte: number, data1: number, data2: number): void;
   }
@@ -1348,7 +1330,7 @@ declare namespace com.bitwig.extension.callback {
      *
      * @param callback
      *           a callback function that receives a ShortMidiMessage instance.
-     * @ @since API version 2
+     * @since API version 2
      */
     (msg: ShortMidiMessage): void;
 
@@ -1943,15 +1925,13 @@ declare namespace com.bitwig.extension.controller.api {
   import StringValueChangedCallback = com.bitwig.extension.callback.StringValueChangedCallback;
 
   /**
-   * An interface that provides methods for accessing the most common global application commands.<br/>
+   * An interface that provides methods for accessing the most common global application commands.
    *
    * In addition, functions are provided for accessing any application action in a generic and categorized way,
    * pretty much as displayed in the Bitwig Studio commander dialog (see {@link #getActions()},
-   * {@link #getAction(String)}, {@link #getActionCategories()}), {@link #getActionCategory(String)}).<br/>
+   * {@link #getAction(String)}, {@link #getActionCategories()}), {@link #getActionCategory(String)}).
    *
    * To receive an instance of the application interface call {@link ControllerHost#createApplication()}.
-   *
-   * @since API version 1
    */
   interface Application {
     /**
@@ -2017,7 +1997,7 @@ declare namespace com.bitwig.extension.controller.api {
      * provides a more generic way to find available application functionality.
      *
      * @return the list of actions
-     * @ @since API version 1
+     * @since API version 1
      */
     getActions(): Action[];
 
@@ -2029,7 +2009,7 @@ declare namespace com.bitwig.extension.controller.api {
      *           the action identifier string, must not be `null`
      * @return the action associated with the given id, or null in case there is no action with the given
      *         identifier.
-     * @ @since API version 1
+     * @since API version 1
      */
     getAction(id: string): Action;
 
@@ -2037,7 +2017,7 @@ declare namespace com.bitwig.extension.controller.api {
      * Returns a list of action categories that is used by Bitwig Studio to group actions into categories.
      *
      * @return the list of action categories
-     * @ @since API version 1
+     * @since API version 1
      */
     getActionCategories(): ActionCategory[];
 
@@ -2049,7 +2029,7 @@ declare namespace com.bitwig.extension.controller.api {
      *           the category identifier string, must not be `null`
      * @return the action associated with the given id, or null in case there is no category with the given
      *         identifier
-     * @ @since API version 1
+     * @since API version 1
      */
     getActionCategory(id: string): ActionCategory;
 
@@ -2706,11 +2686,9 @@ declare namespace com.bitwig.extension.controller.api {
   // source: com/bitwig/extension/controller/api/Arranger.java
 
   /**
-   * An interface representing various commands which can be performed on the Bitwig Studio arranger.<br/>
+   * An interface representing various commands which can be performed on the Bitwig Studio arranger.
    *
    * To receive an instance of the application interface call {@link ControllerHost#createArranger}.
-   *
-   * @since API version 1
    */
   interface Arranger extends TimelineEditor {
     /**
@@ -2907,8 +2885,6 @@ declare namespace com.bitwig.extension.controller.api {
 
   /**
    * Callback that is notified when an asynchronous transfer has completed.
-   *
-   * @since API version 7
    */
   interface AsyncTransferCompledCallback {
     /** Called upon completion of an asynchronous read. */
@@ -4993,9 +4969,11 @@ declare namespace com.bitwig.extension.controller.api {
     /**
      * Setting "Launch Mode" from the inspector.
      * Possible values are:
-     *  - play_with_quantization
-     *  - continue_immediately
-     *  - continue_with_quantization
+     *  - default
+     *  - from_start
+     *  - continue_or_from_start
+     *  - continue_or_synced
+     *  - synced
      *
      * @since API version 9
      */
@@ -5019,7 +4997,8 @@ declare namespace com.bitwig.extension.controller.api {
      * Launches with the given options:
      *
      * @param quantization possible values are "default", "none", "8", "4", "2", "1", "1/2", "1/4", "1/8", "1/16"
-     * @param launchMode possible values are: "play_with_quantization", "continue_immediately", "continue_with_quantization"
+     * @param launchMode possible values are: "default", "from_start", "continue_or_from_start",
+     *                   "continue_or_synced", "synced"
      *
      * @since API version 16
      */
@@ -5099,7 +5078,7 @@ declare namespace com.bitwig.extension.controller.api {
     isRecordingQueued(): BooleanValue;
 
     /**
-     * Value that reports whether this slot is queued for recording or not.
+     * Value that reports true if the slot has a clip playing and the track is queued for stop.
      *
      * @since API version 2
      */
@@ -5354,6 +5333,7 @@ declare namespace com.bitwig.extension.controller.api {
      * @param shouldIndicate
      *           `true` if visual indications should be enabled, `false` otherwise
      * @since API version 1
+     * @deprecated
      */
     setIndication(shouldIndicate: boolean): void;
 
@@ -5379,7 +5359,7 @@ declare namespace com.bitwig.extension.controller.api {
     name(): StringValue;
 
     /**
-     * Launches the scene.
+     * Launches the clip or scene.
      *
      * @since API version 1
      */
@@ -5388,13 +5368,49 @@ declare namespace com.bitwig.extension.controller.api {
     launchAction(): HardwareActionBindable;
 
     /**
+     * Launches with alternative settings.
+     *
+     * @since API version 18
+     */
+    launchAlt(): void;
+
+    /**
+     * @since API version 18
+     */
+    launchAltAction(): HardwareActionBindable;
+
+    /**
+     * Call it when the pad is released.
+     *
+     * @since API version 18
+     */
+    launchRelease(): void;
+
+    /**
+     * @since API version 18
+     */
+    launchReleaseAction(): HardwareActionBindable;
+
+    /**
+     * Call it when the pad is released with alternative settings.
+     *
+     * @since API version 18
+     */
+    launchReleaseAlt(): void;
+
+    /**
+     * @since API version 18
+     */
+    launchReleaseAltAction(): HardwareActionBindable;
+
+    /**
      * Launches with the given options:
      *
      * @param quantization
      *           possible values are "default", "none", "8", "4", "2", "1", "1/2", "1/4", "1/8", "1/16"
      * @param launchMode
-     *           possible values are: "play_with_quantization", "continue_immediately",
-     *           "continue_with_quantization"
+     *           possible values are: "default", "from_start", "continue_or_from_start",
+     *           "continue_or_synced", "synced"
      *
      * @since API version 16
      */
@@ -5411,8 +5427,8 @@ declare namespace com.bitwig.extension.controller.api {
      * @param quantization
      *           possible values are "default", "none", "8", "4", "2", "1", "1/2", "1/4", "1/8", "1/16"
      * @param launchMode
-     *           possible values are: "play_with_quantization", "continue_immediately",
-     *           "continue_with_quantization"
+     *           possible values are: "default", "from_start", "continue_or_from_start",
+     *           "continue_or_synced", "synced"
      *
      * @since API version 16
      */
@@ -5510,6 +5526,15 @@ declare namespace com.bitwig.extension.controller.api {
     launch(slot: number): void;
 
     /**
+     * Launches the scene/slot with the given index.
+     *
+     * @param slot
+     *           the index of the slot that should be launched
+     * @since API version 18
+     */
+    launchAlt(slot: number): void;
+
+    /**
      * Stops clip launcher playback for the associated track.
      *
      * @since API version 1
@@ -5517,10 +5542,23 @@ declare namespace com.bitwig.extension.controller.api {
     stop(): void;
 
     /**
+     * Stops clip launcher playback for the associated track.
+     *
+     * @since API version 18
+     */
+    stopAlt(): void;
+
+    /**
      * Action to call {@link #stop()}.
      * @since API version 10
      */
     stopAction(): HardwareActionBindable;
+
+    /**
+     * Action to call {@link #stopAlt()}.
+     * @since API version 18
+     */
+    stopAltAction(): HardwareActionBindable;
 
     /**
      * Performs a return-to-arrangement operation on the related track, which caused playback to be taken over
@@ -6139,6 +6177,29 @@ declare namespace com.bitwig.extension.controller.api {
      * @since API version 1
      */
     createMainTrackBank(
+      numTracks: number,
+      numSends: number,
+      numScenes: number
+    ): TrackBank;
+
+    /**
+     * Returns a track bank with the given number of effect tracks, sends and scenes. Only effect tracks are
+     * considered. For more information about track banks and the `bank pattern` in general, see the
+     * documentation for {@link #createTrackBank}.
+     *
+     * @param numTracks
+     *           the number of tracks spanned by the track bank
+     * @param numSends
+     *           the number of sends spanned by the track bank
+     * @param numScenes
+     *           the number of scenes spanned by the track bank
+     * @return an object for bank-wise navigation of tracks, sends and scenes
+     * @see Track#createEffectTrackBank
+     * @see #createTrackBank
+     * @see #createMainTrackBank
+     * @since API version 18
+     */
+    createEffectTrackBank(
       numTracks: number,
       numSends: number,
       numScenes: number
@@ -7693,7 +7754,7 @@ declare namespace com.bitwig.extension.controller.api {
      * @param indexInPage
      *           the index of the parameter within the current parameter page.
      * @return an object that provides access to the requested parameter
-     * @ @deprecated Use getRemoteControls().getRemoteControlInSlot(indexInPage)
+     * @deprecated Use getRemoteControls().getRemoteControlInSlot(indexInPage)
      * @since API version 1
      */
     getParameter(indexInPage: number): Parameter;
@@ -7745,7 +7806,7 @@ declare namespace com.bitwig.extension.controller.api {
      * @param index
      *           the index of the parameter within the envelope parameter page.
      * @return an object that provides access to the requested parameter
-     * @ @since API version 1
+     * @since API version 1
      * @deprecated The remote controls deprecate this feature. Instead create remote controls with
      *             {@link #createIndependentRemoteControls(String, int, String)}.
      */
@@ -7757,7 +7818,7 @@ declare namespace com.bitwig.extension.controller.api {
      * @param index
      *           the index of the parameter within the common parameter page.
      * @return an object that provides access to the requested parameter
-     * @ @since API version 1
+     * @since API version 1
      * @deprecated The remote controls deprecate this feature. Instead create remote controls with
      *             {@link #createIndependentRemoteControls(String, int, String)}.
      */
@@ -7769,7 +7830,7 @@ declare namespace com.bitwig.extension.controller.api {
      * @param index
      *           the index of the modulation source
      * @return An object that represents the requested modulation source
-     * @ @since API version 1
+     * @since API version 1
      * @deprecated The remote controls deprecate this feature. Instead create remote controls with
      *             {@link #createIndependentRemoteControls(String, int, String)}.
      */
@@ -7781,7 +7842,7 @@ declare namespace com.bitwig.extension.controller.api {
      * @param index
      *           the index of the macro control, must be in the range [0..7]
      * @return An object that represents the requested macro control
-     * @ @since API version 1
+     * @since API version 1
      * @deprecated Devices no longer have a built in fixed macro section. Instead the user can define pages of
      *             mappings and these should be used instead.
      */
@@ -7924,6 +7985,7 @@ declare namespace com.bitwig.extension.controller.api {
      *           the size of the window used to navigate the results column entries.
      * @return the requested device browser object.
      * @since API version 1
+     * @deprecated Use {@link ControllerHost#createPopupBrowser()} instead
      */
     createDeviceBrowser(
       numFilterColumnEntries: number,
@@ -8444,7 +8506,7 @@ declare namespace com.bitwig.extension.controller.api {
      * @param numDevices
      *           the number of devices that are simultaneously accessible
      * @return the requested device bank object
-     * @ @since API version 1
+     * @since API version 1
      */
     createSiblingsDeviceBank(numDevices: number): DeviceBank;
 
@@ -8742,7 +8804,7 @@ declare namespace com.bitwig.extension.controller.api {
      * @param numDevices
      *           the number of devices should be accessible simultaneously
      * @return the requested device bank object
-     * @ @since API version 1
+     * @since API version 1
      */
     createDeviceBank(numDevices: number): DeviceBank;
 
@@ -9971,7 +10033,7 @@ declare namespace com.bitwig.extension.controller.api {
     insertBitwigDevice(id: UUID): void;
 
     /**
-     * Inserts a VST2 plugin device with the supplied id at this insertion point. If the plug-in is unknown or
+     * Inserts a VST2 plugin device with the supplied id at this insertion point. If the plug-in is unknown, or
      * it's not possible to insert a plug-in here then his does nothing.
      *
      * @param id
@@ -9980,13 +10042,24 @@ declare namespace com.bitwig.extension.controller.api {
     insertVST2Device(id: number): void;
 
     /**
-     * Inserts a VST3 plugin device with the supplied id at this insertion point. If the plug-in is unknown or
+     * Inserts a VST3 plugin device with the supplied id at this insertion point. If the plug-in is unknown, or
      * it's not possible to insert a plug-in here then his does nothing.
      *
      * @param id
-     *           The VST2 plugin id to insert
+     *           The VST3 plugin id to insert
      */
     insertVST3Device(id: string): void;
+
+    /**
+     * Inserts a CLAP plugin device with the supplied id at this insertion point. If the plug-in is unknown, or
+     * it's not possible to insert a plug-in here then his does nothing.
+     *
+     * @param id
+     *           The CLAP plugin id to insert
+     *
+     * @since API version 18
+     */
+    insertCLAPDevice(id: string): void;
 
     /** Pastes the contents of the clipboard at this insertion point. */
     paste(): void;
@@ -10237,7 +10310,7 @@ declare namespace com.bitwig.extension.controller.api {
      * @param callback
      *           a callback function that receives three integer parameters: 1. the status byte 2. the data1
      *           value 2. the data2 value
-     * @ @since API version 1
+     * @since API version 1
      */
     setMidiCallback(callback: ShortMidiDataReceivedCallback): void;
 
@@ -10246,7 +10319,7 @@ declare namespace com.bitwig.extension.controller.api {
      *
      * @param callback
      *           a callback function that takes a single string argument
-     * @ @since API version 1
+     * @since API version 1
      */
     setSysexCallback(callback: SysexMidiDataReceivedCallback): void;
 
@@ -11239,7 +11312,7 @@ declare namespace com.bitwig.extension.controller.api {
      * @param pitchRange
      *           the pitch mapping range in semitones, values must be in the range [1..24]. This parameter is
      *           ignored for non-pitch expressions.
-     * @ @since API version 1
+     * @since API version 1
      */
     assignPolyphonicAftertouchToExpression(
       channel: number,
@@ -12568,6 +12641,13 @@ declare namespace com.bitwig.extension.controller.api {
      * @since API version 10
      */
     hasArmedTracks(): BooleanValue;
+
+    /**
+     * Value that indicates if the project is modified or not.
+     *
+     * @since API version 18
+     */
+    isModified(): BooleanValue;
   }
 
   // source: com/bitwig/extension/controller/api/RangedValue.java
@@ -13283,6 +13363,12 @@ declare namespace com.bitwig.extension.controller.api {
      * @since API version 10
      */
     sendMode(): SettableEnumValue;
+
+    /**
+     * Enables/Disables the send.
+     * @since API version 18
+     */
+    isEnabled(): SettableBooleanValue;
   }
 
   // source: com/bitwig/extension/controller/api/SendBank.java
@@ -13907,6 +13993,16 @@ declare namespace com.bitwig.extension.controller.api {
      * @since API version 1
      */
     toggle(exclusive: boolean): void;
+
+    /**
+     * Toggles the current solo state, using the exclusive setting from the user preferences.
+     *
+     * @param negatePreferences
+     *           If false, then toggles the solo using the exclusive behavior specified in the user preferences,
+     *           ortherwise negate the preference setting.
+     * @since API version 18
+     */
+    toggleUsingPreferences(negatePreferences: boolean): void;
   }
 
   // source: com/bitwig/extension/controller/api/SourceSelector.java
@@ -14469,6 +14565,19 @@ declare namespace com.bitwig.extension.controller.api {
     stopAction(): HardwareActionBindable;
 
     /**
+     * Stops playback of the track using alternative quantization.
+     *
+     * @since API version 18
+     */
+    stopAlt(): void;
+
+    /**
+     * Action to call {@link #stopAlt()}.
+     * @since API version 18
+     */
+    stopAltAction(): HardwareActionBindable;
+
+    /**
      * Calling this method causes the arrangement sequencer to take over playback.
      *
      * @since API version 1
@@ -14538,7 +14647,7 @@ declare namespace com.bitwig.extension.controller.api {
      *           the data1 part of the MIDI message
      * @param data2
      *           the data2 part of the MIDI message
-     * @ @since API version 2
+     * @since API version 2
      */
     sendMidi(status: number, data1: number, data2: number): void;
 
@@ -14642,7 +14751,7 @@ declare namespace com.bitwig.extension.controller.api {
      * the Bitwig Studio user interface.
      *
      * @return the requested device selection cursor object
-     * @ @since API version 1
+     * @since API version 1
      */
     createCursorDevice(): CursorDevice;
 
@@ -14656,7 +14765,7 @@ declare namespace com.bitwig.extension.controller.api {
      *           the device selection cursor in the arranger cursor track as shown in the Bitwig Studio user
      *           interface.
      * @return the requested device selection cursor object
-     * @ @see Track#createCursorDevice
+     * @see Track#createCursorDevice
      * @see #createCursorDevice(String name, int numSends)
      * @since API version 1
      */
@@ -14674,7 +14783,7 @@ declare namespace com.bitwig.extension.controller.api {
      * @param numSends
      *           the number of sends that are simultaneously accessible in nested channels.
      * @return the requested device selection cursor object
-     * @ @see Track#createCursorDevice
+     * @see Track#createCursorDevice
      * @since API version 1
      */
     createCursorDevice(name: string, numSends: number): CursorDevice;
@@ -14785,6 +14894,33 @@ declare namespace com.bitwig.extension.controller.api {
     ): TrackBank;
 
     /**
+     * Returns a track bank with the given number of child effect tracks and scenes. Only effect tracks are
+     * considered. The track bank will only have content if the connected track is a group track. For more
+     * information about track banks and the `bank pattern` in general, see the documentation for
+     * {@link #createTrackBank}.
+     *
+     * @param numTracks
+     *           the number of child tracks spanned by the track bank
+     * @param numSends
+     *           the number of sends spanned by the track bank
+     * @param numScenes
+     *           the number of scenes spanned by the track bank
+     * @param hasFlatTrackList
+     *           specifies whether the track bank should operate on a flat list of all nested child tracks or
+     *           only on the direct child tracks of the connected group track.
+     * @return an object for bank-wise navigation of tracks, sends and scenes
+     * @see #createTrackBank
+     * @see #createMainTrackBank
+     * @since API version 18
+     */
+    createEffectTrackBank(
+      numTracks: number,
+      numSends: number,
+      numScenes: number,
+      hasFlatTrackList: boolean
+    ): TrackBank;
+
+    /**
      * Returns an object that represents the master track of the connected track group. The returned object
      * will only have content if the connected track is a group track.
      *
@@ -14890,7 +15026,8 @@ declare namespace com.bitwig.extension.controller.api {
      * Launches the last clip with the given options:
      *
      * @param quantization possible values are "default", "none", "8", "4", "2", "1", "1/2", "1/4", "1/8", "1/16"
-     * @param launchMode possible values are: "play_with_quantization", "continue_immediately", "continue_with_quantization"
+     * @param launchMode possible values are: "default", "from_start", "continue_or_from_start",
+     *                   "continue_or_synced", "synced"
      *
      * @since API version 16
      */
@@ -14900,6 +15037,47 @@ declare namespace com.bitwig.extension.controller.api {
       quantization: string,
       launchMode: string
     ): HardwareActionBindable;
+
+    /**
+     * Creates a cursor for the selected remote controls page in the device with the supplied number of
+     * parameters. This section will follow the current page selection made by the user in the application.
+     *
+     * @param parameterCount
+     *           The number of parameters the remote controls should contain
+     *
+     * @since API version 18
+     */
+    createCursorRemoteControlsPage(
+      parameterCount: number
+    ): CursorRemoteControlsPage;
+
+    /**
+     * Creates a cursor for a remote controls page in the device with the supplied number of parameters. This
+     * section will be independent from the current page selected by the user in Bitwig Studio's user
+     * interface. The supplied filter is an expression that can be used to match pages this section is
+     * interested in. The expression is matched by looking at the tags added to the pages. If the expression is
+     * empty then no filtering will occur.
+     *
+     * @param name
+     *           A name to associate with this section. This will be used to remember manual mappings made by
+     *           the user within this section.
+     *
+     *
+     * @param parameterCount
+     *           The number of parameters the remote controls should contain
+     *
+     * @param filterExpression
+     *           An expression used to match pages that the user can navigate through. For now this can only be
+     *           the name of a single tag the pages should contain (e.g "drawbars", "dyn", "env", "eq",
+     *           "filter", "fx", "lfo", "mixer", "osc", "overview", "perf").
+     *
+     * @since API version 18
+     */
+    createCursorRemoteControlsPage(
+      name: string,
+      parameterCount: number,
+      filterExpression: string
+    ): CursorRemoteControlsPage;
   }
 
   // source: com/bitwig/extension/controller/api/TrackBank.java
