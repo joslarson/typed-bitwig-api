@@ -1,4 +1,4 @@
-// Type definitions for Bitwig Studio Control Surface Scripting API v18
+// Type definitions for Bitwig Studio Control Surface Scripting API v19
 // Project: https://bitwig.com
 // Definitions by: Joseph Larson <https://github.com/joslarson>
 // TypeScript Version: 4.1.2
@@ -824,8 +824,8 @@ declare namespace com.bitwig.extension.api.opensoundcontrol {
    */
   interface OscAddressSpace {
     /**
-     * Register all the methods annotated with @{@link OscMethod} from object.
-     * Also if a method is annotated with @{@link OscNode}, this method will be called and the returned object's method
+     * Register all the methods annotated with {@link OscMethod} object.
+     * Also, if a method is annotated with {@link OscNode}, this method will be called and the returned object's method
      * will be registered.
      */
     registerObjectMethods(addressPrefix: string, object: object): void;
@@ -2928,10 +2928,6 @@ declare namespace com.bitwig.extension.controller.api {
      */
     setSizeOfBank(size: number): void;
 
-    scrollPageForwards(): void;
-
-    scrollPageBackwards(): void;
-
     /**
      * Gets the item in the bank at the supplied index. The index must be >= 0 and < {@link #getSizeOfBank()}.
      *
@@ -3985,7 +3981,7 @@ declare namespace com.bitwig.extension.controller.api {
    *
    * @since API version 1
    */
-  interface Channel extends DeviceChain, DeleteableObject {
+  interface Channel extends DeviceChain, DeleteableObject, DuplicableObject {
     /**
      * Returns an object that represents the activated state of the channel.
      *
@@ -5010,6 +5006,13 @@ declare namespace com.bitwig.extension.controller.api {
      * @since API version 10
      */
     clipLauncherSlot(): ClipLauncherSlot;
+
+    /**
+     * Open the detail editor and show the clip.
+     *
+     * @since API version 18
+     */
+    showInEditor(): void;
   }
 
   // source: com/bitwig/extension/controller/api/ClipBrowsingSession.java
@@ -5349,7 +5352,10 @@ declare namespace com.bitwig.extension.controller.api {
 
   // source: com/bitwig/extension/controller/api/ClipLauncherSlotOrScene.java
 
-  interface ClipLauncherSlotOrScene extends ObjectProxy, DeleteableObject {
+  interface ClipLauncherSlotOrScene
+    extends ObjectProxy,
+      DeleteableObject,
+      DuplicableObject {
     /**
      * Returns an object that provides access to the name of the scene.
      *
@@ -6741,7 +6747,27 @@ declare namespace com.bitwig.extension.controller.api {
 
     /**
      * Creates a {@link HardwareActionBindable} that can be bound to some {@link HardwareAction} (such as a
-     * button press) and when that action occurs the supplied {@link Runnable} will be run
+     * button press) and when that action occurs the supplied {@link Runnable} will be run.
+     *
+     * This is exactly the same as {@link #createAction(Runnable, Supplier)} but does not use parameter
+     * overloading so can be used from non type safe languages like JavaScript.
+     *
+     * @param runnable
+     *           The runnable to be run
+     * @param descriptionProvider
+     *           Provider that can provide a description of what the runnable does (used for showing onscreen
+     *           feedback or help to the user).
+     *
+     * @since API version 18
+     */
+    createCallbackAction(
+      runnable: () => void,
+      descriptionProvider: Supplier<string>
+    ): HardwareActionBindable;
+
+    /**
+     * Creates a {@link HardwareActionBindable} that can be bound to some {@link HardwareAction} (such as a
+     * button press) and when that action occurs the supplied {@link Runnable} will be run.
      *
      * @param runnable
      *           The runnable to be run
@@ -6753,6 +6779,26 @@ declare namespace com.bitwig.extension.controller.api {
      */
     createAction(
       runnable: () => void,
+      descriptionProvider: Supplier<string>
+    ): HardwareActionBindable;
+
+    /**
+     * Creates a {@link HardwareActionBindable} that can be bound to some {@link HardwareAction} (such as a
+     * button press) and when that action occurs the supplied {@link Runnable} will be run.
+     *
+     * This is exactly the same as {@link #createAction(DoubleConsumer, Supplier)} but does not use parameter
+     * overloading so can be used from non type safe languages like JavaScript.
+     *
+     * @param actionPressureConsumer
+     *           Consumer that will be notified of the pressure of the action
+     * @param descriptionProvider
+     *           Provider that can provide a description of what the runnable does (used for showing onscreen
+     *           feedback or help to the user).
+     *
+     * @since API version 18
+     */
+    createPressureCallbackAction(
+      actionPressureConsumer: DoubleConsumer,
       descriptionProvider: Supplier<string>
     ): HardwareActionBindable;
 
@@ -6831,6 +6877,20 @@ declare namespace com.bitwig.extension.controller.api {
      * @since API version 10
      */
     deleteObjects(...objects: DeleteableObject[]): void;
+
+    /**
+     * It will duplicate multiple object within one undo step.
+     *
+     * @since API version 19
+     */
+    duplicateObjects(undoName: string, ...objects: DuplicableObject[]): void;
+
+    /**
+     * It will duplicate multiple object within one undo step.
+     *
+     * @since API version 19
+     */
+    duplicateObjects(...objects: DuplicableObject[]): void;
 
     /**
      * Creates a {@link DeviceMatcher} that will match any instrument.
@@ -6924,7 +6984,7 @@ declare namespace com.bitwig.extension.controller.api {
    *
    * @since API version 2
    */
-  interface CueMarker extends ObjectProxy, DeleteableObject {
+  interface CueMarker extends ObjectProxy, DeleteableObject, DuplicableObject {
     /**
      * Launches playback at the marker position.
      *
@@ -7614,6 +7674,11 @@ declare namespace com.bitwig.extension.controller.api {
      */
     deleteObject(): void;
 
+    /**
+     * Deletes this object from the document.
+     *
+     * @since API version 15
+     */
     deleteObjectAction(): HardwareActionBindable;
   }
 
@@ -7665,7 +7730,7 @@ declare namespace com.bitwig.extension.controller.api {
    *
    * @since API version 1
    */
-  interface Device extends ObjectProxy, DeleteableObject {
+  interface Device extends ObjectProxy, DeleteableObject, DuplicableObject {
     /**
      * Returns a representation of the device chain that contains this device. Possible device chain instances
      * are tracks, device layers, drums pads, or FX slots.
@@ -9041,6 +9106,26 @@ declare namespace com.bitwig.extension.controller.api {
     hasSoloedPads(): BooleanValue;
   }
 
+  // source: com/bitwig/extension/controller/api/DuplicableObject.java
+
+  interface DuplicableObject {
+    /**
+     * Duplicates this object into the document.
+     *
+     * If you want to duplicate multiple objects at once, see Host.duplicateObjects().
+     *
+     * @since API version 19
+     */
+    duplicateObject(): void;
+
+    /**
+     * Duplicates this object into the document.
+     *
+     * @since API version 19
+     */
+    duplicateObjectAction(): HardwareActionBindable;
+  }
+
   // source: com/bitwig/extension/controller/api/EnumDefinition.java
 
   /**
@@ -9101,7 +9186,7 @@ declare namespace com.bitwig.extension.controller.api {
    */
   interface EnumValueDefinition {
     /**
-     * Gets the enum definition to which belongs this value.
+     * Gets the enum definition this value belongs to.
      * @since API version 11
      */
     enumDefinition(): EnumDefinition;
@@ -10774,6 +10859,8 @@ declare namespace com.bitwig.extension.controller.api {
     /**
      * Sends a MIDI SysEx message to the hardware device.
      *
+     * Starting from API version 19, sending invalid sysex will crash the ControllerExtension.
+     *
      * @param hexString
      *           the sysex message formatted as hexadecimal value string
      * @since API version 1
@@ -10783,8 +10870,11 @@ declare namespace com.bitwig.extension.controller.api {
     /**
      * Sends a MIDI SysEx message to the hardware device.
      *
+     * Starting from API version 19, sending invalid sysex will crash the ControllerExtension.
+     *
      * @param data
      *           the array of bytes to send
+     *
      * @since API version 2
      */
     sendSysex(data: number): void;
@@ -10793,6 +10883,8 @@ declare namespace com.bitwig.extension.controller.api {
      * Sends a MIDI SysEx message to the hardware device. This method is identical to {@link #sendSysex(byte[])}
      * but exists so that Javascript controllers can explicitly call this method instead of relying on some
      * intelligent overload resolution of the Javascript engine based on its loose type system.
+     *
+     * Starting from API version 19, sending invalid sysex will crash the ControllerExtension.
      *
      * @param data
      *           the array of bytes to send
@@ -11600,7 +11692,7 @@ declare namespace com.bitwig.extension.controller.api {
 
     /**
      * If there is a note started at this position, it will update the pitch offset of the note.
-     * @param transpose in semitones, from -24 to +24
+     * @param transpose in semitones, from -96 to +96
      * @since API version 10
      */
     setTranspose(transpose: number): void;
@@ -12133,6 +12225,20 @@ declare namespace com.bitwig.extension.controller.api {
      * @since API version 1
      */
     restoreAutomationControl(): void;
+
+    /**
+     * Boolean value that is true if the parameter has automation data.
+     *
+     * @since API version 19
+     */
+    hasAutomation(): BooleanValue;
+
+    /**
+     * Deletes all automation for this parameter.
+     *
+     * @since API version 19
+     */
+    deleteAllAutomation(): void;
   }
 
   // source: com/bitwig/extension/controller/api/ParameterBank.java
@@ -12979,12 +13085,10 @@ declare namespace com.bitwig.extension.controller.api {
    *
    * @since API version 2
    */
-  interface RemoteControlsPage extends ParameterBank {
+  interface RemoteControlsPage extends ParameterBank, DeleteableObject {
     getParameter(indexInBank: number): RemoteControl;
 
-    /*
-   @since API version 4
-    */
+    /** @since API version 4 */
     getName(): StringValue;
   }
 
@@ -14258,7 +14362,7 @@ declare namespace com.bitwig.extension.controller.api {
     /**
      * Toggles the timeline between zoomToSelection and zoomToFit, if it is visible.
      *
-     * @since API version 14
+     * @since API version 18
      */
     zoomToFitSelectionOrAllAction(): HardwareActionBindable;
 
@@ -14267,7 +14371,7 @@ declare namespace com.bitwig.extension.controller.api {
     /**
      * Toggles the timeline between zoomToSelection and the last śet zoom level, if it is visible.
      *
-     * @since API version 14
+     * @since API version 18
      */
     zoomToFitSelectionOrPreviousAction(): HardwareActionBindable;
 
@@ -14994,6 +15098,7 @@ declare namespace com.bitwig.extension.controller.api {
      * Will create a new empty clip at or after slot index.
      * If necessary, a new scene will be created.
      * The new clip will be selected.
+     * @param slotIndex absolute slot index in the track (unrelated to banks)
      * @since API version 10
      */
     createNewLauncherClip(slotIndex: number, lengthInBeats: number): void;
@@ -15003,6 +15108,7 @@ declare namespace com.bitwig.extension.controller.api {
      * It will use the default clip length.
      * If necessary, a new scene will be created.
      * The new clip will be selected.
+     * @param slotIndex absolute slot index in the track (unrelated to banks)
      * @since API version 10
      */
     createNewLauncherClip(slotIndex: number): void;
@@ -15011,13 +15117,14 @@ declare namespace com.bitwig.extension.controller.api {
      * Will start recording a new clip at or after slot index.
      * If necessary, a new scene will be created.
      * The new clip will be selected.
+     * @param slotIndex absolute slot index in the track (unrelated to banks)
      * @since API version 10
      */
     recordNewLauncherClip(slotIndex: number): void;
 
     /**
      * Selects the slot at the given index.
-     *
+     * @param slotIndex absolute slot index in the track (unrelated to banks)
      * @since API version 10
      */
     selectSlot(slotIndex: number): void;
