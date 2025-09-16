@@ -4,9 +4,13 @@ import { getTypeArgs, typeOverrides } from '../util';
 
 export const renderUnannType = (node: UnannTypeCstNode) => {
   if (node.children.unannPrimitiveType?.[0]) {
-    return node.children.unannPrimitiveType[0].children.Boolean?.[0]
+    // @ts-ignore
+    const isArrayOfType = node.children.dims;
+    const primitiveType = node.children.unannPrimitiveType[0].children
+      .Boolean?.[0]
       ? 'boolean'
       : 'number';
+    return `${primitiveType}${isArrayOfType ? '[]' : ''}`;
   } else if (node.children.unannReferenceType?.[0]) {
     const name = visit(node, 'unannClassType')?.[0].Identifier?.[0].image;
     const typeArgs = getTypeArgs(node);

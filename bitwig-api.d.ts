@@ -657,9 +657,9 @@ declare namespace com.bitwig.extension.api.graphics {
 
     setLineWidth(width: number): void;
 
-    setDash(dashes: number, offset: number): void;
+    setDash(dashes: number[], offset: number): void;
 
-    setDash(dashes: number): void;
+    setDash(dashes: number[]): void;
 
     setFillRule(rule: FillRule): void;
 
@@ -931,7 +931,7 @@ declare namespace com.bitwig.extension.api.opensoundcontrol {
 
     getString(index: number): string;
 
-    getBlob(index: number): number;
+    getBlob(index: number): number[];
 
     getInt(index: number): number;
 
@@ -1116,15 +1116,15 @@ declare namespace com.bitwig.extension.api.util.midi {
 
     addString(string: string, length: number): SysexBuilder;
 
-    add(bytes: number): SysexBuilder;
+    add(bytes: number[]): SysexBuilder;
 
     addHex(hex: string): SysexBuilder;
 
-    terminate(): number;
+    terminate(): number[];
 
-    array(): number;
+    array(): number[];
 
-    mData: number;
+    mData: number[];
 
     mLength: number;
   }
@@ -1183,7 +1183,7 @@ declare namespace com.bitwig.extension.callback {
   // source: com/bitwig/extension/callback/DataReceivedCallback.java
 
   interface DataReceivedCallback extends Callback {
-    (data: number): void;
+    (data: number[]): void;
   }
 
   // source: com/bitwig/extension/callback/DirectParameterDisplayedValueChangedCallback.java
@@ -6510,7 +6510,7 @@ declare namespace com.bitwig.extension.controller.api {
      *           signed (in the range -128..127).
      * @since API version 1
      */
-    sendDatagramPacket(host: string, port: number, data: number): void;
+    sendDatagramPacket(host: string, port: number, data: number[]): void;
 
     /**
      * Adds an observer for incoming UDP (User Datagram Protocol) packets on the selected port.
@@ -10877,7 +10877,7 @@ declare namespace com.bitwig.extension.controller.api {
      *
      * @since API version 2
      */
-    sendSysex(data: number): void;
+    sendSysex(data: number[]): void;
 
     /**
      * Sends a MIDI SysEx message to the hardware device. This method is identical to {@link #sendSysex(byte[])}
@@ -10890,7 +10890,7 @@ declare namespace com.bitwig.extension.controller.api {
      *           the array of bytes to send
      * @since API version 2
      */
-    sendSysexBytes(data: number): void;
+    sendSysexBytes(data: number[]): void;
 
     /**
      * Enables or disables sending MIDI beat clock messages to the hardware depending on the given parameter.
@@ -13058,7 +13058,7 @@ declare namespace com.bitwig.extension.controller.api {
      * @throws IOException
      * @since API version 1
      */
-    send(data: number): void;
+    send(data: number[]): void;
   }
 
   // source: com/bitwig/extension/controller/api/RemoteControl.java
