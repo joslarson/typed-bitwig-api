@@ -1,4 +1,4 @@
-// Type definitions for Bitwig Studio Control Surface Scripting API v20
+// Type definitions for Bitwig Studio Control Surface Scripting API v21
 // Project: https://bitwig.com
 // Definitions by: Joseph Larson <https://github.com/joslarson>
 // TypeScript Version: 4.1.2
@@ -2881,6 +2881,16 @@ declare namespace com.bitwig.extension.controller.api {
   interface AudioHardwareIoInfo extends ObjectProxy {
     color(): ColorValue;
   }
+
+  // source: com/bitwig/extension/controller/api/AudioIoDeviceMatcher.java
+
+  /**
+   * Opaque type used to match audio I/O devices. Create instances of this type
+   * using the factory methods in ControllerHost.
+   * @see ControllerHost#createAudioIoDeviceHardwareAddressMatcher(String)
+   * @see ControllerHost#createUsbAudioIoDeviceMatcher(int, int)
+   */
+  interface AudioIoDeviceMatcher {}
 
   // source: com/bitwig/extension/controller/api/Bank.java
 
@@ -6978,24 +6988,39 @@ declare namespace com.bitwig.extension.controller.api {
     createMasterRecorder(): MasterRecorder;
 
     /**
+     * Creates a matcher that matches devices with the given hardware address.
+     * @since API version 22
+     */
+    createAudioIoDeviceHardwareAddressMatcher(
+      hardwareAddress: string
+    ): AudioIoDeviceMatcher;
+
+    /**
+     * Creates a matcher that matches devices with the given USB vendor and product id.
+     * @since API version 22
+     */
+    createUsbAudioIoDeviceMatcher(
+      vendorId: number,
+      productId: number
+    ): AudioIoDeviceMatcher;
+
+    /**
      * Creates a {@link AudioHardwareIoInfo} for the specified output.
-     * @since API version 20
-     * @param deviceId
+     * @since API version 22
      * @param channels zero based channel indices
      */
     createAudioHardwareOutputInfo(
-      deviceId: string,
+      matcher: AudioIoDeviceMatcher,
       channels: number[]
     ): AudioHardwareIoInfo;
 
     /**
      * Creates a {@link AudioHardwareIoInfo} for the specified input.
-     * @since API version 20
-     * @param deviceId
+     * @since API version 22
      * @param channels zero based channel indices
      */
     createAudioHardwareInputInfo(
-      deviceId: string,
+      matcher: AudioIoDeviceMatcher,
       channels: number[]
     ): AudioHardwareIoInfo;
   }
@@ -10265,11 +10290,20 @@ declare namespace com.bitwig.extension.controller.api {
   interface LastClickedParameter {
     isLocked(): SettableBooleanValue;
 
+    /**
+     * Toggle locked status, but if we are already locked and the mouse points
+     * at a different parameter now, lock to the new parameter instead.
+     */
+    smartToggleLockAction(): HardwareActionBindable;
+
+    /**
+     * @see LastClickedParameter#smartToggleLockAction()
+     */
+    smartToggleLock(): void;
+
     parameter(): Parameter;
 
     parameterColor(): ColorValue;
-
-    updateLockedToLastClicked(): void;
   }
 
   // source: com/bitwig/extension/controller/api/Macro.java
@@ -10913,6 +10947,15 @@ declare namespace com.bitwig.extension.controller.api {
      *           Expression returns true if the event matches
      */
     createActionMatcher(expression: string): HardwareActionMatcher;
+
+    /**
+     *
+     * @return The address of the hardware device this port belongs to. If two ports belong to the same physical device,
+     * they have the same address.
+     *
+     * @since API version 21
+     */
+    hardwareAddress(): string;
   }
 
   // source: com/bitwig/extension/controller/api/MidiOut.java
@@ -13539,6 +13582,68 @@ declare namespace com.bitwig.extension.controller.api {
     canScrollForwards(): BooleanValue;
   }
 
+  // source: com/bitwig/extension/controller/api/ScrollbarModel.java
+
+  /**
+   * Interface providing detailed access to a specific scrollbar.
+   * @since API version 21
+   */
+  interface ScrollbarModel {
+    /**
+     * Does this ScrollbarModel support zoom?.
+     * @since API version 21
+     */
+    isZoomable(): boolean;
+
+    /**
+     * Get the zoom level expressed as content units per pixel.
+     * @since API version 21
+     */
+    getContentPerPixel(): DoubleValue;
+
+    /**
+     * Zoom in/out around a specific position (in content units). The distance is given in 2ˣ, so +1 implies 200% of the
+     * current level and -1 implies 50%
+     * @since API version 21
+     */
+    zoomAtPosition(position: number, distance: number): void;
+
+    /**
+     * Adjusts the zoom level so it fits all content
+     *
+     * @since API version 21
+     */
+    zoomToFit(): void;
+
+    /**
+     * Adjusts the zoom level so it fits the selected content
+     *
+     * @since API version 21
+     */
+    zoomToSelection(): void;
+
+    /**
+     * Alternate the zoom level between fitting all content or the selection
+     *
+     * @since API version 21
+     */
+    zoomToFitSelectionOrAll(): void;
+
+    /**
+     * Alternate the zoom level between fitting the selected content or the previous zoom level
+     *
+     * @since API version 21
+     */
+    zoomToFitSelectionOrCurrent(): void;
+
+    /**
+     * Set the zoom level to fit a specific content range.
+     *
+     * @since API version 21
+     */
+    zoomToContentRegion(from: number, to: number): void;
+  }
+
   // source: com/bitwig/extension/controller/api/Send.java
 
   interface Send extends Parameter {
@@ -14472,6 +14577,13 @@ declare namespace com.bitwig.extension.controller.api {
     zoomToFitSelectionOrPreviousAction(): HardwareActionBindable;
 
     zoomToFitSelectionOrPrevious(): void;
+
+    /**
+     * Get the horizontal (time) scrollbar model.
+     *
+     * @since API version 21
+     */
+    getHorizontalScrollbarModel(): ScrollbarModel;
   }
 
   // source: com/bitwig/extension/controller/api/TimeSignatureValue.java
