@@ -1,4 +1,4 @@
-// Type definitions for Bitwig Studio Control Surface Scripting API v23
+// Type definitions for Bitwig Studio Control Surface Scripting API v24
 // Project: https://bitwig.com
 // Definitions by: Joseph Larson <https://github.com/joslarson>
 // TypeScript Version: 4.1.2
@@ -3990,6 +3990,13 @@ declare namespace com.bitwig.extension.controller.api {
      * @since API version 20
      */
     channelId(): StringValue;
+
+    /**
+     * Reports the channel index.
+     *
+     * @since API version 22
+     */
+    channelIndex(): IntegerValue;
 
     /**
      * Returns an object that represents the activated state of the channel.
