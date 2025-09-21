@@ -1,4 +1,4 @@
-// Type definitions for Bitwig Studio Control Surface Scripting API v19
+// Type definitions for Bitwig Studio Control Surface Scripting API v20
 // Project: https://bitwig.com
 // Definitions by: Joseph Larson <https://github.com/joslarson>
 // TypeScript Version: 4.1.2
@@ -152,6 +152,11 @@ declare namespace com.bitwig.extension.api {
     getBlue255(): number;
 
     getAlpha255(): number;
+
+    /**
+     * @param hsv array of length 3. On return, the array will be set to {h, s, v} with 0 <= h <= 360, 0 <= s <= 1 and 0 <= v <= 1.
+     */
+    toHSV(hsv: number[]): void;
 
     mRed: number;
 
@@ -715,9 +720,9 @@ declare namespace com.bitwig.extension.api.graphics {
   // source: com/bitwig/extension/api/graphics/MeshPattern.java
 
   /**
-   * This represent a 2D gradient.
+   * This represents a 2D gradient.
    *
-   * @link https://www.cairographics.org/manual/cairo-cairo-pattern-t.html#cairo-pattern-create-mesh
+   * @see <a href="https://www.cairographics.org/manual/cairo-cairo-pattern-t.html#cairo-pattern-create-mesh">cairo mesh pattern</a>
    */
   interface MeshPattern extends Pattern {
     beginPatch(): void;
@@ -1149,11 +1154,8 @@ declare namespace com.bitwig.extension.callback {
      * `stopped`, `playing`, `recording`, but also `queued for stop`, `queued for playback`, `queued for
      * recording`.
      *
-     * @param callback
-     *           a callback function that receives three parameters: 1. the slot index (integer), 2. the queued
-     *           or playback state: `0` when stopped, `1` when playing, or `2` when recording, and 3. a boolean
-     *           parameter indicating if the second argument is referring to the queued state (`true`) or the
-     *           actual playback state (`false`)
+     * @param playbackState the queued or playback state: `0` when stopped, `1` when playing, or `2` when recording
+     * @param isQueued indicates if the second argument is referring to the queued state (`true`) or the actual playback state (`false`)
      * @since API version 1
      */
     (slotIndex: number, playbackState: number, isQueued: boolean): void;
@@ -1226,12 +1228,6 @@ declare namespace com.bitwig.extension.callback {
   interface IndexedBooleanValueChangedCallback
     extends IndexedValueChangedCallback {
     /**
-     * Registers an observer that reports the names of the scenes and slots. The slot names reflect the names
-     * of containing clips.
-     *
-     * @param callback
-     *           a callback function receiving two parameters: 1. the slot index (integer) within the
-     *           configured window, and 2. the name of the scene/slot (string)
      * @since API version 1
      */
     (index: number, newValue: boolean): void;
@@ -1245,9 +1241,6 @@ declare namespace com.bitwig.extension.callback {
      * Registers an observer that reports the names of the scenes and slots. The slot names reflect the names
      * of containing clips.
      *
-     * @param callback
-     *           a callback function receiving two parameters: 1. the slot index (integer) within the
-     *           configured window, and 2. the name of the scene/slot (string)
      * @since API version 1
      */
     (index: number, red: number, green: number, blue: number): void;
@@ -1261,9 +1254,6 @@ declare namespace com.bitwig.extension.callback {
      * Registers an observer that reports the names of the scenes and slots. The slot names reflect the names
      * of containing clips.
      *
-     * @param callback
-     *           a callback function receiving two parameters: 1. the slot index (integer) within the
-     *           configured window, and 2. the name of the scene/slot (string)
      * @since API version 1
      */
     (index: number, newValue: string): void;
@@ -1309,11 +1299,8 @@ declare namespace com.bitwig.extension.callback {
 
   interface ShortMidiDataReceivedCallback extends Callback {
     /**
-     * Registers a callback for receiving short (normal) MIDI messages on this MIDI input port.
+     * Callback for receiving short (normal) MIDI messages on this MIDI input port.
      *
-     * @param callback
-     *           a callback function that receives three integer parameters: 1. the status byte 2. the data1
-     *           value 2. the data2 value
      * @since API version 1
      */
     (statusByte: number, data1: number, data2: number): void;
@@ -1326,10 +1313,8 @@ declare namespace com.bitwig.extension.callback {
   interface ShortMidiMessageReceivedCallback
     extends ShortMidiDataReceivedCallback {
     /**
-     * Registers a callback for receiving short (normal) MIDI messages on this MIDI input port.
+     * Callback for receiving short (normal) MIDI messages on this MIDI input port.
      *
-     * @param callback
-     *           a callback function that receives a ShortMidiMessage instance.
      * @since API version 2
      */
     (msg: ShortMidiMessage): void;
@@ -1503,10 +1488,10 @@ declare namespace com.bitwig.extension.controller {
   // source: com/bitwig/extension/controller/HardwareDeviceMatcher.java
 
   /** Matcher that can match a particular hardware device that is connected to the user's machine.
-   * Sub classes of this define how the hardware is connected.
+   * Subclasses of this define how the hardware is connected.
    * Currently only USB devices are supported.
    * @see UsbDeviceMatcher
-   * @see ControllerExtensionDefinition#listHardwareDevices(java.util.List)*/
+   * @see ControllerExtensionDefinition#listHardwareDevices(HardwareDeviceMatcherList) */
   class HardwareDeviceMatcher {
     constructor(name: string);
 
@@ -2891,6 +2876,12 @@ declare namespace com.bitwig.extension.controller.api {
     (amountTransferred: number): void;
   }
 
+  // source: com/bitwig/extension/controller/api/AudioHardwareIoInfo.java
+
+  interface AudioHardwareIoInfo extends ObjectProxy {
+    color(): ColorValue;
+  }
+
   // source: com/bitwig/extension/controller/api/Bank.java
 
   /**
@@ -2929,7 +2920,7 @@ declare namespace com.bitwig.extension.controller.api {
     setSizeOfBank(size: number): void;
 
     /**
-     * Gets the item in the bank at the supplied index. The index must be >= 0 and < {@link #getSizeOfBank()}.
+     * Gets the item in the bank at the supplied index. The index must be {@literal >= 0 and <} {@link #getSizeOfBank()}.
      *
      * @since API version 2
      */
@@ -2989,6 +2980,7 @@ declare namespace com.bitwig.extension.controller.api {
   // source: com/bitwig/extension/controller/api/BeatTimeValue.java
 
   import DoubleValueChangedCallback = com.bitwig.extension.callback.DoubleValueChangedCallback;
+  import ValueChangedCallback = com.bitwig.extension.callback.ValueChangedCallback;
 
   /**
    * Instances of this interface represent beat time values.
@@ -3005,7 +2997,7 @@ declare namespace com.bitwig.extension.controller.api {
      *           a callback function that receives a single numeric parameter with double precision.
      * @since API version 1
      * @deprecated This exists for backwards compatibility. Use
-     *             {@link #addValueObserver(DoubleValueChangedCallback)} instead.
+     *             {@link #addValueObserver(ValueChangedCallback)} instead.
      */
     addRawValueObserver(callback: DoubleValueChangedCallback): void;
 
@@ -3983,6 +3975,13 @@ declare namespace com.bitwig.extension.controller.api {
    */
   interface Channel extends DeviceChain, DeleteableObject, DuplicableObject {
     /**
+     * Reports the channel UUID.
+     *
+     * @since API version 20
+     */
+    channelId(): StringValue;
+
+    /**
      * Returns an object that represents the activated state of the channel.
      *
      * @return an object that provides access to the channels activated state.
@@ -4077,7 +4076,6 @@ declare namespace com.bitwig.extension.controller.api {
      * @param callback
      *           a callback function that takes a single numeric argument. The value is in the range
      *           [0..range-1].
-     * @throws com.bitwig.base.control_surface.ControlSurfaceException
      * @since API version 1
      */
     addVuMeterObserver(
@@ -4753,7 +4751,7 @@ declare namespace com.bitwig.extension.controller.api {
      * @param y
      *           the y position within the note grid, defining the key of the target note
      * @param clearCurrentSelection
-     *           `true` if the existing selection should be cleared, {@false} if the note should be added to
+     *           `true` if the existing selection should be cleared, false if the note should be added to
      *           the current selection.
      * @since API version 10
      */
@@ -5203,7 +5201,7 @@ declare namespace com.bitwig.extension.controller.api {
      * @param slot
      *           the index of the slot within the slot window.
      * @since API version 1
-     * @deprecated Use {@link #getItemAt(int).deleteObject()} instead.
+     * @deprecated Use {@link #getItemAt(int)}.deleteObject() instead.
      */
     deleteClip(slot: number): void;
 
@@ -5484,7 +5482,7 @@ declare namespace com.bitwig.extension.controller.api {
      * @since API version 10
      * @deprecated Clip launcher indication is now not per slot or scene but instead as a framed rectangle in
      *             the user interface. Use {@link SceneBank#setIndication(boolean)} or
-     *             {@link TrackBank#setShouldShowClipLauncherFeedback()}
+     *             {@link TrackBank#setShouldShowClipLauncherFeedback(boolean)}
      */
     setIndication(shouldIndicate: boolean): void;
 
@@ -5745,17 +5743,7 @@ declare namespace com.bitwig.extension.controller.api {
   import HardwareDeviceMatcher = com.bitwig.extension.controller.HardwareDeviceMatcher;
 
   /**
-   * @mainpage Introduction
-   *
-   * Welcome to the Bitwig Control Surface API.<br/>
-   *
-   * The pages shown here include the reference documentation for the various interfaces and functions provided
-   * by the API.<br/>
-   *
-   * The best starting point for becoming familiar with the API within these pages is the documentation of the
-   * {@link Host} interface. A singleton instance of that interface is available in the scope of each script.
-   * In addition it is highly recommended to also walk through the <b>Control Surface Scripting Guide</b> that is
-   * available from the @em Help menu in Bitwig Studio.
+   * @include api-changes
    */
   interface ControllerHost extends Host {
     /**
@@ -5891,7 +5879,7 @@ declare namespace com.bitwig.extension.controller.api {
     /**
      * Gets the {@link HardwareDevice} at the specified index. This index corresponds to the index of the
      * {@link HardwareDeviceMatcher} specified in the
-     * {@link ControllerExtensionDefinition#listHardwareDevices(java.util.List)}
+     * {@link ControllerExtensionDefinition#listHardwareDevices}
      *
      * @since API version 7
      */
@@ -6403,6 +6391,12 @@ declare namespace com.bitwig.extension.controller.api {
     createUserControls(numControllers: number): UserControlBank;
 
     /**
+     * The last clicked parameter in the gui. Can also be pinned
+     * @since API version 20
+     */
+    createLastClickedParameter(id: string, name: string): LastClickedParameter;
+
+    /**
      * Schedules the given callback function for execution after the given delay. For timer applications call
      * this method once initially and then from within the callback function.
      *
@@ -6523,7 +6517,7 @@ declare namespace com.bitwig.extension.controller.api {
      *           the callback function that gets called when data arrives. The function receives a single
      *           parameter that contains the data byte array.
      *
-     * @return {@true} if was possible to bind the port, false otherwise
+     * @return true if was possible to bind the port, false otherwise
      * @since API version 1
      */
     addDatagramPacketObserver(
@@ -6659,7 +6653,7 @@ declare namespace com.bitwig.extension.controller.api {
     /**
      * {@link BeatTimeFormatter} used to format beat times by default. This will be used to format beat times
      * when asking for a beat time in string format without providing any formatting options. For example by
-     * calling {@link BeatTimeStringValue#get()}.
+     * calling {@link BeatTimeValue#get()}.
      *
      * @since API version 2
      */
@@ -6963,7 +6957,7 @@ declare namespace com.bitwig.extension.controller.api {
     createOrDeviceMatcher(...deviceMatchers: DeviceMatcher[]): DeviceMatcher;
 
     /**
-     * Creates a {@link DeviceMatcher} that matches a device if all of the supplied matchers match the device.
+     * Creates a {@link DeviceMatcher} that matches a device if all the supplied matchers match the device.
      *
      * @since API version 12
      */
@@ -6975,6 +6969,35 @@ declare namespace com.bitwig.extension.controller.api {
      * @since API version 12
      */
     createNotDeviceMatcher(deviceMatcher: DeviceMatcher): DeviceMatcher;
+
+    /**
+     * Creates a {@link MasterRecorder}.
+     *
+     * @since API version 20
+     */
+    createMasterRecorder(): MasterRecorder;
+
+    /**
+     * Creates a {@link AudioHardwareIoInfo} for the specified output.
+     * @since API version 20
+     * @param deviceId
+     * @param channels zero based channel indices
+     */
+    createAudioHardwareOutputInfo(
+      deviceId: string,
+      channels: number[]
+    ): AudioHardwareIoInfo;
+
+    /**
+     * Creates a {@link AudioHardwareIoInfo} for the specified input.
+     * @since API version 20
+     * @param deviceId
+     * @param channels zero based channel indices
+     */
+    createAudioHardwareInputInfo(
+      deviceId: string,
+      channels: number[]
+    ): AudioHardwareIoInfo;
   }
 
   // source: com/bitwig/extension/controller/api/CueMarker.java
@@ -8638,7 +8661,7 @@ declare namespace com.bitwig.extension.controller.api {
    *
    * To receive an instance of DeviceBank call {@link Track#createDeviceBank}.
    *
-   * @see {@link Track#createDeviceBank}
+   * @see Track#createDeviceBank(int)
    * @since API version 1
    */
   interface DeviceBank extends Bank<Device> {
@@ -8743,7 +8766,7 @@ declare namespace com.bitwig.extension.controller.api {
      * @param callback
      *           a callback function that receives a single integer parameter
      * @since API version 1
-     * @deprecated Use {@link #deviceCount()}.addValueObserver(callback)
+     * @deprecated Use {@link #itemCount()}.addValueObserver(callback)
      */
     addDeviceCountObserver(callback: IntegerValueChangedCallback): void;
 
@@ -8751,7 +8774,7 @@ declare namespace com.bitwig.extension.controller.api {
      * Browses for content to insert a device at the given index inside this bank.
      *
      * @param index
-     *           the index to insert the device at. Must be >= 0 and <= {@link #getSizeOfBank()}.
+     *           the index to insert the device at. Must be {@literal >= 0 and <=} {@link #getSizeOfBank()}.
      *
      * @since API version 2
      */
@@ -8947,7 +8970,7 @@ declare namespace com.bitwig.extension.controller.api {
    *
    * To receive an instance of device layer bank call {@link Device#createLayerBank(int numChannels)}.
    *
-   * @see {@link Device#createLayerBank}
+   * @see Device#createLayerBank(int)
    * @since API version 1
    */
   interface DeviceLayerBank extends ChannelBank<DeviceLayer> {
@@ -9065,7 +9088,7 @@ declare namespace com.bitwig.extension.controller.api {
    *
    * To receive an instance of drum pad bank call {@link Device#createDrumPadBank(int numChannels)}.
    *
-   * @see {@link Device#createDrumPadBank}
+   * @see Device#createDrumPadBank(int)
    * @since API version 1
    */
   interface DrumPadBank extends ChannelBank<DrumPad> {
@@ -9141,7 +9164,7 @@ declare namespace com.bitwig.extension.controller.api {
     getValueCount(): number;
 
     /**
-     * Gets the {@Link EnumValueDefinition} for the given index.
+     * Gets the {@link EnumValueDefinition} for the given index.
      * @param valueIndex must be in the range 0 .. {@link #getValueCount()} - 1.
      * @return null if not found
      * @since API version 11
@@ -9149,7 +9172,7 @@ declare namespace com.bitwig.extension.controller.api {
     valueDefinitionAt(valueIndex: number): EnumValueDefinition;
 
     /**
-     * Gets the {@Link EnumValueDefinition} for the given enum id.
+     * Gets the {@link EnumValueDefinition} for the given enum id.
      * @return null if not found
      * @since API version 11
      */
@@ -9567,17 +9590,19 @@ declare namespace com.bitwig.extension.controller.api {
 
   // source: com/bitwig/extension/controller/api/HardwareDevice.java
 
+  import HardwareDeviceMatcherList = com.bitwig.extension.controller.HardwareDeviceMatcherList;
+
   /**
    * Represents a hardware device that the user has chosen to communicate with. The hardware devices that the
    * user needs to choose are defined by the
-   * {@link ControllerExtensionDefinition#listHardwareDevices(java.util.List)} method.
+   * {@link ControllerExtensionDefinition#listHardwareDevices(HardwareDeviceMatcherList)} method.
    *
    * @since API version 7
    */
   interface HardwareDevice {
     /**
      * The {@link HardwareDeviceMatcher} that was provided by the controller for identifying this hardware
-     * device in {@link ControllerExtensionDefinition#listHardwareDevices(java.util.List)}.
+     * device in {@link ControllerExtensionDefinition#listHardwareDevices(HardwareDeviceMatcherList)}.
      *
      */
     deviceMatcher(): HardwareDeviceMatcher;
@@ -9913,9 +9938,6 @@ declare namespace com.bitwig.extension.controller.api {
      *
      * @param id
      *           A unique string that identifies this parameter.
-     * @param internalStateToLightVisualStateFunction
-     *           A function that can be used to determine the visual state of the light on the hardware so it
-     *           can be visualized in Bitwig Studio's user interface when needed.
      *
      * @since API version 10
      */
@@ -10227,8 +10249,7 @@ declare namespace com.bitwig.extension.controller.api {
    * Defines the current state of a {@link MultiStateHardwareLight}. What this state means is entirely up to the
    * controller implementation.
    *
-   * @apiNote The {@link Object#equals(Object)} method <b>MUST</b> be overridden to compare light states
-   *          correctly.
+   * The {@link Object#equals(Object)} method <b>MUST</b> be overridden to compare light states correctly.
    *
    * @since API version 10
    */
@@ -10237,6 +10258,18 @@ declare namespace com.bitwig.extension.controller.api {
     getVisualState(): HardwareLightVisualState;
 
     equals(obj: object): boolean;
+  }
+
+  // source: com/bitwig/extension/controller/api/LastClickedParameter.java
+
+  interface LastClickedParameter {
+    isLocked(): SettableBooleanValue;
+
+    parameter(): Parameter;
+
+    parameterColor(): ColorValue;
+
+    updateLockedToLastClicked(): void;
   }
 
   // source: com/bitwig/extension/controller/api/Macro.java
@@ -10281,6 +10314,51 @@ declare namespace com.bitwig.extension.controller.api {
       textWhenUnassigned: string,
       callback: StringValueChangedCallback
     ): void;
+  }
+
+  // source: com/bitwig/extension/controller/api/MasterRecorder.java
+
+  /**
+   * Controls the project's master recording.
+   *
+   * @newSince API version 20
+   */
+  interface MasterRecorder {
+    /**
+     * Value that indicates if the master recording is active.
+     *
+     * @since API version 20
+     */
+    isActive(): BooleanValue;
+
+    /**
+     * Starts the master recording.
+     *
+     * @since API version 20
+     */
+    start(): void;
+
+    /**
+     * Stops the master recording.
+     *
+     * @since API version 20
+     */
+    stop(): void;
+
+    /**
+     * Toggles the master recording.
+     *
+     * @since API version 20
+     */
+    toggle(): void;
+
+    /**
+     * Get the master recording duration in milliseconds.
+     * Only relevant when master recording is active.
+     *
+     * @since API version 20
+     */
+    duration(): IntegerValue;
   }
 
   // source: com/bitwig/extension/controller/api/MasterTrack.java
@@ -10369,12 +10447,13 @@ declare namespace com.bitwig.extension.controller.api {
    * <p>
    * Expressions can be used to generate matchers for various MIDI events that can then be used to update
    * hardware control states (see {@link MidiIn#createActionMatcher(String)} and {@link HardwareControl}).
+   * </p>
    *
    * <p>
-   * The expression language supports these operators in the same way that C, Java, C++ do: +, -, *, /, %,
-   * <<, >>, &&, ||, &, |, ^, <, <=, >, >=, ==, !=
+   * The expression language supports these operators in the same way that C, Java, C++ do:
+   * {@literal +, -, *, /, %, <<, >>, &&, ||, &, |, ^, <, <=, >, >=, ==, !=}
+   * </p>
    *
-   * <p>
    * The following variables are also defined for matching parts of the event:
    * <ul>
    * <li>status - Value of the status byte
@@ -10385,6 +10464,7 @@ declare namespace com.bitwig.extension.controller.api {
    *
    * <p>
    * Integers can be represented in hex using same syntax as C. 'true' and 'false' keywords are also defined.
+   * </p>
    *
    * @since API version 1
    */
@@ -10417,11 +10497,11 @@ declare namespace com.bitwig.extension.controller.api {
      *           the name of the note input as it appears in the track input choosers in Bitwig Studio
      * @param masks
      *           a filter string formatted as hexadecimal value with `?` as wildcard. For example `80????`
-     *           would match note-off on channel 1 (0). When this parameter is {@null}, a standard filter will
+     *           would match note-off on channel 1 (0). When this parameter is null, a standard filter will
      *           be used to forward note-related messages on channel 1 (0).
      *
      *           If multiple note input match the same MIDI event then they'll all receive the MIDI event, and
-     *           if one of them does not consume events then the events wont' be consumed.
+     *           if one of them does not consume events then the events won't be consumed.
      * @return the object representing the requested note input
      * @since API version 1
      */
@@ -12783,6 +12863,22 @@ declare namespace com.bitwig.extension.controller.api {
     getAsDouble(): number;
 
     /**
+     * The normalized origin of this value.
+     *
+     * For example, the origin for a pan value is 0.5 (representing center), but the origin for a level value is 0.
+     *
+     * @since API version 20
+     */
+    getOrigin(): DoubleValue;
+
+    /**
+     * The number of discrete steps available in the range, or -1 for continuous value ranges.
+     *
+     * @since API version 20
+     */
+    discreteValueCount(): IntegerValue;
+
+    /**
      * Value that represents a formatted text representation of the value whenever the value changes.
      *
      * @since API version 2
@@ -12975,7 +13071,7 @@ declare namespace com.bitwig.extension.controller.api {
   /**
    * Represents a physical hardware knob that inputs a relative value.
    *
-   * @see ControllerHost#createRelativeHardwareKnob()
+   * @see HardwareSurface#createRelativeHardwareKnob(String)
    *
    * @since API version 10
    */
@@ -12988,9 +13084,9 @@ declare namespace com.bitwig.extension.controller.api {
    *
    * For example, when a certain MIDI CC message happens.
    *
-   * @see MidiIn#createRelative2sComplementCCValueMatcher(int, int)
-   * @see MidiIn#createRelativeBinOffsetCCValueMatcher(int, int)
-   * @see MidiIn#createRelativeSignedBit2CCValueMatcher(int, int)
+   * @see MidiIn#createRelative2sComplementCCValueMatcher(int, int, int)
+   * @see MidiIn#createRelativeBinOffsetCCValueMatcher(int, int, int)
+   * @see MidiIn#createRelativeSignedBit2CCValueMatcher(int, int, int)
    *
    * @since API version 10
    *
@@ -13016,7 +13112,7 @@ declare namespace com.bitwig.extension.controller.api {
    * Instances of this interface are reported to the supplied script callback when connecting to a remote TCP
    * socket via {@link ControllerHost#connectToRemoteHost}.
    *
-   * @see {@link ControllerHost#connectToRemoteHost}
+   * @see ControllerHost#connectToRemoteHost(String, int, ConnectionEstablishedCallback)
    * @since API version 1
    */
   interface RemoteConnection {
@@ -13098,7 +13194,7 @@ declare namespace com.bitwig.extension.controller.api {
    * Instances of this interface represent a TCP socket that other network clients can connect to, typically
    * created by calling {@link ControllerHost#createRemoteConnection}.
    *
-   * @see {@link ControllerHost#createRemoteConnection}
+   * @see ControllerHost#createRemoteConnection
    * @since API version 1
    */
   interface RemoteSocket {
@@ -13229,7 +13325,7 @@ declare namespace com.bitwig.extension.controller.api {
    * To receive an instance of scene bank call
    * {@link com.bitwig.extension.controller.api.ControllerHost#createSceneBank}.
    *
-   * @see {@link com.bitwig.extension.controller.api.ControllerHost#createSceneBank}
+   * @see com.bitwig.extension.controller.api.ControllerHost#createSceneBank(int)
    * @since API version 1
    */
   interface SceneBank extends ClipLauncherSlotOrSceneBank<Scene> {
@@ -13601,7 +13697,7 @@ declare namespace com.bitwig.extension.controller.api {
     /**
      * Sets the value to the enumeration item with the given name.
      *
-     * @param name
+     * @param value
      *           the name of the new enum item
      * @since API version 1
      */
@@ -15199,9 +15295,9 @@ declare namespace com.bitwig.extension.controller.api {
    * Additional methods are provided in the {@link ControllerHost} interface to create track banks that include only main
    * tracks ({@link ControllerHost#createMainTrackBank}) or only effect tracks ({@link ControllerHost#createEffectTrackBank}).
    *
-   * @see {@link ControllerHost#createTrackBank}
-   * @see {@link ControllerHost#createMainTrackBank}
-   * @see {@link ControllerHost#createEffectTrackBank}
+   * @see ControllerHost#createTrackBank
+   * @see ControllerHost#createMainTrackBank
+   * @see ControllerHost#createEffectTrackBank
    * @since API version 1
    */
   interface TrackBank extends ChannelBank<Track> {
@@ -15254,7 +15350,7 @@ declare namespace com.bitwig.extension.controller.api {
     scrollToTrack(position: number): void;
 
     /**
-     * @deprecated use {@link #addChannelScrollPositionObserver(Callable, int)} instead.
+     * @deprecated use {@link #scrollPosition()} instead.
      */
     addTrackScrollPositionObserver(
       callback: IntegerValueChangedCallback,
@@ -15343,7 +15439,7 @@ declare namespace com.bitwig.extension.controller.api {
      *           a callback function that takes a single boolean parameter
      * @since API version 1
      *
-     * @deprecated use {@link #canScrollScenesUp()} instead.
+     * @deprecated use {@link #sceneBank()} instead.
      */
     addCanScrollScenesUpObserver(callback: BooleanValueChangedCallback): void;
 
@@ -15354,7 +15450,7 @@ declare namespace com.bitwig.extension.controller.api {
      *           a callback function that takes a single boolean parameter
      * @since API version 1
      *
-     * @deprecated use {@link #canScrollScenesDown()} instead.
+     * @deprecated use {@link #sceneBank()} instead.
      */
     addCanScrollScenesDownObserver(callback: BooleanValueChangedCallback): void;
 
@@ -15365,7 +15461,7 @@ declare namespace com.bitwig.extension.controller.api {
      * @param callback
      *           a callback function that receives a single integer parameter
      * @since API version 1
-     * @deprecated Use {@link #sceneBank().itemCount().addValueObserver()}
+     * @deprecated Use {@link #sceneBank()}.itemCount().addValueObserver()
      */
     addSceneCountObserver(callback: IntegerValueChangedCallback): void;
 
@@ -16417,8 +16513,6 @@ declare namespace com.bitwig.extension.controller.api {
   }
 
   // source: com/bitwig/extension/controller/api/Value.java
-
-  import ValueChangedCallback = com.bitwig.extension.callback.ValueChangedCallback;
 
   /**
    * The common interface that is shared by all value objects in the controller API.
