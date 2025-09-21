@@ -1,6 +1,6 @@
 {
   "name": "typed-bitwig-api",
-  "version": "24.0.0",
+  "version": "25.0.0",
   "repository": "joslarson/typed-bitwig-api",
   "description": "TypeScript definition file for the Bitwig Studio Control Surface Scripting API.",
   "types": "bitwig-api.d.ts",

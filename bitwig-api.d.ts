@@ -1,4 +1,4 @@
-// Type definitions for Bitwig Studio Control Surface Scripting API v24
+// Type definitions for Bitwig Studio Control Surface Scripting API v25
 // Project: https://bitwig.com
 // Definitions by: Joseph Larson <https://github.com/joslarson>
 // TypeScript Version: 4.1.2
@@ -6409,6 +6409,10 @@ declare namespace com.bitwig.extension.controller.api {
 
     /**
      * The last clicked parameter in the gui. Can also be pinned
+     * @param id used for persistent state. Extensions should use different IDs for different objects, but should try to
+     *           not change IDs in between different versions.
+     * @param name user facing name, used for example in context menus. Extensions may change the name in between
+     *             different versions.
      * @since API version 20
      */
     createLastClickedParameter(id: string, name: string): LastClickedParameter;
@@ -10362,7 +10366,7 @@ declare namespace com.bitwig.extension.controller.api {
   /**
    * Controls the project's master recording.
    *
-   * @newSince API version 20
+   * @since API version 20
    */
   interface MasterRecorder {
     /**
@@ -15170,6 +15174,20 @@ declare namespace com.bitwig.extension.controller.api {
     ): TrackBank;
 
     /**
+     * Beta API - this method might not be available in a future version of Bitwig Studio
+     *
+     * @see #createTrackBank(int, int, int, boolean)
+     * @param flatteningMode see comments in TrackBankFlatteningMode
+     * @since API version 25
+     */
+    createTrackBank(
+      numTracks: number,
+      numSends: number,
+      numScenes: number,
+      flatteningMode: TrackBankFlatteningMode
+    ): TrackBank;
+
+    /**
      * Returns a track bank with the given number of child tracks, sends and scenes. Only audio tracks,
      * instrument tracks and hybrid tracks are considered. The track bank will only have content if the
      * connected track is a group track. For more information about track banks and the `bank pattern` in
@@ -15197,6 +15215,20 @@ declare namespace com.bitwig.extension.controller.api {
     ): TrackBank;
 
     /**
+     * Beta API - this method might not be available in a future version of Bitwig Studio
+     *
+     * @see #createMainTrackBank(int, int, int, boolean)
+     * @param flatteningMode see comments in TrackBankFlatteningMode
+     * @since API version 25
+     */
+    createMainTrackBank(
+      numTracks: number,
+      numSends: number,
+      numScenes: number,
+      flatteningMode: TrackBankFlatteningMode
+    ): TrackBank;
+
+    /**
      * Returns a track bank with the given number of child effect tracks and scenes. Only effect tracks are
      * considered. The track bank will only have content if the connected track is a group track. For more
      * information about track banks and the `bank pattern` in general, see the documentation for
@@ -15218,6 +15250,19 @@ declare namespace com.bitwig.extension.controller.api {
       numTracks: number,
       numScenes: number,
       hasFlatTrackList: boolean
+    ): TrackBank;
+
+    /**
+     * Beta API - this method might not be available in a future version of Bitwig Studio
+     *
+     * @see #createEffectTrackBank(int, int, int, boolean)
+     * @param flatteningMode see comments in TrackBankFlatteningMode
+     * @since API version 25
+     */
+    createEffectTrackBank(
+      numTracks: number,
+      numScenes: number,
+      flatteningMode: TrackBankFlatteningMode
     ): TrackBank;
 
     /**
@@ -15245,6 +15290,20 @@ declare namespace com.bitwig.extension.controller.api {
       numSends: number,
       numScenes: number,
       hasFlatTrackList: boolean
+    ): TrackBank;
+
+    /**
+     * Beta API - this method might not be available in a future version of Bitwig Studio
+     *
+     * @see #createEffectTrackBank(int, int, int, boolean)
+     * @param flatteningMode see comments in TrackBankFlatteningMode
+     * @since API version 25
+     */
+    createEffectTrackBank(
+      numTracks: number,
+      numSends: number,
+      numScenes: number,
+      flatteningMode: TrackBankFlatteningMode
     ): TrackBank;
 
     /**
@@ -15629,6 +15688,32 @@ declare namespace com.bitwig.extension.controller.api {
      * @since API versian 17
      */
     setShouldShowClipLauncherFeedback(value: boolean): void;
+
+    /**
+     * Beta API - this method might not be available in a future version of Bitwig Studio
+     *
+     * @param mode
+     */
+    setFlatteningMode(mode: TrackBankFlatteningMode): void;
+
+    /**
+     * Beta API - this method might not be available in a future version of Bitwig Studio
+     *
+     * Sets whether to include all channels that are visible in the mixer. When off, only tracks and groups are included;
+     * when on, drum pads and FX layers are included in addition.
+     * Disabled by default.
+     *
+     * @since API version 24
+     */
+    setShouldIncludeAllMixerChannels(shouldSkip: boolean): void;
+  }
+
+  // source: com/bitwig/extension/controller/api/TrackBankFlatteningMode.java
+
+  enum TrackBankFlatteningMode {
+    NOT_FLATTENED = 0,
+    FLATTEN = 1,
+    FLATTEN_AND_IGNORE_VISIBILITY = 2,
   }
 
   // source: com/bitwig/extension/controller/api/Transport.java
